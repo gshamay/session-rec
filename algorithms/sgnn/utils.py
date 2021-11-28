@@ -244,6 +244,7 @@ def process_seqs(iseqs, idates, max_len=None):
     return out_seqs, out_dates, labs, ids
 
 
+#this method split the sessions to sub sessions
 def prepare_data(train, test, max_len=None):
 
     sess_clicks = OrderedDict()
