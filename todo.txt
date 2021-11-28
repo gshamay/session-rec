@@ -7,12 +7,14 @@ v enable preprocess recsys
 
 param to process
 add option to work on exiting result (from csv? in a raw?)
+
 implement random by probability threshold  (th = 0.1...1)
-implement random by train session len
-run random based on earlier results csv
+implement random by train session len (need to build histogram of the train session lengths)
+run random based on earlier results csv?
 
 push up results
 evaluation support in -1... -n
+
 Evaluation measures for 1...k (P@k, mrr@k)
 
 Add print to File
@@ -38,6 +40,21 @@ aEOS vs original (how much aEOS fail tha algo)
 
 Check:
 Random - set seed = 42 in all places
+-------------------------------------------------
+Precision / Recall @ K
+
+in regular Session next Click
+P@K = TP/(TP+FP) -->
+FP= the cases that we didn't manage to predict the next click in the top K == not hit
+(hit : 1 no hit: 0) / total
+in EOS we can do the same OR
+** P@K = hits/(hits + (reported aEOS in none EOS))
+
+R@K = TP/(TP+FN) -->
+There are no positive and negative values - there is hit and not hit ; FN=FP=the cases that we didn't manage to predict the next click in the top K == not hit
+? Lior: Why they use P@K and R@K in the earlier works ? it's wrong!
+in EOS we can do the same OR
+** R@K = hits/(hits + (Not reported aEOS in EOS))
 
 
 

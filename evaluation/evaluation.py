@@ -309,17 +309,21 @@ def evaluate_sessions(pr, metrics, test_data, train_data, items=None, cut_off=20
             
             for m in metrics:
                 if hasattr(m, 'start_predict'):
-                    m.start_predict( pr )
+                    m.start_predict( pr ) # only some of the metrics, as the running time metric (Time_usage_training), has 'start_predict' variable
             
-            preds = pr.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)
-            
+            preds = pr.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+            # preds contain now a list of all possible items with their probabilities to be the next item
+
             for m in metrics:
                 if hasattr(m, 'stop_predict'):
-                    m.stop_predict( pr )
+                    m.stop_predict( pr ) # same as 'start_predict' above
             
-            preds[np.isnan(preds)] = 0
+            preds[np.isnan(preds)] = 0 # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+            # todo: add here aEOS tune and 'pushUp' method - change all -1...-N to be -1
+            #  and keep only  the -1 with the highest probability value - zero the probability of all the rest
+
 #             preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
-            preds.sort_values( ascending=False, inplace=True )
+            preds.sort_values( ascending=False, inplace=True ) # sort preds according to the predicted probability
             
             time_sum_clock += time.clock()-crs
             time_sum += time.time()-trs
@@ -327,6 +331,9 @@ def evaluate_sessions(pr, metrics, test_data, train_data, items=None, cut_off=20
             
             for m in metrics:
                 if hasattr(m, 'add'):
+                    # todo: we can implement Random here -
+                    #  as a metric  - copy the prediction and add the random data on it - Less calculations
+                    #  or as a new prediction algorithm -  more natural -  but the prediction need to run twice
                     m.add( preds, iid, for_item=prev_iid, session=sid, position=pos )
             
             pos += 1
