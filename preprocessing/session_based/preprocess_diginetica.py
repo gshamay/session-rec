@@ -197,7 +197,9 @@ def load_data(file):
           format(len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(),
                  data_end.date().isoformat()))
 
-    data = data.groupby('SessionId').apply(lambda x: x.sort_values('Time'))     # data = data.sort_values(['SessionId'],['Time'])
+    #This line take long to run..
+    data = data.groupby('SessionId').apply(lambda x: x.sort_values('Time'))
+    # data = data.sort_values(['SessionId'],['Time'])
     data.index = data.index.get_level_values(1)
     return data;
 
@@ -207,22 +209,31 @@ def filter_data(data, min_item_support=MIN_ITEM_SUPPORT, min_session_length=MIN_
     session_lengths = data.groupby('SessionId').size()
     session_lengths = session_lengths[ session_lengths >= min_session_length ]
     data = data[np.in1d(data.SessionId, session_lengths.index)]
+    print(len(data))
 
     # filter item support
     data['ItemSupport'] = data.groupby('ItemId')['ItemId'].transform('count')
     data = data[data.ItemSupport >= min_item_support]
+    print(len(data))
 
     # filter session length again, after filtering items
     session_lengths = data.groupby('SessionId').size()
     data = data[np.in1d(data.SessionId, session_lengths[session_lengths >= min_session_length].index)]
-    
+    print(len(data))
+
     # output
     data_start = datetime.fromtimestamp(data.Time.min(), timezone.utc)
     data_end = datetime.fromtimestamp(data.Time.max(), timezone.utc)
 
+
     print('Filtered data set default \n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {}\n\n'.
           format(len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(),
                  data_end.date().isoformat()))
+
+    #can run on session length or on all data
+    # currentSessionID =  -1
+    # for session_lengths
+    # for entry in data:
 
     return data;
 
@@ -275,9 +286,10 @@ def split_data_org(data, output_file):
     valid = train[np.in1d(train.SessionId, session_valid)]
     valid = valid[np.in1d(valid.ItemId, train_tr.ItemId)]
     tslength = valid.groupby('SessionId').size()
-    valid = valid[np.in1d(valid.SessionId, tslength[tslength >= 2].index)]
+    valid = valid[np.in1d(valid.SessionId, tslength[tslength >= 2].index)] # todo: tslength suppose to be read from a parameter in the yml
     print('Train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train_tr), train_tr.SessionId.nunique(),
                                                                         train_tr.ItemId.nunique()))
+    #todo: add here code that add the aEOS node into the sessions
     train_tr.to_csv(output_file + '_train_tr.txt', sep='\t', index=False)
     print('Validation set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(valid), valid.SessionId.nunique(),
                                                                              valid.ItemId.nunique()))
@@ -366,7 +378,7 @@ def split_data_slice(data, output_file, slice_id, days_offset, days_train, days_
     test = test[np.in1d(test.ItemId, train.ItemId)]
 
     tslength = test.groupby('SessionId').size()
-    test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)]
+    test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)] # todo: tslength suppose to be read from a parameter in the yml
 
     print('Test set {}\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {} \n\n'.
           format(slice_id, len(test), test.SessionId.nunique(), test.ItemId.nunique(), middle.date().isoformat(),
@@ -427,7 +439,7 @@ def split_data_retrain_train(data, output_file, days_train, days_test, retrain_n
     valid = train[np.in1d(train.SessionId, session_valid)]
     valid = valid[np.in1d(valid.ItemId, train_tr.ItemId)]
     tslength = valid.groupby('SessionId').size()
-    valid = valid[np.in1d(valid.SessionId, tslength[tslength >= 2].index)]
+    valid = valid[np.in1d(valid.SessionId, tslength[tslength >= 2].index)] # todo: tslength suppose to be read from a parameter in the yml
     print('Train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train_tr), train_tr.SessionId.nunique(),
                                                                         train_tr.ItemId.nunique()))
     train_tr.to_csv(output_file + '_train_tr.' + str(retrain_num) + '.txt', sep='\t', index=False)
@@ -461,7 +473,7 @@ def split_data_retrain_test(data, train, output_file, days_train, days_test, ret
     test = data[np.in1d(data.SessionId, session_test)]
     test = test[np.in1d(test.ItemId, train.ItemId)]
     tslength = test.groupby('SessionId').size()
-    test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)]
+    test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)] # todo: tslength suppose to be read from a parameter in the yml
     # print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train), train.SessionId.nunique(),
     #                                                                          train.ItemId.nunique()))
     # train.to_csv(output_file + '_train_full.' + str(retrain_num) + '.txt', sep='\t', index=False)

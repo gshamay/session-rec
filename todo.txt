@@ -1,0 +1,38 @@
+Remove unneeded changes
+
+params to preProcess (aEOS 1... N/sessions len, gen dir, name Dir)
+Preprocess 1... N + session len
+
+param to process
+add option to work on exiting result (from csv? in a raw?)
+implement random by probability threshold  (th = 0.1...1)
+implement random by train session len
+run random based on earlier results csv
+
+push up results
+evaluation support in -1... -n
+Evaluation measures for 1...k (P@k, mrr@k)
+
+Add print to File
+short Run on EC2 GPU - compare runTime
+
+try Colab
+
+Document the run in EC2
+load db from web ZIP
+Load --> Train --> Run --> save in one command
+
+run on recsys64 on all aEOS N
+Find best N aEOS
+
+run all algos on all dbs - reproduce  regular results reported by papers (gen p@1..20  mrr@1...20)
+run all algos using N on all dbs (gen p@1..20  mrr@1...20)
+run all algos using random (th = 0.1...1)  and (session len) (gen p@1..20  mrr@1...20)
+
+Compare
+graphs...
+aEOS vs random (is aEOS better than random)
+aEOS vs original (how much aEOS fail tha algo)
+
+
+
