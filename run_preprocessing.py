@@ -68,7 +68,7 @@ def run_file( conf ):
     #include preprocessing
     preprocessor = load_preprocessor( conf )
     
-    #load data from raw and transform
+    # load data from raw and transform
     if 'sample_percentage' in conf['data']:
         data = preprocessor.load_data(conf['data']['folder'] + conf['data']['prefix'], sample_percentage=conf['data']['sample_percentage'])
     else:
@@ -102,9 +102,12 @@ def run_file( conf ):
         # run on all data and add new aEOS - option 1
         #  DataFrame --> List of lists --> add aEOS --> DataFrame
         dataAsListOfLists = data.values.tolist()
-        indexOfSessionId = 0  # todo look for 'SessionId'
-        indexOfTime = 1
-        indexOfItemId = 2
+
+        # look for variable locations 'SessionId'
+        indexOfSessionId = data.columns.get_loc("SessionId")
+        indexOfTime = data.columns.get_loc("Time")
+        indexOfItemId = data.columns.get_loc("ItemId")
+
         # list_of_lists.append([1, 2, 3])
         # list_of_lists.append([4, 5, 6])
         session_length = 1
@@ -116,8 +119,8 @@ def run_file( conf ):
         i = 1
         dataLen = len(data)
         while i < len(data):
-            if(i%1000 == 0):
-                print('processed ' + str(i) + "/" + str(dataLen))
+            if (i % 1000 == 0):
+                print('processed aEOS' + str(i) + "/" + str(dataLen))
 
             entryList = dataAsListOfLists[i]
             entry = dataAsListOfLists[i]
@@ -141,16 +144,16 @@ def run_file( conf ):
                     # todo: consider setting the time according to the last two enries times
                     #  timeBetweenLastTwoEnties = entry_1.iloc[0]['Time'] - entry_2.iloc[0]['Time']
                     #  print('adding new line' + str(timeBetweenLastTwoEnties))
-                    newEntry  = entry_1.copy()
+                    newEntry = entry_1.copy()
 
                     newEntryItemID = -1
                     if(sessionLength):
                         newEntryItemID = -session_length
                     else:
                         randVal = np.random.random()
-                        newEntryItemID = ((int)(randVal*aEOS) + 1)
-                        if(newEntryItemID > aEOS):
-                            newEntryItemID = aEOS # in case the random value is 1.0
+                        newEntryItemID = ((int)(randVal * aEOS) + 1)
+                        if (newEntryItemID > aEOS):
+                            newEntryItemID = aEOS  # in case the random value is 1.0
                         newEntryItemID = -newEntryItemID
 
                     newEntry[indexOfItemId] = newEntryItemID

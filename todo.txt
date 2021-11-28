@@ -3,6 +3,8 @@ v Remove unneeded changes
 v params to preProcess (aEOS 1... N/sessions len, gen dir, name Dir)
 v Preprocess 1... N + session len
 
+v enable preprocess recsys
+
 param to process
 add option to work on exiting result (from csv? in a raw?)
 implement random by probability threshold  (th = 0.1...1)
