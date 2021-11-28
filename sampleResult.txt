@@ -1,0 +1,188 @@
+C:\pycharmEnv\pythin37x64Env\Scripts\python.exe "C:\Program Files\JetBrains\PyCharm Community Edition 2021.1.3\plugins\python-ce\helpers\pydev\pydevd.py" --multiproc --qt-support=auto --client 127.0.0.1 --port 56221 --file C:/bgu/session-rec/run_config.py conf/in conf/out
+Connected to pydev debugger (build 212.5284.44)
+Checking conf/in
+waiting for configuration files in  conf/in
+processing config conf/in\test_csrm - Digi_1.yml
+C:/bgu/session-rec/run_config.py:99: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  c = yaml.load(stream)
+run test single
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\framework\dtypes.py:516: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\framework\dtypes.py:517: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\framework\dtypes.py:518: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\framework\dtypes.py:519: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\framework\dtypes.py:520: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\framework\dtypes.py:525: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorboard\compat\tensorflow_stub\dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorboard\compat\tensorflow_stub\dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorboard\compat\tensorflow_stub\dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorboard\compat\tensorflow_stub\dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorboard\compat\tensorflow_stub\dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorboard\compat\tensorflow_stub\dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:12: The name tf.set_random_seed is deprecated. Please use tf.compat.v1.set_random_seed instead.
+START load data
+Loaded train set
+	Events: 1583
+	Sessions: 342
+	Items: 228
+	Span: 2016-01-05 / 2016-05-25
+Loaded test set
+	Events: 111
+	Sessions: 22
+	Items: 45
+	Span: 2016-05-25 / 2016-06-01
+END load data  0.022625600000001356 c /  0.021986961364746094 s
+fit  ar
+ar  time:  0.012974977493286133
+START evaluation of  111  actions in  22  sessions
+    eval process:  0  of  111  actions:  0.0  % in 0.002998828887939453 s
+END evaluation in  1.0570161999999996 c /  1.056434154510498 s
+    avg rt  0.004725177636307277 s /  0.004642531460673941 c
+    time count  89 count/ 0.42054080963134766  sum
+fit  csrm-epoch=1
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:400: The name tf.ConfigProto is deprecated. Please use tf.compat.v1.ConfigProto instead.
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:402: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+2021-11-28 11:26:01.228266: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:149: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:149: The name tf.random_normal is deprecated. Please use tf.random.normal instead.
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:80: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:83: GRUCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is equivalent as tf.keras.layers.GRUCell, and will be replaced by that in Tensorflow 2.0.
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:86: dynamic_rnn (from tensorflow.python.ops.rnn) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `keras.layers.RNN(cell)`, which is equivalent to this API
+WARNING:tensorflow:From C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\ops\init_ops.py:1251: calling VarianceScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\ops\rnn_cell_impl.py:564: calling Constant.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\ops\rnn_cell_impl.py:574: calling Zeros.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:Entity <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001387C927448>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001387C927448>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:From C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\ops\rnn.py:244: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+WARNING:tensorflow:Entity <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001387C9E8CC8>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001387C9E8CC8>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\ome.py:73: calling reduce_sum_v1 (from tensorflow.python.ops.math_ops) with keep_dims is deprecated and will be removed in a future version.
+Instructions for updating:
+keep_dims is deprecated, use keepdims instead
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:143: The name tf.train.AdamOptimizer is deprecated. Please use tf.compat.v1.train.AdamOptimizer instead.
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\CSRM\csrm.py:145: The name tf.train.Saver is deprecated. Please use tf.compat.v1.train.Saver instead.
+ [*] Initialize all variables
+ [*] Initialization finished
+*****************************************************************
+Best perfomance updated!
+Valid Recall@20: 0.20161290322580644    Valid Mrr@20: 0.06092884848194738 
+Test Recall@20 0.1348314606741573    Test Mrr@20: 0.03676248936170942
+Seen 1117 samples
+This epoch took 1.5s
+*****************************************************************
+=================Best performance=================
+Valid Recall@20: 0.20161290322580644    Valid Mrr@20: 0.06092884848194738 
+Test Recall@20 0.1348314606741573    Test Mrr@20: 0.03676248936170942
+==================================================
+csrm-epoch=1  time:  5.069608449935913
+START evaluation of  111  actions in  22  sessions
+    eval process:  0  of  111  actions:  0.0  % in 0.002996683120727539 s
+END evaluation in  1.3873077999999985 c /  1.387488842010498 s
+    avg rt  0.008167116829518522 s /  0.008202578651685359 c
+    time count  89 count/ 0.7268733978271484  sum
+fit  sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3
+229
+WARNING:tensorflow:Entity <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x0000013802014808>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x0000013802014808>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\sgnn\gnn.py:26: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+WARNING:tensorflow:Entity <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001380201B108>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001380201B108>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:From C:\bgu\session-rec\algorithms\sgnn\gnn.py:127: The name tf.train.exponential_decay is deprecated. Please use tf.compat.v1.train.exponential_decay instead.
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\ops\gradients_util.py:93: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+start training:  2021-11-28 11:26:14.733914
+start predicting:  2021-11-28 11:26:16.829336
+train_loss:	4.6090	test_loss:	4.051785	Recall@20:	79.0000	MMR@20:	51.1824	Epoch:	0
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3  time:  9.530363321304321
+START evaluation of  111  actions in  22  sessions
+    eval process:  0  of  111  actions:  0.0  % in 0.00299835205078125 s
+END evaluation in  1.0212223999999992 c /  1.0214293003082275 s
+    avg rt  0.0041997459497344625 s /  0.00416781573033711 c
+    time count  89 count/ 0.3737773895263672  sum
+ar : HitRate@3:    0.5393258426966292
+ar : HitRate@5:    0.6629213483146067
+ar : HitRate@10:    0.7303370786516854
+ar : HitRate@15:    0.7303370786516854
+ar : HitRate@20:    0.7303370786516854
+ar : MRR@3:    0.38576779026217234
+ar : MRR@5:    0.41385767790262173
+ar : MRR@10:    0.4243579454253612
+ar : MRR@15:    0.4243579454253612
+ar : MRR@20:    0.4243579454253612
+ar : NDCG@3:    0.5102978457865192
+ar : NDCG@5:    0.5682010232063728
+ar : NDCG@10:    0.5933353125252436
+ar : NDCG@15:    0.5933353125252436
+ar : NDCG@20:    0.5933353125252436
+ar : Coverage@20:    0.4298245614035088
+ar : Popularity@20:    0.06544367194965234
+ar : Saver@50:    1
+ar : Training time:   0.012974977493286133
+ar : Testing time seconds:   0.004642531460673941
+ar : Testing time cpu:   0.004642531460673941
+csrm-epoch=1 : HitRate@3:    0.011235955056179775
+csrm-epoch=1 : HitRate@5:    0.0449438202247191
+csrm-epoch=1 : HitRate@10:    0.11235955056179775
+csrm-epoch=1 : HitRate@15:    0.12359550561797752
+csrm-epoch=1 : HitRate@20:    0.12359550561797752
+csrm-epoch=1 : MRR@3:    0.0056179775280898875
+csrm-epoch=1 : MRR@5:    0.01348314606741573
+csrm-epoch=1 : MRR@10:    0.022610130194399856
+csrm-epoch=1 : MRR@15:    0.023412698412698413
+csrm-epoch=1 : MRR@20:    0.023412698412698413
+csrm-epoch=1 : NDCG@3:    0.011235955056179775
+csrm-epoch=1 : NDCG@5:    0.027310972562622392
+csrm-epoch=1 : NDCG@10:    0.05067884904981507
+csrm-epoch=1 : NDCG@15:    0.0536299674210195
+csrm-epoch=1 : NDCG@20:    0.0536299674210195
+csrm-epoch=1 : Coverage@20:    0.8947368421052632
+csrm-epoch=1 : Popularity@20:    0.032121321954594884
+csrm-epoch=1 : Saver@50:    1
+csrm-epoch=1 : Training time:   5.069608449935913
+csrm-epoch=1 : Testing time seconds:   0.008202578651685359
+csrm-epoch=1 : Testing time cpu:   0.008202578651685359
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : HitRate@3:    0.5842696629213483
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : HitRate@5:    0.6292134831460674
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : HitRate@10:    0.6741573033707865
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : HitRate@15:    0.7528089887640449
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : HitRate@20:    0.7752808988764045
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : MRR@3:    0.47752808988764045
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : MRR@5:    0.4882022471910112
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : MRR@10:    0.49431960049937573
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : MRR@15:    0.5007231220714367
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : MRR@20:    0.5020495889877913
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : NDCG@3:    0.5718290928170154
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : NDCG@5:    0.5935220878515479
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : NDCG@10:    0.6091423180416466
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : NDCG@15:    0.6308677792712666
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : NDCG@20:    0.6363712901315827
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : Coverage@20:    0.7280701754385965
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : Popularity@20:    0.06317671092951989
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : Saver@50:    1
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : Training time:   9.530363321304321
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : Testing time seconds:   0.00416781573033711
+sgnn-hidden_size=100-out_size=100-step=1-nonhybrid=True-batch_size=100-epoch_n=1-batch_predict=True-lr=0.006-l2=3e-05-lr_dc=0.36666667-lr_dc_step=3 : Testing time cpu:   0.00416781573033711
+finished config conf/in\test_csrm - Digi_1.yml
