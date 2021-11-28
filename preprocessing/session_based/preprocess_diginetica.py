@@ -295,7 +295,7 @@ def split_data_org(data, output_file):
                                                                              valid.ItemId.nunique()))
     valid.to_csv(output_file + '_train_valid.txt', sep='\t', index=False)
 
-
+# Split train/ test
 def split_data(data, output_file, days_test=DAYS_TEST):
     data_end = datetime.fromtimestamp(data.Time.max(), timezone.utc)
     test_from = data_end - timedelta(days=days_test)
