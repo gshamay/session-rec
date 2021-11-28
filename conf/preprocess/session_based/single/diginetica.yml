@@ -13,5 +13,10 @@ filter:
 params:
   days_test: 7
 
+# add here the option to add aEOS
+#  use a fixed number or 'sessionLength' to use the session Length as the ID of the aEOS
+#  when a fixed number is set, the distribution of the id of th eEOS - will be done randomly
+aEOS : 3
+
 output:
   folder: data/diginetica/prepared/

@@ -1,7 +1,7 @@
-Remove unneeded changes
+v Remove unneeded changes
 
-params to preProcess (aEOS 1... N/sessions len, gen dir, name Dir)
-Preprocess 1... N + session len
+v params to preProcess (aEOS 1... N/sessions len, gen dir, name Dir)
+v Preprocess 1... N + session len
 
 param to process
 add option to work on exiting result (from csv? in a raw?)
@@ -33,6 +33,9 @@ Compare
 graphs...
 aEOS vs random (is aEOS better than random)
 aEOS vs original (how much aEOS fail tha algo)
+
+Check:
+Random - set seed = 42 in all places
 
 
 

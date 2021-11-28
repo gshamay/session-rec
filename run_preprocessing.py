@@ -1,3 +1,4 @@
+import random
 import time
 
 '''
@@ -17,6 +18,9 @@ import traceback
 import os
 import pandas as pd
 import numpy as np
+
+SEED = 42
+np.random.seed(SEED)
 
 def main( conf ): 
     '''
@@ -55,7 +59,10 @@ def main( conf ):
         exit()
     
     print( 'File not found: ' + conf )
-    
+
+
+
+#this method is used for loading yml
 def run_file( conf ):
     
     #include preprocessing
@@ -77,74 +84,96 @@ def run_file( conf ):
     #  diginetica Index(['SessionId', 'Time', 'ItemId', 'Date', 'Datestamp', 'TimeO', 'ItemSupport'],   dtype='object')
 
 
-    print('add aEOS')
+    aEOS = None
+    try:
+        aEOS = conf['aEOS']
+    except Exception:
+        aEOS = None
 
-    # run on all data and add new aEOS - option 1
-    #  DataFrame --> List of lists --> add aEOS --> DataFrame
-    dataAsListOfLists = data.values.tolist()
-    indexOfSessionId = 0  # todo look for 'SessionId'
-    indexOfTime = 1
-    indexOfItemId = 2
-    # list_of_lists.append([1, 2, 3])
-    # list_of_lists.append([4, 5, 6])
-    session_length = 1
-    firstEntry = dataAsListOfLists[0]
-    newData = [firstEntry]
-    currentSessionID = firstEntry[indexOfSessionId]
-    entry_1 =  firstEntry
-    entry_2 =  None
-    i = 1
-    dataLen = len(data)
-    while i < len(data):
-        if(i%1000 == 0):
-            print('processed ' + str(i) + "/" + str(dataLen))
+    sessionLength = False
+    if(isinstance(aEOS, str)):
+        if(aEOS == 'sessionLength'):
+            sessionLength = True
 
-        entryList = dataAsListOfLists[i]
+    print('aEOS[' + str(aEOS) + ']sessionLength[' +str(sessionLength) + ']')
 
-        entry = dataAsListOfLists[i]
-        currentIndex = i
-        i+=1
+    if(aEOS != None):
+        print('add aEOS') # same aEOS for all dbs
+        # run on all data and add new aEOS - option 1
+        #  DataFrame --> List of lists --> add aEOS --> DataFrame
+        dataAsListOfLists = data.values.tolist()
+        indexOfSessionId = 0  # todo look for 'SessionId'
+        indexOfTime = 1
+        indexOfItemId = 2
+        # list_of_lists.append([1, 2, 3])
+        # list_of_lists.append([4, 5, 6])
+        session_length = 1
+        firstEntry = dataAsListOfLists[0]
+        newData = [firstEntry]
+        currentSessionID = firstEntry[indexOfSessionId]
+        entry_1 =  firstEntry
+        entry_2 =  None
+        i = 1
+        dataLen = len(data)
+        while i < len(data):
+            if(i%1000 == 0):
+                print('processed ' + str(i) + "/" + str(dataLen))
 
-        if(currentSessionID == entryList[indexOfSessionId] or currentSessionID == -1):
-            # didn't moved to a new session
-            currentSessionID = entryList[indexOfSessionId]
-            entry_2 = entry_1
-            entry_1 = entry
-            session_length+=1
-            newData.append(entry)
-        else:
-            #moved to a new session
-            if(entry_2 is None or entry_1 is None):
-                print('unexpected less then 2 entries session')
-            else:
-                # build new raw entry - based last two raws
+            entryList = dataAsListOfLists[i]
+            entry = dataAsListOfLists[i]
+            currentIndex = i
+            i+=1
 
-                # todo: consider settingthe time according to the last two enries times
-                #  timeBetweenLastTwoEnties = entry_1.iloc[0]['Time'] - entry_2.iloc[0]['Time']
-                #  print('adding new line' + str(timeBetweenLastTwoEnties))
-                newEntry  = entry_1.copy()
-                newEntry[indexOfItemId] = -1
-                newEntry[indexOfTime] = newEntry[indexOfTime] + 1
-
-                newData.append(newEntry)
-                newData.append(entry)
-
-                # add raw to the new Pos
-                #data = pd.DataFrame(np.insert(data.values, i-1, values=newEntry, axis=0))
-                #i+=1 #added a new row to the data - that we dont need to analyze
-
-                #setting up new session data
-                session_length = 1
-                currentSessionID = entry[indexOfSessionId] #entry is a df in len  1
+            if(currentSessionID == entryList[indexOfSessionId] or currentSessionID == -1):
+                # didn't moved to a new session
+                currentSessionID = entryList[indexOfSessionId]
+                entry_2 = entry_1
                 entry_1 = entry
-                entry_2 = None
+                session_length+=1
+                newData.append(entry)
+            else:
+                #moved to a new session
+                if(entry_2 is None or entry_1 is None):
+                    print('unexpected less then 2 entries session')
+                else:
+                    # build new raw entry - based last two raws
 
-    newData = pd.DataFrame(newData, columns=data.columns)
-    newData = newData.astype(data.dtypes)
-    print('finished Option 1' + str(newData))
-    data = newData
+                    # todo: consider setting the time according to the last two enries times
+                    #  timeBetweenLastTwoEnties = entry_1.iloc[0]['Time'] - entry_2.iloc[0]['Time']
+                    #  print('adding new line' + str(timeBetweenLastTwoEnties))
+                    newEntry  = entry_1.copy()
 
-    #
+                    newEntryItemID = -1
+                    if(sessionLength):
+                        newEntryItemID = -session_length
+                    else:
+                        randVal = np.random.random()
+                        newEntryItemID = ((int)(randVal*aEOS) + 1)
+                        if(newEntryItemID > aEOS):
+                            newEntryItemID = aEOS # in case the random value is 1.0
+                        newEntryItemID = -newEntryItemID
+
+                    newEntry[indexOfItemId] = newEntryItemID
+                    newEntry[indexOfTime] = newEntry[indexOfTime] + 1
+
+                    newData.append(newEntry)
+                    newData.append(entry)
+
+                    # add raw to the new Pos
+                    #data = pd.DataFrame(np.insert(data.values, i-1, values=newEntry, axis=0))
+                    #i+=1 #added a new row to the data - that we dont need to analyze
+
+                    #setting up new session data
+                    session_length = 1
+                    currentSessionID = entry[indexOfSessionId] #entry is a df in len  1
+                    entry_1 = entry
+                    entry_2 = None
+
+        newData = pd.DataFrame(newData, columns=data.columns)
+        newData = newData.astype(data.dtypes)
+        print('finished adding aEOS' + str(newData))
+        data = newData
+
     # # run on all data and add new aEOS
     # session_length = 1
     # firstEntry = data.iloc[[0]]
