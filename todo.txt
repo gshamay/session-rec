@@ -5,19 +5,26 @@ v Preprocess 1... N + session len
 
 v enable preprocess recsys
 
-param to process
-add option to work on exiting result (from csv? in a raw?)
+v save model        results:  pickle_models: results/next/rsc15/
+v load model        class: filemodel.filemodel.FileModel; params: { modelfile: results/next/rsc15/ar_rsc_ar.pkl }
 
-implement random by probability threshold  (th = 0.1...1)
-implement random by train session len (need to build histogram of the train session lengths)
-run random based on earlier results csv?
+v run on earlier results csv       class: filemodel.resultfile.ResultFile; params: { file: data/rsc15/recommendations/recoms_rsc15_100k_sr }
 
-push up results
+? run multiple algorithms from a single yml - using key per class (not working)        (memory can be an issue)
+
+implement simple random - to set the probability (* max existing prob to be more 'realistic'  )
+implement 'always yes' option - always return that the item is EOS
+
 evaluation support in -1... -n
+push up results
 
-Evaluation measures for 1...k (P@k, mrr@k)
+? implement random by probability threshold  (th = 0.1...1)
+? implement random by train session len (need to build histogram of the train session lengths)
 
-Add print to File
+v Evaluation measures for 1...k (P@k, mrr@k)
+
+? Add print to File
+
 short Run on EC2 GPU - compare runTime
 
 try Colab
@@ -26,14 +33,15 @@ Document the run in EC2
 load db from web ZIP
 Load --> Train --> Run --> save in one command
 
-run on recsys64 on all aEOS N
-Find best N aEOS
-
-run all algos on all dbs - reproduce  regular results reported by papers (gen p@1..20  mrr@1...20)
+generate recsys64 0,1,5,10,20,100, aEOS
+run on recsys64 on all aEOS N --> Find best N aEOS
+gen all dbs with N
+run all algos on all dbs (w/o aEOS) - reproduce  regular results reported by papers (gen p@1..20  mrr@1...20)
 run all algos using N on all dbs (gen p@1..20  mrr@1...20)
-run all algos using random (th = 0.1...1)  and (session len) (gen p@1..20  mrr@1...20)
+run all algos with their saved reults using random (th = 0.1...1)  and (session len) (gen p@1..20  mrr@1...20)
 
 Compare
+
 graphs...
 aEOS vs random (is aEOS better than random)
 aEOS vs original (how much aEOS fail tha algo)
@@ -55,6 +63,10 @@ There are no positive and negative values - there is hit and not hit ; FN=FP=the
 ? Lior: Why they use P@K and R@K in the earlier works ? it's wrong!
 in EOS we can do the same OR
 ** R@K = hits/(hits + (Not reported aEOS in EOS))
+
+How to implement Random
+https://dl.acm.org/doi/pdf/10.1145/3109859.3109872
+When recurrent neural networks meet the neighborhood for session-based recommendation
 
 
 
