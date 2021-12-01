@@ -37,6 +37,7 @@ class AssociationRules:
         
             
         '''
+        print('fit ar start ['+ str(len(data)) + '] rows')
 
         cur_session = -1
         last_items = []
@@ -44,9 +45,12 @@ class AssociationRules:
         
         index_session = data.columns.get_loc( self.session_key )
         index_item = data.columns.get_loc( self.item_key )
-        
+        counter = 0
         for row in data.itertuples( index=False ):
-            
+            counter+=1
+            if(counter %1000 == 0):
+                print('fit['+str(counter)+']')
+
             session_id, item_id = row[index_session], row[index_item]
             
             if session_id != cur_session:
@@ -76,9 +80,11 @@ class AssociationRules:
             self.prune( rules )
             
         self.rules = rules
-    
+        print('fit ar done')
+
+
     def linear(self, i):
-        return 1 - (0.1*i) if i <= 10 else 0
+        return 1 - (0.1 * i) if i <= 10 else 0
     
     def same(self, i):
         return 1
