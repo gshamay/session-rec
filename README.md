@@ -94,7 +94,7 @@ Parts of the framework and its algorithms are based on code developed and shared
 <h2>Requirements</h2>
 To run session-aware, the following libraries are required:
 <ul>
-    <li>Anaconda 4.X (Python 3.5)</li>
+    <li>Anaconda 4.X (Python 3.5) (Anaconda3-4.4.0-Windows-x86_64.exe from https://repo.anaconda.com/archive/) </li>
     <li>Pympler</li>
     <li>NumPy</li>
     <li>SciPy</li>

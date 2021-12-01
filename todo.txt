@@ -35,7 +35,13 @@ Load --> Train --> Run --> save in one command
 
 generate recsys64 0,1,5,10,20,100, aEOS
 run on recsys64 on all aEOS N --> Find best N aEOS
-gen all dbs with N
+
+gen diginetica dbs with N
+gen rsc64 dbs with N
+gen rsc4 dbs with N
+gen more dbs
+
+
 run all algos on all dbs (w/o aEOS) - reproduce  regular results reported by papers (gen p@1..20  mrr@1...20)
 run all algos using N on all dbs (gen p@1..20  mrr@1...20)
 run all algos with their saved reults using random (th = 0.1...1)  and (session len) (gen p@1..20  mrr@1...20)

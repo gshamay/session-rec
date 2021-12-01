@@ -1,5 +1,8 @@
 import theano.misc.pkl_utils as pickle
 import dill
+import numpy as np
+SEED = 42
+np.random.seed(SEED)
 
 class FileModel:
     addOn = None
@@ -51,11 +54,26 @@ class FileModel:
 
         '''
         retVal = self.model.predict_next(session_id, input_item_id, predict_for_item_ids, skip, mode_type)
-        if (self.addOn == 'random'):
-            print('do random')
 
-        if (self.addOn == 'naiveTrue'):
-            print('do naiveTrue')
+        if (self.addOn != None):
+            retVal[np.isnan(retVal)] = 0  # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+            retVal.sort_values(ascending=False, inplace=True)  # sort preds according to the predicted probability
+            if (self.addOn == 'random'):
+                print('do random')
+                randRate = np.random.random()
+                highestValue = retVal[retVal.index[0]]
+                randValue = randRate * highestValue
+                retVal[-1] = randValue
+
+            if (self.addOn == 'naiveTrue'):
+                print('do naiveTrue')
+                value4 = retVal[retVal.index[4]]
+                value5 = retVal[retVal.index[5]]
+                newValue5 = (value4 + value5) / 2
+                if(newValue5 == 0):
+                    newValue5 = 0.01
+
+                retVal[-1] = newValue5
 
         return retVal
 
