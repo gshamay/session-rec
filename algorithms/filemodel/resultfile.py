@@ -1,8 +1,11 @@
 import theano.misc.pkl_utils as pickle
 import pandas as pd
 import numpy as np
+SEED = 42
+np.random.seed(SEED)
 
 class ResultFile:
+    addOn = None
     '''
     FileModel( modelfile )
     Uses a trained algorithm, which was pickled to a file.
@@ -14,9 +17,10 @@ class ResultFile:
 
     '''
 
-    def __init__(self, file):
+    def __init__(self, file, addOn =None):
         # config.experimental.unpickle_gpu_on_cpu = True
         self.file = file
+        self.addOn = addOn
     
     def init(self, train, test=None, slice=None):
         file = self.file + ( ('.' + str(slice) + '.csv') if slice is not None else '' )
@@ -73,6 +77,16 @@ class ResultFile:
         res = pd.Series( index=items, data=scores ) 
         
         self.pos += 1
+
+        if (self.addOn == 'random'):
+            randValue = np.random()
+
+            print('do random')
+
+        if (self.addOn == 'naiveTrue'):
+
+            print('do naiveTrue')
+
         
         return res
     

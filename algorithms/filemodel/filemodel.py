@@ -2,6 +2,7 @@ import theano.misc.pkl_utils as pickle
 import dill
 
 class FileModel:
+    addOn = None
     '''
     FileModel( modelfile )
     Uses a trained algorithm, which was pickled to a file.
@@ -13,9 +14,10 @@ class FileModel:
 
     '''
 
-    def __init__(self, modelfile):
+    def __init__(self, modelfile,addOn =None):
         # config.experimental.unpickle_gpu_on_cpu = True
         self.model = dill.load(open(modelfile, 'rb'))
+        self.addOn = addOn
 
     #fix Error: AttributeError: 'FileModel' object has no attribute 'clear'
 
@@ -48,7 +50,14 @@ class FileModel:
             Prediction scores for selected items on how likely to be the next item of this session. Indexed by the item IDs.
 
         '''
-        return self.model.predict_next(session_id, input_item_id, predict_for_item_ids, skip, mode_type)
+        retVal = self.model.predict_next(session_id, input_item_id, predict_for_item_ids, skip, mode_type)
+        if (self.addOn == 'random'):
+            print('do random')
+
+        if (self.addOn == 'naiveTrue'):
+            print('do naiveTrue')
+
+        return retVal
 
     def predict_next_batch(self, session_ids, input_item_ids, predict_for_item_ids=None, batch=100):
         '''
@@ -75,4 +84,13 @@ class FileModel:
             Columns: events of the batch; rows: items. Rows are indexed by the item IDs.
 
         '''
-        return self.model.predict_next_batch(session_ids, input_item_ids, predict_for_item_ids, batch)
+        retVal = self.model.predict_next_batch(session_ids, input_item_ids, predict_for_item_ids, batch)
+        if (self.addOn == 'random'):
+            print('do random')
+
+        if (self.addOn == 'naiveTrue'):
+            print('do naiveTrue')
+
+        return retVal
+
+
