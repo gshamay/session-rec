@@ -1,0 +1,22 @@
+---
+type: single # single|window
+mode: session_based # session_based | session_aware
+preprocessor: diginetica # dataset (folder) name
+data:
+  folder: data/diginetica/raw/
+  prefix: train-item-views_full
+
+filter:
+  min_item_support: 5
+  min_session_length: 2
+
+params:
+  days_test: 7
+
+# add here the option to add aEOS
+#  use a fixed number or 'sessionLength' to use the session Length as the ID of the aEOS
+#  when a fixed number is set, the distribution of the id of th eEOS - will be done randomly
+aEOS : 100
+
+output:
+  folder: data/diginetica/prepared/diginetica_100EOS/

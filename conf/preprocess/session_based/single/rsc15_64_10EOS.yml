@@ -5,7 +5,7 @@ preprocessor: rsc15 #
 # add here the option to add aEOS
 #  use a fixed number or 'sessionLength' to use the session Length as the ID of the aEOS
 #  when a fixed number is set, the distribution of the id of th eEOS - will be done randomly
-#aEOS : 
+aEOS : 10
 
 data:
   folder: data/rsc15/raw/
@@ -20,4 +20,4 @@ params:
   last_nth: 64 #optional for rsc15_4/64
 
 output:
-  folder: data/rsc15/prepared/
+  folder: data/rsc15/prepared/rsc15_64_10EOS/

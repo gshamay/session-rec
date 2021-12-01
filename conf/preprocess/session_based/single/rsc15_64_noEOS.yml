@@ -20,4 +20,4 @@ params:
   last_nth: 64 #optional for rsc15_4/64
 
 output:
-  folder: data/rsc15/prepared/
+  folder: data/rsc15/prepared/rsc15_64_noEOS/
