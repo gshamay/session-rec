@@ -17,7 +17,16 @@ class FileModel:
         # config.experimental.unpickle_gpu_on_cpu = True
         self.model = dill.load(open(modelfile, 'rb'))
 
+    #fix Error: AttributeError: 'FileModel' object has no attribute 'clear'
+
+
+    def clear(self):
+        print("Clear in FileModfel - call model clear")
+        self.model.clear()
+        return
+
     def fit(self, train, test=None):
+        print("fit in FileModfel - do nothing")
         return
 
     def predict_next(self, session_id, input_item_id, predict_for_item_ids, skip=False, mode_type='view', timestamp=0):
