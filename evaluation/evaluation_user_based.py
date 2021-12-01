@@ -9,8 +9,8 @@ logging.basicConfig(
     format="%(asctime)s: %(name)s: %(levelname)s: %(message)s")
 
 
-def evaluate_sessions(pr, metrics, test_data, train_data, items=None, session_key='SessionId',
-                                 user_key='UserId', item_key='ItemId', time_key='Time'):
+def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, items=None, session_key='SessionId',
+                      user_key='UserId', item_key='ItemId', time_key='Time'):
     """
     Evaluates the HGRU4Rec network wrt. recommendation accuracy measured by recall@N and MRR@N.
     Concatenates train sessions to test sessions to bootstrap the hidden states of the HGRU.

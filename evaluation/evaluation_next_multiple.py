@@ -1,7 +1,9 @@
 import time
 import numpy as np
 
-def evaluate_sessions(pr, metrics, test_data, train_data, items=None, cut_off=20, session_key='SessionId', item_key='ItemId', time_key='Time'): 
+
+def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, items=None, cut_off=20,
+                      session_key='SessionId', item_key='ItemId', time_key='Time'):
     '''
     Evaluates the baselines wrt. recommendation accuracy measured by
     1- HitRate@N and MRR@N (immediate next item recommendation task)

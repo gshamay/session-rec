@@ -46,7 +46,7 @@ def main(conf, out=None):
     '''
     print('Checking {}'.format(conf))
     if TELEGRAM_STATUS:
-        updater.dispatcher.add_handler( CommandHandler('status', status) )
+        updater.dispatcher.add_handler(CommandHandler('status', status))
 
     file = Path(conf)
     if file.is_file():
@@ -443,14 +443,15 @@ def run_bayopt(conf):
         space_dict = generate_space(entry)
 
         # generate space for algorithm
-        opt = Optimizer([values for k, values in space_dict.items()], n_initial_points=conf['optimize']['initial_points'] if 'optimize' in conf and 'initial_points' in conf['optimize'] else 10)
+        opt = Optimizer([values for k, values in space_dict.items()], n_initial_points=conf['optimize'][
+            'initial_points'] if 'optimize' in conf and 'initial_points' in conf['optimize'] else 10)
 
         for i in range(start, iterations):
             print('start bayesian test ', str(i))
             suggested = opt.ask()
-            params = { k:v for k,v in zip( space_dict.keys(), suggested ) }
+            params = {k: v for k, v in zip(space_dict.keys(), suggested)}
 
-            algo_instance = create_algorithm_dict( entry, params )
+            algo_instance = create_algorithm_dict(entry, params)
 
             run_bayopt_single(conf, algo_instance, i, globals)
             res = globals['current']
@@ -498,10 +499,13 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
         if hasattr(m, 'start'):
             m.start(algorithm)
 
+    # train the model
+    # todo: Why do we provide the test data to the train ?
     algorithm.fit(train, test)
 
     print(key, ' time: ', (time.time() - ts))
 
+    # todo; rename pickle_models to something else ? (pickle was changed to dill)
     if 'results' in conf and 'pickle_models' in conf['results']:
         try:
             save_model(key, algorithm, conf)
@@ -512,7 +516,8 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
         if hasattr(m, 'start'):
             m.stop(algorithm)
 
-    results[key] = eval.evaluate_sessions(algorithm, metrics, test, train)
+    algorithmKey = key
+    results[key] = eval.evaluate_sessions(algorithm, metrics, test, train, algorithmKey, conf)
     if out:
         write_results_csv({key: results[key]}, conf, extra=key, iteration=iteration)
 
@@ -578,9 +583,8 @@ def save_model(key, algorithm, conf):
             Configuration dictionary, has to include results.pickel_models
     '''
 
-
-    #fixed: the  pickle_models does not use the pickle_models value, but the folder one
-    #file_name = conf['results']['folder'] + '/' + conf['key'] + '_' + conf['data']['name'] + '_' + key + '.pkl'one
+    # fixed: the  pickle_models does not use the pickle_models value, but the folder one
+    # file_name = conf['results']['folder'] + '/' + conf['key'] + '_' + conf['data']['name'] + '_' + key + '.pkl'one
     file_name = conf['results']['pickle_models'] + '/' + conf['key'] + '_' + conf['data']['name'] + '_' + key + '.pkl'
     file_name = Path(file_name)
     ensure_dir(file_name)
@@ -653,12 +657,15 @@ def create_algorithms_dict(list):
                     else:
                         key += '-' + str(k) + "=" + str(val)
                         key = key.replace(',', '_')
+                        key = key.replace('/', '_')
+                        # todo: refactor to method generateAlgorithmKey (duplicated code x4)
 
             else:
                 for k, val in params.items():
                     if k != 'file':
                         key += '-' + str(k) + "=" + str(val)
                         key = key.replace(',', '_')
+                        key = key.replace('/', '_')
                     # key += '-' + '-'.join( map( lambda x: str(x[0])+'='+str(x[1]), params.items() ) )
 
         if 'params_var' in algorithm:
@@ -717,12 +724,14 @@ def create_algorithm_dict(entry, additional_params={}):
                 else:
                     key += '-' + str(k) + "=" + str(val)
                     key = key.replace(',', '_')
+                    key = key.replace('/', '_')
 
         else:
             for k, val in params.items():
                 if k != 'file':
                     key += '-' + str(k) + "=" + str(val)
                     key = key.replace(',', '_')
+                    key = key.replace('/', '_')
                 # key += '-' + '-'.join( map( lambda x: str(x[0])+'='+str(x[1]), params.items() ) )
 
     if 'params_var' in algorithm:
@@ -923,5 +932,3 @@ if __name__ == '__main__':
         main(sys.argv[1], out=sys.argv[2] if len(sys.argv) > 2 else None)
     else:
         print('File or folder expected.')
-
-

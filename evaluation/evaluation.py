@@ -235,7 +235,9 @@ def evaluate_sessions_batch_org(pr, metrics, test_data, train_data, items=None, 
     
     return recall/evalutation_point_count, mrr/evalutation_point_count
 
-def evaluate_sessions(pr, metrics, test_data, train_data, items=None, cut_off=20, session_key='SessionId', item_key='ItemId', time_key='Time'): 
+
+def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, items=None, cut_off=20,
+                      session_key='SessionId', item_key='ItemId', time_key='Time'):
     '''
     Evaluates the baselines wrt. recommendation accuracy measured by recall@N and MRR@N. Has no batch evaluation capabilities. Breaks up ties.
 
@@ -317,13 +319,17 @@ def evaluate_sessions(pr, metrics, test_data, train_data, items=None, cut_off=20
             for m in metrics:
                 if hasattr(m, 'stop_predict'):
                     m.stop_predict( pr ) # same as 'start_predict' above
-            
+
+            # todo: refactor. Duplicated code that is handled differently between the
+            #  different evaluate_sessions methods;  Also appear as preds.fillna(0, inplace=True)
             preds[np.isnan(preds)] = 0 # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
-            # todo: add here aEOS tune and 'pushUp' method - change all -1...-N to be -1
-            #  and keep only  the -1 with the highest probability value - zero the probability of all the rest
 
 #             preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
             preds.sort_values( ascending=False, inplace=True ) # sort preds according to the predicted probability
+
+            # todo: add here aEOS tune and 'pushUp' method - change all -1...-N to be -1
+            #  and keep only  the -1 with the highest probability value - zero the probability of all the rest
+            #  NOTE : this need to be done in all evaluate_sessions methods (7 methods)
             
             time_sum_clock += time.clock()-crs
             time_sum += time.time()-trs

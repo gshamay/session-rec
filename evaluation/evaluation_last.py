@@ -1,7 +1,8 @@
 import time
 import numpy as np
     
-def evaluate_sessions(pr, metrics, test_data, train_data, items=None, session_key='SessionId', item_key='ItemId', time_key='Time'): 
+def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, items=None, session_key='SessionId',
+                      item_key='ItemId', time_key='Time'):
     '''
     TODO
 
