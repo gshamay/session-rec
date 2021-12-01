@@ -499,6 +499,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
             m.start(algorithm)
 
     algorithm.fit(train, test)
+
     print(key, ' time: ', (time.time() - ts))
 
     if 'results' in conf and 'pickle_models' in conf['results']:
@@ -577,7 +578,10 @@ def save_model(key, algorithm, conf):
             Configuration dictionary, has to include results.pickel_models
     '''
 
-    file_name = conf['results']['folder'] + '/' + conf['key'] + '_' + conf['data']['name'] + '_' + key + '.pkl'
+
+    #fixed: the  pickle_models does not use the pickle_models value, but the folder one
+    #file_name = conf['results']['folder'] + '/' + conf['key'] + '_' + conf['data']['name'] + '_' + key + '.pkl'one
+    file_name = conf['results']['pickle_models'] + '/' + conf['key'] + '_' + conf['data']['name'] + '_' + key + '.pkl'
     file_name = Path(file_name)
     ensure_dir(file_name)
     file = open(file_name, 'wb')
