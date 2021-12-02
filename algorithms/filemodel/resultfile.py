@@ -77,6 +77,8 @@ class ResultFile:
         res = pd.Series( index=items, data=scores ) 
         
         self.pos += 1
+        # todo: in case that the next res does not exists (train on EOS test on EOS)
+        #  duplicated last prediction (it will be wrong anyway)
 
         if (self.addOn == 'random'):
             randValue = np.random()
