@@ -60,11 +60,23 @@ class ResultFile:
         if session_id != self.session_id:
             self.pos = 0
             self.session_id = session_id
-        
-        recs = self.recommendations[(self.recommendations.SessionId == session_id) & (self.recommendations.Position == self.pos) ]
-        if len(recs) == 0: 
+
+        recs = self.recommendations[(self.recommendations.SessionId == session_id) & (self.recommendations.Position == self.pos)]
+
+        # Work on exiting results, model that was trained and tested w/o aEOS, but now with aEOS in the expected output
+        #  This provides the ability to test an exiting model with aEOS random variation ( when addOn is applied )
+        # in case that the next res does not exists (train on EOS test on EOS)
+        #  duplicated last prediction (it will be wrong anyway)
+        if (len(recs) == 0):
             recs = self.recommendations[self.recommendations.SessionId == session_id]
-            recs = recs.iloc[[self.pos]]
+            if (self.pos >= len(recs)):
+                self.pos = self.pos - 1
+                recs = self.recommendations[
+                    (self.recommendations.SessionId == session_id) & (self.recommendations.Position == (self.pos))]
+
+            else:
+                recs = recs.iloc[[self.pos]]
+
         items = recs.Recommendations.values[0]
         scores = recs.Scores.values[0]
         
@@ -77,17 +89,32 @@ class ResultFile:
         res = pd.Series( index=items, data=scores ) 
         
         self.pos += 1
-        # todo: in case that the next res does not exists (train on EOS test on EOS)
-        #  duplicated last prediction (it will be wrong anyway)
 
-        if (self.addOn == 'random'):
-            randValue = np.random()
+        #todo: refactor: identical code to fileModel
+        if (self.addOn != None):
+            # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+            res[np.isnan(res)] = 0
+            aEOSItemId = -1
+            res.sort_values(ascending=False, inplace=True)  # sort preds according to the predicted probability
+            if (self.addOn == 'random'):
+                #print('do random')
+                randRate = np.random.random()
+                highestValue = res[res.index[0]]
+                randValue = randRate * highestValue
+                res[aEOSItemId] = randValue
 
-            print('do random')
+            if (self.addOn == 'naiveTrue'):
+                #print('do naiveTrue')
+                defaultKLocation = 5
+                value4 = res[res.index[defaultKLocation - 1]]
+                value5 = res[res.index[defaultKLocation]]
+                newValue5 = (value4 + value5) / 2
+                if (newValue5 == 0):
+                    defaultValueToSetInResults = 0.01
+                    newValue5
+                    defaultValueToSetInResults
 
-        if (self.addOn == 'naiveTrue'):
-
-            print('do naiveTrue')
+                res[aEOSItemId] = newValue5
 
         
         return res

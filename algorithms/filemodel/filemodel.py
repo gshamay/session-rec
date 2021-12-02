@@ -54,28 +54,33 @@ class FileModel:
 
         '''
         retVal = self.model.predict_next(session_id, input_item_id, predict_for_item_ids, skip, mode_type)
-
         if (self.addOn != None):
-            retVal[np.isnan(retVal)] = 0  # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+            # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+            retVal[np.isnan(retVal)] = 0
+            aEOSItemId = -1
             retVal.sort_values(ascending=False, inplace=True)  # sort preds according to the predicted probability
             if (self.addOn == 'random'):
                 print('do random')
                 randRate = np.random.random()
                 highestValue = retVal[retVal.index[0]]
                 randValue = randRate * highestValue
-                retVal[-1] = randValue
+                retVal[aEOSItemId] = randValue
 
             if (self.addOn == 'naiveTrue'):
                 print('do naiveTrue')
-                value4 = retVal[retVal.index[4]]
-                value5 = retVal[retVal.index[5]]
+                defaultKLocation = 5
+                value4 = retVal[retVal.index[defaultKLocation - 1]]
+                value5 = retVal[retVal.index[defaultKLocation]]
                 newValue5 = (value4 + value5) / 2
-                if(newValue5 == 0):
-                    newValue5 = 0.01
+                if (newValue5 == 0):
+                    defaultValueToSetInResults = 0.01
+                    newValue5
+                    defaultValueToSetInResults
 
-                retVal[-1] = newValue5
+                retVal[aEOSItemId] = newValue5
 
         return retVal
+
 
     def predict_next_batch(self, session_ids, input_item_ids, predict_for_item_ids=None, batch=100):
         '''
