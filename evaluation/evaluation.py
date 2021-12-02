@@ -306,8 +306,8 @@ def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, it
                 if np.in1d(iid, items): items_to_predict = items
                 else: items_to_predict = np.hstack(([iid], items))  
                     
-            crs = time.clock();
-            trs = time.time();
+            crs = time.clock()
+            trs = time.time()
             
             for m in metrics:
                 if hasattr(m, 'start_predict'):
@@ -327,42 +327,62 @@ def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, it
 #             preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
             preds.sort_values( ascending=False, inplace=True ) # sort preds according to the predicted probability
 
-            # todo: add here aEOS tune and 'pushUp' method - change all -1...-N to be -1
-            #  and keep only  the -1 with the highest probability value - zero the probability of all the rest
-            #  NOTE : this need to be done in all evaluate_sessions methods (7 methods)
-            
+            ############################################################
+            # Handle multiple aEOS predictions
+            #  in case there are more then a single aEOS, we need to select the top one,
+            #  set it's value to -1, and push all the rest down as they are not relevant
+            #  change all -1...-N to be -1
+            #  'pushUp' all other results to cover the unneeded -2...-N
+            #  this will keep only  the -1 with the highest probability value
+            maxUsedK = 50
+            aEOSBaseIDValue = -1
+            foundAEOS = False
+            aEOSMaxPredictedValue = 0
+            defaultMinValueToPushDownPrediction = -0.01
+            for i in range(maxUsedK):
+                iKey = preds.index[i]
+                if (iKey <= aEOSBaseIDValue):
+                    if (not foundAEOS):
+                        foundAEOS = True
+                        aEOSMaxPredictedValue = preds[iKey]
+                    preds[iKey] = defaultMinValueToPushDownPrediction  # push the result down the results list
+
+            if (aEOSMaxPredictedValue > 0):
+                preds[aEOSBaseIDValue] = aEOSMaxPredictedValue
+                # re sort preds according to the new  predicted probabilities
+                preds.sort_values(ascending=False, inplace=True)
+
+            # if the predicted aEOS is < -1 (-2, -3....-N), we change it to -1 as it's the default aEOS id
+            if (iid <= aEOSBaseIDValue):
+                iid = aEOSBaseIDValue
+            ############################################################
+
             time_sum_clock += time.clock()-crs
             time_sum += time.time()-trs
             time_count += 1
             
             for m in metrics:
                 if hasattr(m, 'add'):
-                    # todo: we can implement Random here -
-                    #  as a metric  - copy the prediction and add the random data on it - Less calculations
-                    #  or as a new prediction algorithm -  more natural -  but the prediction need to run twice
                     m.add( preds, iid, for_item=prev_iid, session=sid, position=pos )
-            
+
             pos += 1
-            
+
         prev_iid = iid
-        
+
         count += 1
 
-
-    print( 'END evaluation in ', (time.clock()-sc), 'c / ', (time.time()-st), 's' )
-    print( '    avg rt ', (time_sum/time_count), 's / ', (time_sum_clock/time_count), 'c' )
-    print( '    time count ', (time_count), 'count/', (time_sum), ' sum' )
-
+    print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+    print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
+    print('    time count ', (time_count), 'count/', (time_sum), ' sum')
 
     res = []
     for m in metrics:
         if type(m).__name__ == 'Time_usage_testing':
-            res.append(m.result_second(time_sum_clock/time_count))
+            res.append(m.result_second(time_sum_clock / time_count))
             res.append(m.result_cpu(time_sum_clock / time_count))
         else:
-            res.append( m.result() )
+            res.append(m.result())
 
-    
     return res
 
 def evaluate_sessions_org(pr, metrics, test_data, train_data, items=None, cut_off=20, session_key='SessionId', item_key='ItemId', time_key='Time'): 
