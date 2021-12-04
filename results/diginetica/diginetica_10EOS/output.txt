@@ -1,0 +1,178 @@
+waiting for configuration files in  conf/in
+processing config conf/in\test_diginnetica_10EOS.yml
+C:/bgu/session-rec/run_config.py:99: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  c = yaml.load(stream)
+run test single
+START load data
+Loaded train set
+	Events: 1105176
+	Sessions: 188807
+	Items: 43115
+	Span: 2016-01-01 / 2016-05-25
+
+Loaded test set
+	Events: 92884
+	Sessions: 15979
+	Items: 21149
+	Span: 2016-05-25 / 2016-06-01
+
+END load data  1.6632715000014286 c /  1.664025068283081 s
+fit  sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10
+43116
+WARNING:tensorflow:Entity <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001A17CAE0A88>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001A17CAE0A88>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:Entity <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001A17C07D888>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method GRUCell.call of <tensorflow.python.ops.rnn_cell_impl.GRUCell object at 0x000001A17C07D888>>: AssertionError: Bad argument number for Name: 3, expecting 4
+C:\pycharmEnv\pythin37x64Env\lib\site-packages\tensorflow\python\ops\gradients_util.py:93: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+start training:  2021-12-02 23:10:50.500254
+start predicting:  2021-12-02 23:41:30.477939
+train_loss:	8.4399	test_loss:	7.261215	Recall@20:	35.6076	MMR@20:	8.8820	Epoch:	0
+start training:  2021-12-03 00:00:36.799455
+start predicting:  2021-12-03 00:30:39.601161
+train_loss:	8.3273	test_loss:	7.206030	Recall@20:	35.6193	MMR@20:	8.6481	Epoch:	1
+start training:  2021-12-03 00:49:07.960047
+start predicting:  2021-12-03 01:18:05.885753
+train_loss:	8.3681	test_loss:	7.173225	Recall@20:	35.8169	MMR@20:	8.7833	Epoch:	2
+start training:  2021-12-03 01:36:28.874720
+start predicting:  2021-12-03 02:05:45.356642
+train_loss:	7.5744	test_loss:	6.496003	Recall@20:	39.9116	MMR@20:	9.6188	Epoch:	3
+start training:  2021-12-03 02:24:53.871993
+start predicting:  2021-12-03 02:55:24.853427
+train_loss:	6.9922	test_loss:	6.463234	Recall@20:	39.8765	MMR@20:	9.6623	Epoch:	4
+start training:  2021-12-03 03:14:15.903953
+start predicting:  2021-12-03 03:42:23.154777
+train_loss:	7.2478	test_loss:	6.478056	Recall@20:	40.2549	MMR@20:	9.7850	Epoch:	5
+start training:  2021-12-03 04:01:00.823752
+start predicting:  2021-12-03 04:29:26.384961
+train_loss:	6.7584	test_loss:	5.972729	Recall@20:	44.0557	MMR@20:	11.0278	Epoch:	6
+start training:  2021-12-03 04:47:47.574554
+start predicting:  2021-12-03 05:16:08.071447
+train_loss:	6.9839	test_loss:	5.974790	Recall@20:	44.2195	MMR@20:	11.0174	Epoch:	7
+start training:  2021-12-03 05:34:25.610179
+start predicting:  2021-12-03 06:02:42.368543
+train_loss:	6.0931	test_loss:	5.966556	Recall@20:	44.2260	MMR@20:	11.1674	Epoch:	8
+start training:  2021-12-03 06:21:00.112051
+start predicting:  2021-12-03 06:49:14.773350
+train_loss:	5.7307	test_loss:	5.665100	Recall@20:	47.5860	MMR@20:	12.2784	Epoch:	9
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10  time:  28634.7089240551
+START evaluation of  92884  actions in  15979  sessions
+    eval process:  0  of  92884  actions:  0.0  % in 0.10194015502929688 s
+    eval process:  1000  of  92884  actions:  1.0766116876964815  % in 36.64255928993225 s
+    eval process:  2000  of  92884  actions:  2.153223375392963  % in 72.18961358070374 s
+    eval process:  3000  of  92884  actions:  3.2298350630894452  % in 107.60705375671387 s
+    eval process:  4000  of  92884  actions:  4.306446750785926  % in 143.26211428642273 s
+    eval process:  5000  of  92884  actions:  5.383058438482409  % in 178.13767790794373 s
+    eval process:  6000  of  92884  actions:  6.4596701261788905  % in 213.29993987083435 s
+    eval process:  7000  of  92884  actions:  7.536281813875371  % in 248.47129464149475 s
+    eval process:  8000  of  92884  actions:  8.612893501571852  % in 283.294237613678 s
+    eval process:  9000  of  92884  actions:  9.689505189268335  % in 319.5621783733368 s
+    eval process:  10000  of  92884  actions:  10.766116876964817  % in 356.06392669677734 s
+    eval process:  11000  of  92884  actions:  11.842728564661298  % in 392.0812659263611 s
+    eval process:  12000  of  92884  actions:  12.919340252357781  % in 427.62082052230835 s
+    eval process:  13000  of  92884  actions:  13.99595194005426  % in 463.7791430950165 s
+    eval process:  14000  of  92884  actions:  15.072563627750743  % in 499.85392355918884 s
+    eval process:  15000  of  92884  actions:  16.149175315447227  % in 536.260174036026 s
+    eval process:  16000  of  92884  actions:  17.225787003143704  % in 572.3804948329926 s
+    eval process:  17000  of  92884  actions:  18.30239869084019  % in 608.6095039844513 s
+    eval process:  18000  of  92884  actions:  19.37901037853667  % in 644.0798981189728 s
+    eval process:  19000  of  92884  actions:  20.45562206623315  % in 679.6430184841156 s
+    eval process:  20000  of  92884  actions:  21.532233753929635  % in 715.428405046463 s
+    eval process:  21000  of  92884  actions:  22.608845441626112  % in 751.607462644577 s
+    eval process:  22000  of  92884  actions:  23.685457129322597  % in 787.3207755088806 s
+    eval process:  23000  of  92884  actions:  24.762068817019077  % in 823.3497688770294 s
+    eval process:  24000  of  92884  actions:  25.838680504715562  % in 858.5288589000702 s
+    eval process:  25000  of  92884  actions:  26.91529219241204  % in 894.2665696144104 s
+    eval process:  26000  of  92884  actions:  27.99190388010852  % in 930.2598202228546 s
+    eval process:  27000  of  92884  actions:  29.068515567805004  % in 966.7820544242859 s
+    eval process:  28000  of  92884  actions:  30.145127255501485  % in 1002.270779132843 s
+    eval process:  29000  of  92884  actions:  31.22173894319797  % in 1038.3119633197784 s
+    eval process:  30000  of  92884  actions:  32.298350630894454  % in 1074.5924627780914 s
+    eval process:  31000  of  92884  actions:  33.37496231859093  % in 1110.652990102768 s
+    eval process:  32000  of  92884  actions:  34.45157400628741  % in 1146.1105556488037 s
+    eval process:  33000  of  92884  actions:  35.52818569398389  % in 1181.843111038208 s
+    eval process:  34000  of  92884  actions:  36.60479738168038  % in 1217.4038627147675 s
+    eval process:  35000  of  92884  actions:  37.68140906937686  % in 1253.127230644226 s
+    eval process:  36000  of  92884  actions:  38.75802075707334  % in 1289.2092299461365 s
+    eval process:  37000  of  92884  actions:  39.83463244476982  % in 1325.0653038024902 s
+    eval process:  38000  of  92884  actions:  40.9112441324663  % in 1360.1315279006958 s
+    eval process:  39000  of  92884  actions:  41.987855820162785  % in 1396.3069503307343 s
+    eval process:  40000  of  92884  actions:  43.06446750785927  % in 1431.4966266155243 s
+    eval process:  41000  of  92884  actions:  44.14107919555575  % in 1467.4603312015533 s
+    eval process:  42000  of  92884  actions:  45.217690883252224  % in 1503.4395735263824 s
+    eval process:  43000  of  92884  actions:  46.29430257094871  % in 1540.015210390091 s
+    eval process:  44000  of  92884  actions:  47.37091425864519  % in 1575.9412350654602 s
+    eval process:  45000  of  92884  actions:  48.44752594634167  % in 1611.5631065368652 s
+    eval process:  46000  of  92884  actions:  49.524137634038155  % in 1647.8090949058533 s
+    eval process:  47000  of  92884  actions:  50.60074932173464  % in 1682.5388045310974 s
+    eval process:  48000  of  92884  actions:  51.677361009431124  % in 1718.5712983608246 s
+    eval process:  49000  of  92884  actions:  52.75397269712761  % in 1754.0113067626953 s
+    eval process:  50000  of  92884  actions:  53.83058438482408  % in 1789.7675614356995 s
+    eval process:  51000  of  92884  actions:  54.907196072520556  % in 1825.7283535003662 s
+    eval process:  52000  of  92884  actions:  55.98380776021704  % in 1862.0599148273468 s
+    eval process:  53000  of  92884  actions:  57.060419447913524  % in 1897.4118926525116 s
+    eval process:  54000  of  92884  actions:  58.13703113561001  % in 1933.1042785644531 s
+    eval process:  55000  of  92884  actions:  59.213642823306486  % in 1968.9599936008453 s
+    eval process:  56000  of  92884  actions:  60.29025451100297  % in 2004.4057874679565 s
+    eval process:  57000  of  92884  actions:  61.366866198699455  % in 2039.5843243598938 s
+    eval process:  58000  of  92884  actions:  62.44347788639594  % in 2075.0459971427917 s
+    eval process:  59000  of  92884  actions:  63.52008957409242  % in 2110.4678163528442 s
+    eval process:  60000  of  92884  actions:  64.59670126178891  % in 2144.8355746269226 s
+    eval process:  61000  of  92884  actions:  65.67331294948538  % in 2180.399830341339 s
+    eval process:  62000  of  92884  actions:  66.74992463718186  % in 2215.920534133911 s
+    eval process:  63000  of  92884  actions:  67.82653632487833  % in 2251.0430884361267 s
+    eval process:  64000  of  92884  actions:  68.90314801257482  % in 2286.4263393878937 s
+    eval process:  65000  of  92884  actions:  69.9797597002713  % in 2322.0642392635345 s
+    eval process:  66000  of  92884  actions:  71.05637138796779  % in 2356.682573080063 s
+    eval process:  67000  of  92884  actions:  72.13298307566427  % in 2391.808869600296 s
+    eval process:  68000  of  92884  actions:  73.20959476336076  % in 2427.5407350063324 s
+    eval process:  69000  of  92884  actions:  74.28620645105724  % in 2462.40669131279 s
+    eval process:  70000  of  92884  actions:  75.36281813875372  % in 2497.3794379234314 s
+    eval process:  71000  of  92884  actions:  76.4394298264502  % in 2532.590788125992 s
+    eval process:  72000  of  92884  actions:  77.51604151414668  % in 2567.0491874217987 s
+    eval process:  73000  of  92884  actions:  78.59265320184315  % in 2601.5374042987823 s
+    eval process:  74000  of  92884  actions:  79.66926488953963  % in 2636.396187067032 s
+    eval process:  75000  of  92884  actions:  80.74587657723612  % in 2671.0342502593994 s
+    eval process:  76000  of  92884  actions:  81.8224882649326  % in 2706.752681016922 s
+    eval process:  77000  of  92884  actions:  82.89909995262909  % in 2740.8881216049194 s
+    eval process:  78000  of  92884  actions:  83.97571164032557  % in 2775.8463847637177 s
+    eval process:  79000  of  92884  actions:  85.05232332802206  % in 2810.9903004169464 s
+    eval process:  80000  of  92884  actions:  86.12893501571854  % in 2845.7824699878693 s
+    eval process:  81000  of  92884  actions:  87.20554670341501  % in 2880.605267763138 s
+    eval process:  82000  of  92884  actions:  88.2821583911115  % in 2915.6610221862793 s
+    eval process:  83000  of  92884  actions:  89.35877007880798  % in 2950.088781118393 s
+    eval process:  84000  of  92884  actions:  90.43538176650445  % in 2984.4186248779297 s
+    eval process:  85000  of  92884  actions:  91.51199345420093  % in 3019.0564119815826 s
+    eval process:  86000  of  92884  actions:  92.58860514189742  % in 3053.1759209632874 s
+    eval process:  87000  of  92884  actions:  93.6652168295939  % in 3087.5192046165466 s
+    eval process:  88000  of  92884  actions:  94.74182851729039  % in 3121.8265721797943 s
+    eval process:  89000  of  92884  actions:  95.81844020498687  % in 3155.6213681697845 s
+    eval process:  90000  of  92884  actions:  96.89505189268334  % in 3190.692165374756 s
+    eval process:  91000  of  92884  actions:  97.97166358037983  % in 3224.722489118576 s
+    eval process:  92000  of  92884  actions:  99.04827526807631  % in 3266.371418237686 s
+END evaluation in  3300.0222141999984 c /  3300.023166656494 s
+    avg rt  0.03881194238877871 s /  0.03881030849229762 c
+    time count  76905 count/ 2984.832429409027  sum
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : HitRate@2:    0.18093752031727456
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : HitRate@3:    0.231207333723425
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : HitRate@5:    0.30883557636044473
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : HitRate@10:    0.43092126649762696
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : HitRate@15:    0.5017359079383655
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : HitRate@20:    0.5483128535205773
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : MRR@2:    0.15018529354398283
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : MRR@3:    0.1669418980127069
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : MRR@5:    0.18459484645560145
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : MRR@10:    0.20089796419620687
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : MRR@15:    0.20647098359604715
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : MRR@20:    0.20909075126672916
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : NDCG@2:    0.18093752031727456
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : NDCG@3:    0.21265424130171087
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : NDCG@5:    0.24903634069291408
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : NDCG@10:    0.2910646070078359
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : NDCG@15:    0.3103634645218947
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : NDCG@20:    0.32157747407675613
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : Coverage@20:    0.5801229270555491
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : Popularity@20:    0.04329958601298688
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : Saver@50:    1
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : Training time:   28634.7099237442
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : Testing time seconds:   0.03881030849229762
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10 : Testing time cpu:   0.03881030849229762
+finished config conf/in\test_diginnetica_10EOS.yml

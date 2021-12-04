@@ -1,7 +1,8 @@
 v Remove unneeded changes
 
 v params to preProcess (aEOS 1... N/sessions len, gen dir, name Dir)
-v Preprocess 1... N + session len
+v Preprocess 1... N
+Preprocess session len digi and recsys
 
 v enable preprocess recsys
 
@@ -12,11 +13,15 @@ v run on earlier results csv       class: filemodel.resultfile.ResultFile; param
 
 ? run multiple algorithms from a single yml - using key per class (not working)        (memory can be an issue)
 
-implement simple random - to set the probability (* max existing prob to be more 'realistic'  )
-implement 'always yes' option - always return that the item is EOS
+v implement Naive 'always yes' option - always return that the item is EOS - on ResultsFile- on FileModel
+v implement simple random - to set the probability (* max existing prob to be more 'realistic'  ) - on FileModel
 
-evaluation support in -1... -n
-push up results
+v implement simple random - to set the probability (* max existing prob to be more 'realistic'  ) - on ResultsFile
+v implement Naive 'always yes' option - always return that the item is EOS -in rank K = 5- on ResultsFile
+improve Naive 'always yes' to support input rank K
+
+v evaluation support in -1... -n
+v push up results
 
 ? implement random by probability threshold  (th = 0.1...1)
 ? implement random by train session len (need to build histogram of the train session lengths)
@@ -73,6 +78,7 @@ in EOS we can do the same OR
 How to implement Random
 https://dl.acm.org/doi/pdf/10.1145/3109859.3109872
 When recurrent neural networks meet the neighborhood for session-based recommendation
+
 
 
 
