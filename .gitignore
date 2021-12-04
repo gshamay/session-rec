@@ -105,7 +105,6 @@ venv.bak/
 .project
 .pydevproject
 /.settings/
-/results/
 /data/**/*.txt
 /data/**/*.csv
 /data/**/*.dat
@@ -114,14 +113,17 @@ venv.bak/
 .idea/session-rec.iml
 .idea/vcs.xml
 .idea/workspace.xml
-conf/in/*
 conf/out/*
-
+*.pkl
+*Saver@50.csv
 .idea
-/data/
-*.csv
-*.csv
-*.csv
-*.csv
-*.csv
-*.csv
+results/_next/*
+results/next/*
+results/rsc15/rsc15-clicks64Short/*
+results/rsc15/rsc15-clicks64Short1/*
+conf/in/test_csrm - RecSysShort_ArGnn.yml.txt
+conf/in/test_csrm - RecSys_ShortRunTest.yml.txt
+conf/in/test_csrm - RecSys.yml.txt
+conf/in/test_csrm - Digi_1.yml.txt
+conf/in/test_csrm - Digi.yml - Copy.txt
+conf/in/test_csrm - Copy.yml - Copy.txt
