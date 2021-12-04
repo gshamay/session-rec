@@ -1,0 +1,45 @@
+---
+type: single
+key: diginetica
+evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple
+data:
+  name: rsc
+  folder: data/diginetica/prepared/diginetica_100EOS/
+  prefix: train-item-views_full
+
+results:
+  folder: results/diginetica/diginetica_100EOS/
+# pickle_models: results/diginetica/diginetica_100EOS/
+
+metrics:
+- class: accuracy.HitRate
+  length: [2,3,5,10,15,20]
+- class: accuracy.MRR
+  length: [2,3,5,10,15,20]
+- class: accuracy_multiple.NDCG
+  length: [2,3,5,10,15,20]
+- class: coverage.Coverage
+  length: [20]
+- class: popularity.Popularity
+  length: [20]
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+#- class: baselines.ar.AssociationRules
+#  key: ar
+#- class: narm.narm.NARM
+#  params: { epochs: 10, lr: 0.007, hidden_units: 100, factors: 100 }
+#  key: narm
+#- class: CSRM.csrm.CSRM
+#  params: { } # , epoch_n: 30 -- for diginetica
+#  key: csrm
+#- class: sgnn.gnn.GGNN
+#  params: { hidden_size: 100, out_size: 100, step: 1, nonhybrid: True, batch_size: 100, epoch_n: 10, batch_predict: True, lr: 0.006, l2: 3.00E-05, lr_dc: 0.36666667, lr_dc_step: 3}
+#  key: sgnn
+- class: sgnn.gnn.GGNN
+  params: { lr: 0.008, l2: 0.0001, lr_dc: 0.45, lr_dc_step: 3, epoch_n: 10}
+  key: sgnn-best
+
