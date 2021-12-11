@@ -164,19 +164,22 @@ def split_data_org( data, output_file ) :
     train_tr.to_csv( output_file + '_train_tr.txt', sep='\t', index=False)
     print('Validation set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(valid), valid.SessionId.nunique(), valid.ItemId.nunique()))
     valid.to_csv( output_file + '_train_valid.txt', sep='\t', index=False)
-    
-    
-    
-def split_data( data, output_file, days_test=DAYS_TEST, last_nth=None ) :
-    
-    data_end = datetime.fromtimestamp( data.Time.max(), timezone.utc )
-    test_from = data_end - timedelta( days_test )
-    
+
+
+def split_data(data, output_file, days_test=DAYS_TEST, last_nth=None):
+    return split_dataEx(data, output_file, 5, 2, days_test, last_nth)
+
+
+def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=DAYS_TEST, last_nth=None):
+    data_end = datetime.fromtimestamp(data.Time.max(), timezone.utc)
+    test_from = data_end - timedelta(days_test)
+
     session_max_times = data.groupby('SessionId').Time.max()
-    session_train = session_max_times[ session_max_times < test_from.timestamp() ].index
-    session_test = session_max_times[ session_max_times >= test_from.timestamp() ].index
+    # Split train/test
+    session_train = session_max_times[session_max_times < test_from.timestamp()].index
+    session_test = session_max_times[session_max_times >= test_from.timestamp()].index
     train = data[np.in1d(data.SessionId, session_train)]
-    
+
     if last_nth is not None:
         train.sort_values(['SessionId', 'Time'], inplace=True)  
     
@@ -193,9 +196,15 @@ def split_data( data, output_file, days_test=DAYS_TEST, last_nth=None ) :
     test = data[np.in1d(data.SessionId, session_test)]
     test = test[np.in1d(test.ItemId, train.ItemId)]
     tslength = test.groupby('SessionId').size()
-    test = test[np.in1d(test.SessionId, tslength[tslength>=2].index)]
-    print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train), train.SessionId.nunique(), train.ItemId.nunique()))
-    train.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_train_full.txt', sep='\t', index=False)
+
+    # Fix sessionLength Always = 2 #Remove sessions with less then X items
+    # after splitting and removing items that does not appear on train
+    test = test[np.in1d(test.SessionId, tslength[tslength >= minSessionLength].index)]
+
+    print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'
+          .format(len(train), train.SessionId.nunique(), train.ItemId.nunique()))
+
+    train.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_train_full.txt', sep='\t',index=False)
     print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(test), test.SessionId.nunique(), test.ItemId.nunique()))
     test.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_test.txt', sep='\t', index=False)
     

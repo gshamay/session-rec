@@ -2,7 +2,7 @@ v Remove unneeded changes
 
 v params to preProcess (aEOS 1... N/sessions len, gen dir, name Dir)
 v Preprocess 1... N
-Preprocess session len digi and recsys
+v Preprocess session len digi and recsys
 
 v enable preprocess recsys
 
@@ -18,7 +18,7 @@ v implement simple random - to set the probability (* max existing prob to be mo
 
 v implement simple random - to set the probability (* max existing prob to be more 'realistic'  ) - on ResultsFile
 v implement Naive 'always yes' option - always return that the item is EOS -in rank K = 5- on ResultsFile
-improve Naive 'always yes' to support input rank K
+? improve Naive 'always yes' to support input rank K
 
 v evaluation support in -1... -n
 v push up results
@@ -30,6 +30,29 @@ v Evaluation measures for 1...k (P@k, mrr@k)
 
 ? Add print to File
 
+v generate diginetica 0,1,5,10,20,100, aEOS
+v generate recsys64 0,1,5,10,20,100, aEOS
+
+v Fix Diginetica 20 (was done with 10)
+
+v fix  extra sessions with size =2 with aEOS
+
+create results xls
+find in the papers teh best Algos to use beside gnn (2)
+select one more db
+
+recreate all aEOS (1..session Len)
+re run algos on results to get more accurate results
+update results XLS
+
+run on recsys64 on all aEOS N --> Find best N aEOS
+run on diginetica on all aEOS N --> Find best N aEOS --> N is valid for two datasets
+run another algo on recsys --> Find best N aEOS --> N is valid for two algos
+aEOS vs random (is aEOS better than random) ; Random on resFile train w/o EOS, test with EOS
+aEOS vs standard (is aEOS much worst on all but EOS) ; aEOS resFile, test w/o EOS
+
+fix Precision and Recall (multiple)
+
 short Run on EC2 GPU - compare runTime
 
 try Colab
@@ -38,14 +61,10 @@ Document the run in EC2
 load db from web ZIP
 Load --> Train --> Run --> save in one command
 
-generate recsys64 0,1,5,10,20,100, aEOS
-run on recsys64 on all aEOS N --> Find best N aEOS
 
-gen diginetica dbs with N
 gen rsc64 dbs with N
 gen rsc4 dbs with N
 gen more dbs
-
 
 run all algos on all dbs (w/o aEOS) - reproduce  regular results reported by papers (gen p@1..20  mrr@1...20)
 run all algos using N on all dbs (gen p@1..20  mrr@1...20)

@@ -80,10 +80,11 @@ def run_file( conf ):
     if not(conf['mode'] == 'session_aware' and conf['type'] == 'window'):
         data = preprocessor.filter_data( data, **conf['filter'] )
 
-    #todo: Add here aEOS ?
+    min_item_support = conf['filter']['min_item_support']
+    min_session_length = conf['filter']['min_session_length']
+    ######################################################### aEOS
+    #Add aEOS
     #  diginetica Index(['SessionId', 'Time', 'ItemId', 'Date', 'Datestamp', 'TimeO', 'ItemSupport'],   dtype='object')
-
-
     ######################################################### aEOS
     aEOS = None
     try:
@@ -117,6 +118,7 @@ def run_file( conf ):
         entry_1 =  firstEntry
         entry_2 =  None
         i = 1
+        totalAEOSAdded = 0
         dataLen = len(data)
         while i < len(data):
             if (i % 1000 == 0):
@@ -161,6 +163,7 @@ def run_file( conf ):
 
                     newData.append(newEntry)
                     newData.append(entry)
+                    totalAEOSAdded += 1
 
                     # add raw to the new Pos
                     #data = pd.DataFrame(np.insert(data.values, i-1, values=newEntry, axis=0))
@@ -174,14 +177,19 @@ def run_file( conf ):
 
         newData = pd.DataFrame(newData, columns=data.columns)
         newData = newData.astype(data.dtypes)
-        print('finished adding aEOS' + str(newData))
         data = newData
+        print('finished adding aEOS' + ' total added ['+str(totalAEOSAdded) +']new size['+ str(len(data)))
+        print(str(data))
+        print('new data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\n'.
+              format(len(data), data.SessionId.nunique(), data.ItemId.nunique()))
+        min_session_length += 1
+
 
     ######################################################### aEOS
     ensure_dir( conf['output']['folder'] + conf['data']['prefix'] )
     #call method according to config
     if conf['type'] == 'single':
-        preprocessor.split_data( data, conf['output']['folder'] + conf['data']['prefix'], **conf['params']  )
+        preprocessor.split_dataEx( data, conf['output']['folder'] + conf['data']['prefix'], min_item_support, min_session_length, **conf['params'])
     elif conf['type'] == 'window':
         preprocessor.slice_data( data, conf['output']['folder'] + conf['data']['prefix'], **conf['params']  )
     elif conf['type'] == 'retrain':

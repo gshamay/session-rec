@@ -21,22 +21,23 @@ class ResultFile:
         # config.experimental.unpickle_gpu_on_cpu = True
         self.file = file
         self.addOn = addOn
-    
+
     def init(self, train, test=None, slice=None):
         file = self.file + ( ('.' + str(slice) + '.csv') if slice is not None else '' )
-        if not '.csv' in file: 
+        if not '.csv' in file:
             file = file + '.csv'
         self.recommendations = pd.read_csv( file, sep=';' )
-                
-        return
-              
-    def fit(self, train, test=None):
-        
-        self.pos = 0
-        self.session_id = -1
-        
+
         return
 
+    def fit(self, train, test=None):
+
+        self.pos = 0
+        self.session_id = -1
+
+        return
+
+    missingPredicitons = 0
     def predict_next(self, session_id, input_item_id, predict_for_item_ids, skip=False, mode_type='view', timestamp=0):
         '''
         Gives predicton scores for a selected set of items on how likely they be the next item in the session.
@@ -56,7 +57,7 @@ class ResultFile:
             Prediction scores for selected items on how likely to be the next item of this session. Indexed by the item IDs.
 
         '''
-        
+
         if session_id != self.session_id:
             self.pos = 0
             self.session_id = session_id
@@ -77,17 +78,25 @@ class ResultFile:
             else:
                 recs = recs.iloc[[self.pos]]
 
-        items = recs.Recommendations.values[0]
-        scores = recs.Scores.values[0]
-        
+        if (len(recs) == 0):
+            self.missingPredicitons += 1
+            recs = self.recommendations.iloc[[self.pos]]
+            print('missing predictions session['+str(session_id)+']pos['+str(self.pos)+']missingPredicitons[' +str(self.missingPredicitons))
+
+        try:
+            items = recs.Recommendations.values[0]
+            scores = recs.Scores.values[0]
+        except IndexError:
+            print("error! we should not get here!!!")
+
         def convert( data, funct ):
             return map( lambda x: funct(x), data.split(',') )
-        
+
         items = convert( items, int )
         scores = convert( scores, float )
-        
-        res = pd.Series( index=items, data=scores ) 
-        
+
+        res = pd.Series( index=items, data=scores )
+
         self.pos += 1
 
         #todo: refactor: identical code to fileModel
@@ -116,9 +125,9 @@ class ResultFile:
 
                 res[aEOSItemId] = newValue5
 
-        
+
         return res
-    
+
     def clear(self):
         del self.recommendations
 
