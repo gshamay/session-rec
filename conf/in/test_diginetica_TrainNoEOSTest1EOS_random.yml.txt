@@ -3,9 +3,9 @@ type: single
 key: sgnn 
 evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple
 data:
-  name: rsc
-  folder: data/diginetica/prepared/diginetica_64_1EOS/
-  prefix: diginetica-clicks64
+  name: diginetica
+  folder: data/diginetica/prepared/diginetica_1EOS/
+  prefix: train-item-views_full
 
 results:
   folder: results/diginetica/TrainNoEOSTest1EOS_random/
@@ -29,6 +29,6 @@ metrics:
 
 algorithms:
 - class: filemodel.resultfile.ResultFile
-  params: { file: results/diginetica/diginetica_64_noEOS/test_single_sgnn_rsc-Saver@50.csv, addOn: random}
-  key: digineticaFileModelclicks64
+  params: { file: results/diginetica/diginetica_noEOS/test_single_diginetica_rsc-Saver@50.csv, addOn: random}
+  key: digineticaFileModelclicks
   
