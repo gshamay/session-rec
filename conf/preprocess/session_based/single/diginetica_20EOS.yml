@@ -16,7 +16,7 @@ params:
 # add here the option to add aEOS
 #  use a fixed number or 'sessionLength' to use the session Length as the ID of the aEOS
 #  when a fixed number is set, the distribution of the id of th eEOS - will be done randomly
-aEOS : 10
+aEOS : 20
 
 output:
   folder: data/diginetica/prepared/diginetica_20EOS/
