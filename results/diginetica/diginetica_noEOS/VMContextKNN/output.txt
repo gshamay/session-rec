@@ -1,0 +1,127 @@
+
+processing config conf/in\VMContextKNN_noEOS.yml
+run test single
+START load data
+C:/bgu/session-rec/run_config.py:99: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  c = yaml.load(stream)
+Loaded train set
+	Events: 916370
+	Sessions: 188807
+	Items: 43105
+	Span: 2016-01-01 / 2016-05-25
+
+Loaded test set
+	Events: 76895
+	Sessions: 15969
+	Items: 21139
+	Span: 2016-05-25 / 2016-06-01
+
+END load data  1.3608316999961971 c /  1.361140251159668 s
+fit  vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10  time:  2.4176013469696045
+START evaluation of  76895  actions in  15969  sessions
+    eval process:  0  of  76895  actions:  0.0  % in 0.06298184394836426 s
+    eval process:  1000  of  76895  actions:  1.3004746732557384  % in 11.076480865478516 s
+    eval process:  2000  of  76895  actions:  2.600949346511477  % in 21.262598514556885 s
+    eval process:  3000  of  76895  actions:  3.901424019767215  % in 31.41573429107666 s
+    eval process:  4000  of  76895  actions:  5.201898693022954  % in 41.632824659347534 s
+    eval process:  5000  of  76895  actions:  6.502373366278692  % in 51.573092222213745 s
+    eval process:  6000  of  76895  actions:  7.80284803953443  % in 61.809163331985474 s
+    eval process:  7000  of  76895  actions:  9.103322712790169  % in 71.77540707588196 s
+    eval process:  8000  of  76895  actions:  10.403797386045907  % in 82.49123477935791 s
+    eval process:  9000  of  76895  actions:  11.704272059301644  % in 92.93320393562317 s
+    eval process:  10000  of  76895  actions:  13.004746732557384  % in 103.2522439956665 s
+    eval process:  11000  of  76895  actions:  14.305221405813121  % in 113.96905446052551 s
+    eval process:  12000  of  76895  actions:  15.60569607906886  % in 124.5469262599945 s
+    eval process:  13000  of  76895  actions:  16.9061707523246  % in 134.93494534492493 s
+    eval process:  14000  of  76895  actions:  18.206645425580337  % in 145.8166892528534 s
+    eval process:  15000  of  76895  actions:  19.507120098836076  % in 156.09572386741638 s
+    eval process:  16000  of  76895  actions:  20.807594772091814  % in 166.23886585235596 s
+    eval process:  17000  of  76895  actions:  22.108069445347553  % in 176.91270065307617 s
+    eval process:  18000  of  76895  actions:  23.408544118603288  % in 187.2257444858551 s
+    eval process:  19000  of  76895  actions:  24.709018791859027  % in 197.61374473571777 s
+    eval process:  20000  of  76895  actions:  26.00949346511477  % in 207.8648238182068 s
+    eval process:  21000  of  76895  actions:  27.309968138370504  % in 218.26080131530762 s
+    eval process:  22000  of  76895  actions:  28.610442811626243  % in 228.52489185333252 s
+    eval process:  23000  of  76895  actions:  29.91091748488198  % in 239.47655773162842 s
+    eval process:  24000  of  76895  actions:  31.21139215813772  % in 249.8375825881958 s
+    eval process:  25000  of  76895  actions:  32.51186683139346  % in 260.90317392349243 s
+    eval process:  26000  of  76895  actions:  33.8123415046492  % in 271.8638439178467 s
+    eval process:  27000  of  76895  actions:  35.11281617790494  % in 282.95843601226807 s
+    eval process:  28000  of  76895  actions:  36.413290851160674  % in 293.4324038028717 s
+    eval process:  29000  of  76895  actions:  37.71376552441641  % in 304.00529742240906 s
+    eval process:  30000  of  76895  actions:  39.01424019767215  % in 314.56620955467224 s
+    eval process:  31000  of  76895  actions:  40.31471487092789  % in 325.07912039756775 s
+    eval process:  32000  of  76895  actions:  41.61518954418363  % in 335.3591818809509 s
+    eval process:  33000  of  76895  actions:  42.915664217439364  % in 345.87212777137756 s
+    eval process:  34000  of  76895  actions:  44.216138890695106  % in 356.03925585746765 s
+    eval process:  35000  of  76895  actions:  45.51661356395084  % in 366.46321654319763 s
+    eval process:  36000  of  76895  actions:  46.817088237206576  % in 376.99715209007263 s
+    eval process:  37000  of  76895  actions:  48.11756291046232  % in 387.3311834335327 s
+    eval process:  38000  of  76895  actions:  49.41803758371805  % in 397.33238792419434 s
+    eval process:  39000  of  76895  actions:  50.71851225697379  % in 407.43155694007874 s
+    eval process:  40000  of  76895  actions:  52.01898693022954  % in 417.70564126968384 s
+    eval process:  41000  of  76895  actions:  53.31946160348527  % in 428.0496664047241 s
+    eval process:  42000  of  76895  actions:  54.61993627674101  % in 438.25875186920166 s
+    eval process:  43000  of  76895  actions:  55.92041094999674  % in 448.44788455963135 s
+    eval process:  44000  of  76895  actions:  57.220885623252485  % in 458.8398656845093 s
+    eval process:  45000  of  76895  actions:  58.52136029650823  % in 469.24887204170227 s
+    eval process:  46000  of  76895  actions:  59.82183496976396  % in 479.1881296634674 s
+    eval process:  47000  of  76895  actions:  61.122309643019705  % in 489.10040521621704 s
+    eval process:  48000  of  76895  actions:  62.42278431627544  % in 499.63230562210083 s
+    eval process:  49000  of  76895  actions:  63.72325898953118  % in 510.03529715538025 s
+    eval process:  50000  of  76895  actions:  65.02373366278692  % in 519.9006168842316 s
+    eval process:  51000  of  76895  actions:  66.32420833604266  % in 530.0967268943787 s
+    eval process:  52000  of  76895  actions:  67.6246830092984  % in 540.4057731628418 s
+    eval process:  53000  of  76895  actions:  68.92515768255413  % in 550.2530853748322 s
+    eval process:  54000  of  76895  actions:  70.22563235580988  % in 560.3222715854645 s
+    eval process:  55000  of  76895  actions:  71.52610702906561  % in 570.5193617343903 s
+    eval process:  56000  of  76895  actions:  72.82658170232135  % in 580.4576406478882 s
+    eval process:  57000  of  76895  actions:  74.12705637557708  % in 590.9555771350861 s
+    eval process:  58000  of  76895  actions:  75.42753104883282  % in 600.7729077339172 s
+    eval process:  59000  of  76895  actions:  76.72800572208857  % in 611.0019998550415 s
+    eval process:  60000  of  76895  actions:  78.0284803953443  % in 620.5464687347412 s
+    eval process:  61000  of  76895  actions:  79.32895506860004  % in 630.1799230575562 s
+    eval process:  62000  of  76895  actions:  80.62942974185577  % in 640.1601593494415 s
+    eval process:  63000  of  76895  actions:  81.92990441511152  % in 649.9924800395966 s
+    eval process:  64000  of  76895  actions:  83.23037908836726  % in 659.4140386581421 s
+    eval process:  65000  of  76895  actions:  84.53085376162299  % in 669.1684062480927 s
+    eval process:  66000  of  76895  actions:  85.83132843487873  % in 679.2645745277405 s
+    eval process:  67000  of  76895  actions:  87.13180310813446  % in 688.7301082611084 s
+    eval process:  68000  of  76895  actions:  88.43227778139021  % in 698.6333837509155 s
+    eval process:  69000  of  76895  actions:  89.73275245464595  % in 708.2848131656647 s
+    eval process:  70000  of  76895  actions:  91.03322712790168  % in 717.5774283409119 s
+    eval process:  71000  of  76895  actions:  92.33370180115742  % in 727.0919513702393 s
+    eval process:  72000  of  76895  actions:  93.63417647441315  % in 736.3516035079956 s
+    eval process:  73000  of  76895  actions:  94.9346511476689  % in 745.8610932826996 s
+    eval process:  74000  of  76895  actions:  96.23512582092464  % in 754.9928193092346 s
+    eval process:  75000  of  76895  actions:  97.53560049418037  % in 764.7192180156708 s
+    eval process:  76000  of  76895  actions:  98.8360751674361  % in 773.9698758125305 s
+END evaluation in  782.1487574999992 c /  782.1491520404816 s
+    avg rt  0.008617449682547714 s /  0.008617931569445136 c
+    time count  60926 count/ 525.026739358902  sum
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : HitRate@2:    0.1626891639037521
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : HitRate@3:    0.21191281226405803
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : HitRate@5:    0.28317959491842565
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : HitRate@10:    0.393575813281686
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : HitRate@15:    0.46224928601910514
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : HitRate@20:    0.5112431474247447
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : MRR@2:    0.12695729245313989
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : MRR@3:    0.14336517523990477
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : MRR@5:    0.15956761754696944
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : MRR@10:    0.17418243260495198
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : MRR@15:    0.179596445437808
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : MRR@20:    0.18235522124371303
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : NDCG@2:    0.1626891639037521
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : NDCG@3:    0.19374582823361675
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : NDCG@5:    0.22714110758446945
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : NDCG@10:    0.26498153483040987
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : NDCG@15:    0.28370996122864883
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : NDCG@20:    0.29551043839638885
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : Coverage@20:    0.9523025171093841
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : Popularity@20:    0.08938082069574134
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : Saver@50:    1
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : Training time:   11.330963850021362
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : Testing time seconds:   0.008617931569445136
+vsknn-k=50-sample_size=500-weighting=log-weighting_score=linear-idf_weighting=10 : Testing time cpu:   0.008617931569445136
+finished config conf/in\VMContextKNN_noEOS.yml

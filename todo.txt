@@ -35,7 +35,8 @@ v generate recsys64 0,1,5,10,20,100, aEOS
 
 v Fix Diginetica 20 (was done with 10)
 
-v fix  extra sessions with size =2 with aEOS
+v fix  extra sessions with size =2 with aEOS - recsys
+fix  extra sessions with size =2 with aEOS- digi
 
 create results xls
 find in the papers teh best Algos to use beside gnn (2)

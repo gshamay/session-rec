@@ -1,0 +1,38 @@
+type: single # single|window|opt
+key: VMContextKNN
+evaluation: evaluation
+data:
+  name: rsc
+  folder: data/diginetica/prepared/diginetica_1EOS/
+  prefix: train-item-views_full
+
+results:
+  folder: results/diginetica/diginetica_1EOS/VMContextKNN/
+  pickle_models: results/diginetica/diginetica_1EOS/VMContextKNN/
+  
+metrics:
+
+metrics:
+- class: accuracy.HitRate
+  length: [2,3,5,10,15,20]
+- class: accuracy.MRR
+  length: [2,3,5,10,15,20]
+- class: accuracy_multiple.NDCG
+  length: [2,3,5,10,15,20]
+- class: coverage.Coverage
+  length: [20]
+- class: popularity.Popularity
+  length: [20]
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+#- class: accuracy_multiple.Precision
+#  length: [2,3,5,10,15,20]
+#- class: accuracy_multiple.Recall
+#  length: [2,3,5,10,15,20]
+
+algorithms:
+- class: knn.vsknn.VMContextKNN
+  params: { k: 50, sample_size: 500, weighting: log , weighting_score: linear, idf_weighting: 10  }
+  key: vsknn
