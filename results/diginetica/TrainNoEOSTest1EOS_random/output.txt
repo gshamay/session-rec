@@ -1,0 +1,152 @@
+waiting for configuration files in  conf/in
+processing config conf/in\test_diginetica_TrainNoEOSTest1EOS_random.yml
+run test single
+START load data
+Loaded train set
+	Events: 1105176
+	Sessions: 188807
+	Items: 43106
+	Span: 2016-01-01 / 2016-05-25
+
+Loaded test set
+	Events: 92884
+	Sessions: 15979
+	Items: 21140
+	Span: 2016-05-25 / 2016-06-01
+
+END load data  1.5680899999999838 c /  1.5683510303497314 s
+fit  digineticaFileModelclicks-addOn=random
+digineticaFileModelclicks-addOn=random  time:  0.5616207122802734
+START evaluation of  92884  actions in  15979  sessions
+    eval process:  0  of  92884  actions:  0.0  % in 0.07995843887329102 s
+missing predictions session[2200]pos[-1]missingPredicitons[1
+    eval process:  1000  of  92884  actions:  1.0766116876964815  % in 8.415144205093384 s
+    eval process:  2000  of  92884  actions:  2.153223375392963  % in 16.453500270843506 s
+missing predictions session[39339]pos[-1]missingPredicitons[2
+    eval process:  3000  of  92884  actions:  3.2298350630894452  % in 24.502851724624634 s
+    eval process:  4000  of  92884  actions:  4.306446750785926  % in 32.60321807861328 s
+    eval process:  5000  of  92884  actions:  5.383058438482409  % in 40.5406334400177 s
+    eval process:  6000  of  92884  actions:  6.4596701261788905  % in 48.630961179733276 s
+    eval process:  7000  of  92884  actions:  7.536281813875371  % in 56.81921720504761 s
+    eval process:  8000  of  92884  actions:  8.612893501571852  % in 65.0394675731659 s
+    eval process:  9000  of  92884  actions:  9.689505189268335  % in 73.58258962631226 s
+    eval process:  10000  of  92884  actions:  10.766116876964817  % in 81.97272491455078 s
+    eval process:  11000  of  92884  actions:  11.842728564661298  % in 90.24794697761536 s
+    eval process:  12000  of  92884  actions:  12.919340252357781  % in 98.61912488937378 s
+    eval process:  13000  of  92884  actions:  13.99595194005426  % in 106.84005904197693 s
+    eval process:  14000  of  92884  actions:  15.072563627750743  % in 115.1073009967804 s
+    eval process:  15000  of  92884  actions:  16.149175315447227  % in 123.30556607246399 s
+    eval process:  16000  of  92884  actions:  17.225787003143704  % in 131.92358446121216 s
+    eval process:  17000  of  92884  actions:  18.30239869084019  % in 140.24376463890076 s
+    eval process:  18000  of  92884  actions:  19.37901037853667  % in 148.43003869056702 s
+    eval process:  19000  of  92884  actions:  20.45562206623315  % in 156.51435494422913 s
+missing predictions session[84678]pos[-1]missingPredicitons[3
+    eval process:  20000  of  92884  actions:  21.532233753929635  % in 164.75968503952026 s
+    eval process:  21000  of  92884  actions:  22.608845441626112  % in 172.97592186927795 s
+    eval process:  22000  of  92884  actions:  23.685457129322597  % in 181.13663721084595 s
+    eval process:  23000  of  92884  actions:  24.762068817019077  % in 189.27094078063965 s
+    eval process:  24000  of  92884  actions:  25.838680504715562  % in 197.52618956565857 s
+    eval process:  25000  of  92884  actions:  26.91529219241204  % in 205.80639052391052 s
+    eval process:  26000  of  92884  actions:  27.99190388010852  % in 214.13258028030396 s
+    eval process:  27000  of  92884  actions:  29.068515567805004  % in 222.52574729919434 s
+    eval process:  28000  of  92884  actions:  30.145127255501485  % in 230.54910039901733 s
+    eval process:  29000  of  92884  actions:  31.22173894319797  % in 238.69961810112 s
+    eval process:  30000  of  92884  actions:  32.298350630894454  % in 246.9218864440918 s
+    eval process:  31000  of  92884  actions:  33.37496231859093  % in 255.05617141723633 s
+    eval process:  32000  of  92884  actions:  34.45157400628741  % in 263.3623721599579 s
+    eval process:  33000  of  92884  actions:  35.52818569398389  % in 271.48268389701843 s
+    eval process:  34000  of  92884  actions:  36.60479738168038  % in 279.5540204048157 s
+    eval process:  35000  of  92884  actions:  37.68140906937686  % in 287.6433484554291 s
+    eval process:  36000  of  92884  actions:  38.75802075707334  % in 295.8406329154968 s
+    eval process:  37000  of  92884  actions:  39.83463244476982  % in 304.044153213501 s
+    eval process:  38000  of  92884  actions:  40.9112441324663  % in 312.094486951828 s
+missing predictions session[170030]pos[-1]missingPredicitons[4
+    eval process:  39000  of  92884  actions:  41.987855820162785  % in 320.1918272972107 s
+    eval process:  40000  of  92884  actions:  43.06446750785927  % in 328.35011529922485 s
+    eval process:  41000  of  92884  actions:  44.14107919555575  % in 336.723260641098 s
+missing predictions session[184122]pos[-1]missingPredicitons[5
+    eval process:  42000  of  92884  actions:  45.217690883252224  % in 344.7906029224396 s
+    eval process:  43000  of  92884  actions:  46.29430257094871  % in 352.80998849868774 s
+    eval process:  44000  of  92884  actions:  47.37091425864519  % in 360.913289308548 s
+    eval process:  45000  of  92884  actions:  48.44752594634167  % in 368.9116892814636 s
+    eval process:  46000  of  92884  actions:  49.524137634038155  % in 377.0229868888855 s
+    eval process:  47000  of  92884  actions:  50.60074932173464  % in 385.0444257259369 s
+    eval process:  48000  of  92884  actions:  51.677361009431124  % in 393.2876601219177 s
+    eval process:  49000  of  92884  actions:  52.75397269712761  % in 401.5138964653015 s
+    eval process:  50000  of  92884  actions:  53.83058438482408  % in 409.54127764701843 s
+    eval process:  51000  of  92884  actions:  54.907196072520556  % in 417.7368428707123 s
+    eval process:  52000  of  92884  actions:  55.98380776021704  % in 425.8676960468292 s
+    eval process:  53000  of  92884  actions:  57.060419447913524  % in 433.95908999443054 s
+    eval process:  54000  of  92884  actions:  58.13703113561001  % in 441.9524564743042 s
+missing predictions session[257332]pos[-1]missingPredicitons[6
+    eval process:  55000  of  92884  actions:  59.213642823306486  % in 449.98792576789856 s
+    eval process:  56000  of  92884  actions:  60.29025451100297  % in 458.11223340034485 s
+    eval process:  57000  of  92884  actions:  61.366866198699455  % in 466.41543841362 s
+    eval process:  58000  of  92884  actions:  62.44347788639594  % in 474.42183208465576 s
+    eval process:  59000  of  92884  actions:  63.52008957409242  % in 482.4402012825012 s
+    eval process:  60000  of  92884  actions:  64.59670126178891  % in 490.3636062145233 s
+    eval process:  61000  of  92884  actions:  65.67331294948538  % in 498.4279685020447 s
+    eval process:  62000  of  92884  actions:  66.74992463718186  % in 506.5372836589813 s
+missing predictions session[305190]pos[-1]missingPredicitons[7
+    eval process:  63000  of  92884  actions:  67.82653632487833  % in 514.578675031662 s
+    eval process:  64000  of  92884  actions:  68.90314801257482  % in 522.7289855480194 s
+    eval process:  65000  of  92884  actions:  69.9797597002713  % in 531.0461804866791 s
+    eval process:  66000  of  92884  actions:  71.05637138796779  % in 539.0626049041748 s
+    eval process:  67000  of  92884  actions:  72.13298307566427  % in 547.0409979820251 s
+    eval process:  68000  of  92884  actions:  73.20959476336076  % in 555.1753125190735 s
+    eval process:  69000  of  92884  actions:  74.28620645105724  % in 563.1546914577484 s
+    eval process:  70000  of  92884  actions:  75.36281813875372  % in 571.2090559005737 s
+    eval process:  71000  of  92884  actions:  76.4394298264502  % in 579.2274265289307 s
+    eval process:  72000  of  92884  actions:  77.51604151414668  % in 587.1558413505554 s
+    eval process:  73000  of  92884  actions:  78.59265320184315  % in 595.4650468826294 s
+    eval process:  74000  of  92884  actions:  79.66926488953963  % in 603.626335144043 s
+    eval process:  75000  of  92884  actions:  80.74587657723612  % in 611.5727398395538 s
+    eval process:  76000  of  92884  actions:  81.8224882649326  % in 619.6200964450836 s
+    eval process:  77000  of  92884  actions:  82.89909995262909  % in 627.4486107826233 s
+    eval process:  78000  of  92884  actions:  83.97571164032557  % in 635.4110288619995 s
+    eval process:  79000  of  92884  actions:  85.05232332802206  % in 643.5423142910004 s
+    eval process:  80000  of  92884  actions:  86.12893501571854  % in 651.3788070678711 s
+    eval process:  81000  of  92884  actions:  87.20554670341501  % in 659.6420338153839 s
+    eval process:  82000  of  92884  actions:  88.2821583911115  % in 667.5024762153625 s
+    eval process:  83000  of  92884  actions:  89.35877007880798  % in 675.3443241119385 s
+    eval process:  84000  of  92884  actions:  90.43538176650445  % in 683.1438376903534 s
+    eval process:  85000  of  92884  actions:  91.51199345420093  % in 691.0574953556061 s
+    eval process:  86000  of  92884  actions:  92.58860514189742  % in 698.9039824008942 s
+missing predictions session[510087]pos[-1]missingPredicitons[8
+missing predictions session[512069]pos[-1]missingPredicitons[9
+    eval process:  87000  of  92884  actions:  93.6652168295939  % in 706.7024779319763 s
+    eval process:  88000  of  92884  actions:  94.74182851729039  % in 714.5329556465149 s
+    eval process:  89000  of  92884  actions:  95.81844020498687  % in 722.3874192237854 s
+    eval process:  90000  of  92884  actions:  96.89505189268334  % in 730.3887977600098 s
+    eval process:  91000  of  92884  actions:  97.97166358037983  % in 738.0253703594208 s
+    eval process:  92000  of  92884  actions:  99.04827526807631  % in 745.9489860534668 s
+missing predictions session[588710]pos[-1]missingPredicitons[10
+END evaluation in  752.7857388000002 c /  752.7861070632935 s
+    avg rt  0.005695861483820005 s /  0.005696699140497771 c
+    time count  76905 count/ 438.0402274131775  sum
+digineticaFileModelclicks-addOn=random : HitRate@2:    0.11007086665366361
+digineticaFileModelclicks-addOn=random : HitRate@3:    0.147714712957545
+digineticaFileModelclicks-addOn=random : HitRate@5:    0.20689161953058968
+digineticaFileModelclicks-addOn=random : HitRate@10:    0.3080683960730772
+digineticaFileModelclicks-addOn=random : HitRate@15:    0.373785839672323
+digineticaFileModelclicks-addOn=random : HitRate@20:    0.4241856836356544
+digineticaFileModelclicks-addOn=random : MRR@2:    0.08505298745205123
+digineticaFileModelclicks-addOn=random : MRR@3:    0.0976009362200079
+digineticaFileModelclicks-addOn=random : MRR@5:    0.11105454781873142
+digineticaFileModelclicks-addOn=random : MRR@10:    0.12440584807271288
+digineticaFileModelclicks-addOn=random : MRR@15:    0.12956228451060456
+digineticaFileModelclicks-addOn=random : MRR@20:    0.13239996546951788
+digineticaFileModelclicks-addOn=random : NDCG@2:    0.11007086665366361
+digineticaFileModelclicks-addOn=random : NDCG@3:    0.1338214893256591
+digineticaFileModelclicks-addOn=random : NDCG@5:    0.16155122162846194
+digineticaFileModelclicks-addOn=random : NDCG@10:    0.19617627165690804
+digineticaFileModelclicks-addOn=random : NDCG@15:    0.21406485761329308
+digineticaFileModelclicks-addOn=random : NDCG@20:    0.22620345184062188
+digineticaFileModelclicks-addOn=random : Coverage@20:    0.7146104950586926
+digineticaFileModelclicks-addOn=random : Popularity@20:    0.011454712189080549
+digineticaFileModelclicks-addOn=random : Saver@50:    1
+digineticaFileModelclicks-addOn=random : Training time:   0.0
+digineticaFileModelclicks-addOn=random : Testing time seconds:   0.005696699140497771
+digineticaFileModelclicks-addOn=random : Testing time cpu:   0.005696699140497771
+finished config conf/in\test_diginetica_TrainNoEOSTest1EOS_random.yml
+waiting for configuration files in  conf/in
