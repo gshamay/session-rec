@@ -1,15 +1,14 @@
 type: single
-key: VMContextKNN
+key: AR
 evaluation: evaluation
 data:
   name: rsc
-  folder: data/rsc15/prepared/rsc15_64_noEOS/
+  folder: data/rsc15/prepared/rsc15_64_sessionLengthEOS/
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/rsc15_64_noEOS/VMContextKNN/
-  pickle_models: results/rsc15/rsc15_64_noEOS/VMContextKNN/
-  
+  folder: results/rsc15/rsc15_64_sessionLengthEOS/ar/
+ 
 
 metrics:
 - class: accuracy.HitRate
@@ -28,6 +27,6 @@ metrics:
 - class: time_memory_usage.Time_usage_testing
 
 algorithms:
-- class: knn.vsknn.VMContextKNN
-  params: { k: 50, sample_size: 500, weighting: log , weighting_score: linear, idf_weighting: 10  }
-  key: vsknn
+- class: baselines.ar.AssociationRules
+  params: {}
+  key: ar
