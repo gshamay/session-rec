@@ -1,5 +1,5 @@
 type: single
-key: AR
+key: STAMP
 evaluation: evaluation
 data:
   name: rsc
