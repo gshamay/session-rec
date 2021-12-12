@@ -1,14 +1,14 @@
 ---
 type: single
-key: sgnn 
-evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple
+key: ar 
+evaluation: evaluation 
 data:
-  name: rsc
+  name: ar
   folder: data/rsc15/prepared/rsc15_64_1EOS/
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/TrainNoEOSTest1EOS_naiveTrue/
+  folder: results/rsc15/TrainNoEOSTest1EOS_naiveTrue/ar/
 
 metrics:
 - class: accuracy.HitRate
@@ -28,6 +28,6 @@ metrics:
 
 algorithms:
 - class: filemodel.resultfile.ResultFile
-  params: { file: results/rsc15/rsc15_64_noEOS/test_single_sgnn_rsc-Saver@50.csv, addOn: naiveTrue}
+  params: { file: results/rsc15/rsc15_64_noEOS/ar/test_single_AR_rsc-Saver@50.csv, addOn: naiveTrue}
   key: rsc15FileModelclicks64Short
   
