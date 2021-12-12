@@ -1,0 +1,33 @@
+---
+type: single
+key: STAMP 
+evaluation: evaluation 
+data:
+  name: rsc
+  folder: data/rsc15/prepared/rsc15_64_noEOS/
+  prefix: rsc15-clicks64
+
+results:
+  folder: results/rsc15/Train1EOSTestNoEOS/STAMP/
+
+metrics:
+- class: accuracy.HitRate
+  length: [2,3,5,10,15,20]
+- class: accuracy.MRR
+  length: [2,3,5,10,15,20]
+- class: accuracy_multiple.NDCG
+  length: [2,3,5,10,15,20]
+- class: coverage.Coverage
+  length: [20]
+- class: popularity.Popularity
+  length: [20]
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: filemodel.resultfile.ResultFile
+  params: { file: results/rsc15/rsc15_64_1EOS/STAMP/test_single_STAMP_rsc-Saver@50.csv}
+  key: STAMP
+  
