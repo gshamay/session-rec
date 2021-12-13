@@ -7,7 +7,7 @@ data:
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/rsc15_64_noEOS/ar/
+  folder: results/rsc15/rsc15_64_noEOS/STAMP/
  
 
 metrics:

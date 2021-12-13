@@ -29,5 +29,5 @@ metrics:
 algorithms:
 - class: filemodel.resultfile.ResultFile
   params: { file: results/rsc15/rsc15_64_1EOS/STAMP/test_single_STAMP_rsc-Saver@50.csv}
-  key: STAMP
+  key: rsc15FileModelclicks64Short
   
