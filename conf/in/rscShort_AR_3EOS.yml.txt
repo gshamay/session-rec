@@ -13,10 +13,6 @@ results:
 metrics:
 - class: accuracy.EOS_FP
   length: [2,3,5,10,15,20]
-- class: saver.Saver
-  length: [50]
-- class: time_memory_usage.Time_usage_training
-- class: time_memory_usage.Time_usage_testing
 
 algorithms:
 - class: baselines.ar.AssociationRules

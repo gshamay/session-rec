@@ -327,11 +327,11 @@ class EOS_FP:
 
 
         aEOSBaseIDValue = -1
-        if(next_item <= aEOSBaseIDValue):
-            # in case the next item is aEOS we can get a false negative error
-            # because in case that the next value is not aEOS then it can either be a TN or a FP
+        if(next_item > aEOSBaseIDValue):
+            # in case the next item is NOT aEOS we can get a False Positive (FP) error
+            # because in case that the next value IS aEOS then it can either be a TP or a FN
             # we get here after 'push up' and normalize aEOS --> aEOS can be only -1 and not -2, ..., -N
-            if aEOSBaseIDValue not in result[:self.length].index:
+            if aEOSBaseIDValue in result[:self.length].index:
                 self.fp += 1
 
                 if pop_bin is not None:
@@ -462,11 +462,11 @@ class EOS_FN:
 
 
         aEOSBaseIDValue = -1
-        if(next_item > aEOSBaseIDValue):
-            # in case the next item is NOT aEOS we can get a false positive error
-            # because in case that the next value is aEOS then it can either be a TP or a FN
+        if(next_item <= aEOSBaseIDValue):
+            # in case the next item is aEOS we can get a False Negative (FN)  error
+            # because in case that the next value IS NOT aEOS then it can either be a FP or a TN
             # we get here after 'push up' and normalize aEOS --> aEOS can be only -1 and not -2, ..., -N
-            if aEOSBaseIDValue in result[:self.length].index:
+            if aEOSBaseIDValue not in result[:self.length].index:
                 self.fn += 1
 
                 if pop_bin is not None:
