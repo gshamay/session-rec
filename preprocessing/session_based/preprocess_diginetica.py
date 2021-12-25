@@ -297,6 +297,9 @@ def split_data_org(data, output_file):
 
 # Split train/ test
 def split_data(data, output_file, days_test=DAYS_TEST):
+    return split_dataEx(data, output_file, 5, 2, days_test)
+
+def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=DAYS_TEST):
     data_end = datetime.fromtimestamp(data.Time.max(), timezone.utc)
     test_from = data_end - timedelta(days=days_test)
 
@@ -305,11 +308,11 @@ def split_data(data, output_file, days_test=DAYS_TEST):
     session_test = session_max_times[session_max_times > test_from.timestamp()].index
     train = data[np.in1d(data.SessionId, session_train)]
     trlength = train.groupby('SessionId').size()
-    train = train[np.in1d(train.SessionId, trlength[trlength>=2].index)]
+    train = train[np.in1d(train.SessionId, trlength[trlength >= minSessionLength].index)]
     test = data[np.in1d(data.SessionId, session_test)]
     test = test[np.in1d(test.ItemId, train.ItemId)]
     tslength = test.groupby('SessionId').size()
-    test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)]
+    test = test[np.in1d(test.SessionId, tslength[tslength >= minSessionLength].index)]
     print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train), train.SessionId.nunique(),
                                                                              train.ItemId.nunique()))
     train.to_csv(output_file + '_train_full.txt', sep='\t', index=False)
