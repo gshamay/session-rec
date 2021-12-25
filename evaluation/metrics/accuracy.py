@@ -258,3 +258,271 @@ class HitRate:
             csv += str( self.hit_position[key] / self.test_position[key] ) + ';'
             
         return csv
+
+class EOS_FP:
+    '''
+    EOS_FP( length=20 )
+
+    Used to iteratively calculate the average False Positive on aEOS detection rate for a result list with the defined length.
+
+    Parameters
+    -----------
+    length : int
+        EOS_FP@length
+    '''
+
+    def __init__(self, length=20):
+        self.length = length;
+
+    def init(self, train):
+        '''
+        Do initialization work here.
+
+        Parameters
+        --------
+        train: pandas.DataFrame
+            Training data. It contains the transactions of the sessions. It has one column for session IDs, one for item IDs and one for the timestamp of the events (unix timestamps).
+            It must have a header. Column names are arbitrary, but must correspond to the ones you set during the initialization of the network (session_key, item_key, time_key properties).
+        '''
+        return
+
+    def reset(self):
+        '''
+        Reset for usage in multiple evaluations
+        '''
+        self.test = 0;
+        self.fp = 0
+
+        self.test_popbin = {}
+        self.fp_popbin = {}
+
+        self.test_position = {}
+        self.fp_position = {}
+
+    def add(self, result, next_item, for_item=0, session=0, pop_bin=None, position=None):
+        '''
+        Update the metric with a result set and the correct next item.
+        Result must be sorted correctly.
+
+        Parameters
+        --------
+        result: pandas.Series
+            Series of scores with the item id as the index
+        '''
+
+        self.test += 1
+
+        if pop_bin is not None:
+            if pop_bin not in self.test_popbin:
+                self.test_popbin[pop_bin] = 0
+                self.fp_popbin[pop_bin] = 0
+            self.test_popbin[pop_bin] += 1
+
+        if position is not None:
+            if position not in self.test_position:
+                self.test_position[position] = 0
+                self.fp_position[position] = 0
+            self.test_position[position] += 1
+
+
+
+        aEOSBaseIDValue = -1
+        if(next_item <= aEOSBaseIDValue):
+            # in case the next item is aEOS we can get a false negative error
+            # because in case that the next value is not aEOS then it can either be a TN or a FP
+            # we get here after 'push up' and normalize aEOS --> aEOS can be only -1 and not -2, ..., -N
+            if aEOSBaseIDValue not in result[:self.length].index:
+                self.fp += 1
+
+                if pop_bin is not None:
+                    self.fp_popbin[pop_bin] += 1
+
+                if position is not None:
+                    self.fp_position[position] += 1
+
+    def add_batch(self, result, next_item):
+        '''
+        Update the metric with a result set and the correct next item.
+
+        Parameters
+        --------
+        result: pandas.DataFrame
+            Prediction scores for selected items for every event of the batch.
+            Columns: events of the batch; rows: items. Rows are indexed by the item IDs.
+        next_item: Array of correct next items
+        '''
+        i = 0
+        for part, series in result.iteritems():
+            result.sort_values(part, ascending=False, inplace=True)
+            self.add(series, next_item[i])
+            i += 1
+
+    def result(self):
+        '''
+        Return a tuple of a description string and the current averaged value
+        '''
+        return ("EOS_FP@" + str(self.length) + ": "), (
+                    self.fp / self.test), self.result_pop_bin(), self.result_position()
+
+    def result_pop_bin(self):
+        '''
+        Return a tuple of a description string and the current averaged value
+        '''
+        csv = ''
+        csv += 'Bin: ;'
+        for key in self.test_popbin:
+            csv += str(key) + ';'
+        csv += '\nEOS_FP@' + str(self.length) + ': ;'
+        for key in self.test_popbin:
+            csv += str(self.fp_popbin[key] / self.test_popbin[key]) + ';'
+
+        return csv
+
+    def result_position(self):
+        '''
+        Return a tuple of a description string and the current averaged value
+        '''
+        csv = ''
+        csv += 'Pos: ;'
+        for key in self.test_position:
+            csv += str(key) + ';'
+        csv += '\nEOS_FP@' + str(self.length) + ': ;'
+        for key in self.test_position:
+            csv += str(self.fp_position[key] / self.test_position[key]) + ';'
+
+        return csv
+
+
+
+class EOS_FN:
+    '''
+    EOS_FN( length=20 )
+
+    Used to iteratively calculate the average False Positive on aEOS detection rate for a result list with the defined length.
+
+    Parameters
+    -----------
+    length : int
+        EOS_FN@length
+    '''
+
+    def __init__(self, length=20):
+        self.length = length;
+
+    def init(self, train):
+        '''
+        Do initialization work here.
+
+        Parameters
+        --------
+        train: pandas.DataFrame
+            Training data. It contains the transactions of the sessions. It has one column for session IDs, one for item IDs and one for the timestamp of the events (unix timestamps).
+            It must have a header. Column names are arbitrary, but must correspond to the ones you set during the initialization of the network (session_key, item_key, time_key properties).
+        '''
+        return
+
+    def reset(self):
+        '''
+        Reset for usage in multiple evaluations
+        '''
+        self.test = 0;
+        self.fn = 0
+
+        self.test_popbin = {}
+        self.fn_popbin = {}
+
+        self.test_position = {}
+        self.fn_position = {}
+
+    def add(self, result, next_item, for_item=0, session=0, pop_bin=None, position=None):
+        '''
+        Update the metric with a result set and the correct next item.
+        Result must be sorted correctly.
+
+        Parameters
+        --------
+        result: pandas.Series
+            Series of scores with the item id as the index
+        '''
+
+        self.test += 1
+
+        if pop_bin is not None:
+            if pop_bin not in self.test_popbin:
+                self.test_popbin[pop_bin] = 0
+                self.fn_popbin[pop_bin] = 0
+            self.test_popbin[pop_bin] += 1
+
+        if position is not None:
+            if position not in self.test_position:
+                self.test_position[position] = 0
+                self.fn_position[position] = 0
+            self.test_position[position] += 1
+
+
+
+        aEOSBaseIDValue = -1
+        if(next_item > aEOSBaseIDValue):
+            # in case the next item is NOT aEOS we can get a false positive error
+            # because in case that the next value is aEOS then it can either be a TP or a FN
+            # we get here after 'push up' and normalize aEOS --> aEOS can be only -1 and not -2, ..., -N
+            if aEOSBaseIDValue in result[:self.length].index:
+                self.fn += 1
+
+                if pop_bin is not None:
+                    self.fn_popbin[pop_bin] += 1
+
+                if position is not None:
+                    self.fn_position[position] += 1
+
+    def add_batch(self, result, next_item):
+        '''
+        Update the metric with a result set and the correct next item.
+
+        Parameters
+        --------
+        result: pandas.DataFrame
+            Prediction scores for selected items for every event of the batch.
+            Columns: events of the batch; rows: items. Rows are indexed by the item IDs.
+        next_item: Array of correct next items
+        '''
+        i = 0
+        for part, series in result.iteritems():
+            result.sort_values(part, ascending=False, inplace=True)
+            self.add(series, next_item[i])
+            i += 1
+
+    def result(self):
+        '''
+        Return a tuple of a description string and the current averaged value
+        '''
+        return ("EOS_FN@" + str(self.length) + ": "), (
+                    self.fn / self.test), self.result_pop_bin(), self.result_position()
+
+    def result_pop_bin(self):
+        '''
+        Return a tuple of a description string and the current averaged value
+        '''
+        csv = ''
+        csv += 'Bin: ;'
+        for key in self.test_popbin:
+            csv += str(key) + ';'
+        csv += '\nEOS_FN@' + str(self.length) + ': ;'
+        for key in self.test_popbin:
+            csv += str(self.fn_popbin[key] / self.test_popbin[key]) + ';'
+
+        return csv
+
+    def result_position(self):
+        '''
+        Return a tuple of a description string and the current averaged value
+        '''
+        csv = ''
+        csv += 'Pos: ;'
+        for key in self.test_position:
+            csv += str(key) + ';'
+        csv += '\nEOS_FN@' + str(self.length) + ': ;'
+        for key in self.test_position:
+            csv += str(self.fn_position[key] / self.test_position[key]) + ';'
+
+        return csv

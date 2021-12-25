@@ -219,3 +219,91 @@ class HitRate(AccuracyBase):
         Return a tuple of a description string and the current averaged value
         '''
         return ("HitRate@" + str(self.length) + ": "), (self.hit/self.test), pd.DataFrame( self.table )
+
+class EOS_FP(AccuracyBase):
+    '''
+    EOS_FP( length=20 )
+
+    Used to iteratively calculate the False Positive rate for EnoOfSession
+
+    Parameters
+    -----------
+    length : int
+        EOS_FP@length
+    '''
+
+    def __init__(self, length=20):
+        self.length = length;
+
+    def init(self, train):
+        '''
+        Do initialization work here.
+
+        Parameters
+        --------
+        train: pandas.DataFrame
+            Training data. It contains the transactions of the sessions. It has one column for session IDs, one for item IDs and one for the timestamp of the events (unix timestamps).
+            It must have a header. Column names are arbitrary, but must correspond to the ones you set during the initialization of the network (session_key, item_key, time_key properties).
+        '''
+
+        return
+
+    def reset(self):
+        '''
+        Reset for usage in multiple evaluations
+        '''
+        self.test = 0;
+        self.EOS_FP_Count = 0
+
+        self.table = {}
+        self.table['SessionPop'] = []
+        self.table['SessionSeq'] = []
+        self.table['SessionIdf'] = []
+        self.table['Value'] = []
+
+    def add(self, result, next_item, for_item=0, session=0, pop_bin=None, position=None):
+        '''
+        Update the metric with a result set and the correct next item.
+        Result must be sorted correctly.
+
+        Parameters
+        --------
+        result: pandas.Series
+            Series of scores with the item id as the index
+        '''
+
+        self.test += 1 #number of totla tested values
+        res = 0
+        aEOSBaseIDValue = -1
+        if(next_item > aEOSBaseIDValue):
+            # in case the next item is NOT aEOS we can get a false positive error
+            # because in case that the next value is aEOS then it can either be a hit or a FN
+            # todo: check - do we get here after 'push up' and normalize aEOS?
+            if aEOSBaseIDValue in result[:self.length].index:
+                res = 1
+                self.EOS_FP_Count += res
+
+        self.add_to_table(res, session, position)
+
+    def add_batch(self, result, next_item):
+        '''
+        Update the metric with a result set and the correct next item.
+
+        Parameters
+        --------
+        result: pandas.DataFrame
+            Prediction scores for selected items for every event of the batch.
+            Columns: events of the batch; rows: items. Rows are indexed by the item IDs.
+        next_item: Array of correct next items
+        '''
+        i = 0
+        for part, series in result.iteritems():
+            result.sort_values(part, ascending=False, inplace=True)
+            self.add(series, next_item[i]) # batch is handled one by one eventually
+            i += 1
+
+    def result(self):
+        '''
+        Return a tuple of a description string and the current averaged value
+        '''
+        return ("EOS_FP@" + str(self.length) + ": "), (self.EOS_FP_Count / self.test), pd.DataFrame(self.table)
