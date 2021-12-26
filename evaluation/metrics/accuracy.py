@@ -1,6 +1,6 @@
 import numpy as np
 
-class MRR: 
+class MRR:
     '''
     MRR( length=20 )
 
@@ -526,3 +526,64 @@ class EOS_FN:
             csv += str(self.fn_position[key] / self.test_position[key]) + ';'
 
         return csv
+
+
+class EOS_ACTUAL_COUNT:
+    def __init__(self, length=20):
+        self.length = length;
+
+    def init(self, train):
+        return
+
+    def reset(self):
+        self.test = 0;
+        self.count = 0
+
+
+    def add(self, result, next_item, for_item=0, session=0, pop_bin=None, position=None):
+        self.test += 1
+        aEOSBaseIDValue = -1
+        if (next_item <= aEOSBaseIDValue):
+            self.count += 1
+
+    def add_batch(self, result, next_item):
+        i = 0
+        for part, series in result.iteritems():
+            result.sort_values(part, ascending=False, inplace=True)
+            self.add(series, next_item[i])
+            i += 1
+
+    def result(self):
+        return ("EOS_ACTUAL_COUNT@" + str(self.length) + ": "), (self.count)
+
+
+
+class EOS_PREDICTED_COUNT:
+    def __init__(self, length=20):
+        self.length = length;
+
+    def init(self, train):
+        return
+
+    def reset(self):
+        self.test = 0;
+        self.count = 0
+
+
+    def add(self, result, next_item, for_item=0, session=0, pop_bin=None, position=None):
+        self.test += 1
+        aEOSBaseIDValue = -1
+        if aEOSBaseIDValue in result[:self.length].index:
+            self.count += 1
+
+    def add_batch(self, result, next_item):
+        i = 0
+        for part, series in result.iteritems():
+            result.sort_values(part, ascending=False, inplace=True)
+            self.add(series, next_item[i])
+            i += 1
+
+
+    def result(self):
+        return ("EOS_PREDICTED_COUNT@" + str(self.length) + ": "), (self.count)
+
