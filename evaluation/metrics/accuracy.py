@@ -587,3 +587,59 @@ class EOS_PREDICTED_COUNT:
     def result(self):
         return ("EOS_PREDICTED_COUNT@" + str(self.length) + ": "), (self.count)
 
+class EOS_HIT_COUNT:
+    def __init__(self, length=20):
+        self.length = length;
+
+    def init(self, train):
+        return
+
+    def reset(self):
+        self.test = 0;
+        self.count = 0
+
+    def add(self, result, next_item, for_item=0, session=0, pop_bin=None, position=None):
+        self.test += 1
+        aEOSBaseIDValue = -1
+        if (next_item <= aEOSBaseIDValue):
+            if aEOSBaseIDValue in result[:self.length].index:
+                self.count += 1
+
+    def add_batch(self, result, next_item):
+        i = 0
+        for part, series in result.iteritems():
+            result.sort_values(part, ascending=False, inplace=True)
+            self.add(series, next_item[i])
+            i += 1
+
+    def result(self):
+        return ("EOS_HIT_COUNT@" + str(self.length) + ": "), (self.count)
+
+class EOS_HIT_RATE:
+    def __init__(self, length=20):
+        self.length = length;
+
+    def init(self, train):
+        return
+
+    def reset(self):
+        self.test = 0;
+        self.count = 0
+
+    def add(self, result, next_item, for_item=0, session=0, pop_bin=None, position=None):
+        self.test += 1
+        aEOSBaseIDValue = -1
+        if (next_item <= aEOSBaseIDValue):
+            if aEOSBaseIDValue in result[:self.length].index:
+                self.count += 1
+
+    def add_batch(self, result, next_item):
+        i = 0
+        for part, series in result.iteritems():
+            result.sort_values(part, ascending=False, inplace=True)
+            self.add(series, next_item[i])
+            i += 1
+
+    def result(self):
+        return ("EOS_HIT_RATE@" + str(self.length) + ": "), (self.count / self.test)
+
