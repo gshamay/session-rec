@@ -4,11 +4,11 @@ key: sgnn
 evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple
 data:
   name: rsc
-  folder: data/rsc15/prepared/rsc15_64_1EOS/
+  folder: data/rsc15/prepared/rsc15_64_100EOS/
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/TrainNoEOSTest1EOS_naiveTrue/aEOSStats
+  folder: results/rsc15/rsc15_64_100EOS/aEOSStats
 
 metrics:
 - class: accuracy.EOS_FN
@@ -23,15 +23,10 @@ metrics:
   length: [2,3,5,10,15,20]
 - class: accuracy.EOS_HIT_RATE
   length: [2,3,5,10,15,20]
-- class: accuracy.EOS_HIT_COUNT
-  length: [2,3,5,10,15,20]
-- class: accuracy.EOS_HIT_RATE
-  length: [2,3,5,10,15,20]
-  
 
 
 algorithms:
 - class: filemodel.resultfile.ResultFile
-  params: { file: results/rsc15/TrainNoEOSTest1EOS_naiveTrue/test_single_sgnn_rsc-Saver@50.csv}
+  params: { file: results/rsc15/rsc15_64_100EOS/test_single_sgnn_rsc-Saver@50.csv}
   key: rsc15FileModelclicks64Short
   
