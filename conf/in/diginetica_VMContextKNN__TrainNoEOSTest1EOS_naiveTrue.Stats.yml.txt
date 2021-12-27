@@ -1,0 +1,44 @@
+type: single 
+key: VMContextKNN
+evaluation: evaluation
+data:
+  name: diginetica
+  folder: data/diginetica/prepared/diginetica_1EOS/
+  prefix: train-item-views_full
+
+results:
+  folder: results/diginetica/diginetica_TrainNoEOSTest1EOS_naiveTrue/VMContextKNN/
+  
+metrics:
+- class: accuracy.HitRate
+  length: [2,3,5,10,15,20]
+- class: accuracy.MRR
+  length: [2,3,5,10,15,20]
+- class: accuracy_multiple.NDCG
+  length: [2,3,5,10,15,20]
+- class: coverage.Coverage
+  length: [20]
+- class: popularity.Popularity
+  length: [20]
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+- class: accuracy.EOS_FN
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_FP
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_PREDICTED_COUNT
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_ACTUAL_COUNT
+  length: [1]  
+- class: accuracy.EOS_HIT_COUNT
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_HIT_RATE
+  length: [2,3,5,10,15,20]
+
+algorithms:
+- class: filemodel.resultfile.ResultFile
+  params: { file: results/diginetica/diginetica_noEOS/VMContextKNN/test_single_VMContextKNN_rsc-Saver@50.csv, addOn: naiveTrue}
+  key: rsc15FileModelclicks64Short
+  

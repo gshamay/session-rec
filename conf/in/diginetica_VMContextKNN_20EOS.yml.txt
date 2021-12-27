@@ -2,7 +2,7 @@ type: single
 key: VMContextKNN
 evaluation: evaluation
 data:
-  name: rsc
+  name: diginetica
   folder: data/diginetica/prepared/diginetica_20EOS/
   prefix: train-item-views_full
 
