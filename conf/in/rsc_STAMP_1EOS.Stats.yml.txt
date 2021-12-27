@@ -1,0 +1,32 @@
+type: single
+key: STAMP
+evaluation: evaluation
+data:
+  name: rsc
+  folder: data/rsc15/prepared/rsc15_64_1EOS/
+  prefix: rsc15-clicks64
+
+results:
+  folder: results/rsc15/rsc15_64_1EOS/STAMP/aEOSStats
+ 
+
+metrics:
+- class: accuracy.EOS_FN
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_FP
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_PREDICTED_COUNT
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_ACTUAL_COUNT
+  length: [1]  
+- class: accuracy.EOS_HIT_COUNT
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_HIT_RATE
+  length: [2,3,5,10,15,20]
+
+
+algorithms:
+- class: filemodel.resultfile.ResultFile
+  params: { file: results/rsc15/rsc15_64_1EOS/STAMP/test_single_STAMP_rsc-Saver@50.csv}
+  key: rsc15FileModelclicks64Short
+  

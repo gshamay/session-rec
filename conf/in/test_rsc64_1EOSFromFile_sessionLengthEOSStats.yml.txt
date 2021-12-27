@@ -1,0 +1,32 @@
+---
+type: single
+key: sgnn 
+evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple
+data:
+  name: rsc
+  folder: data/rsc15/prepared/rsc15_64_sessionLengthEOS/
+  prefix: rsc15-clicks64
+
+results:
+  folder: results/rsc15/rsc15_64_sessionLengthEOS/aEOSStats
+
+metrics:
+- class: accuracy.EOS_FN
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_FP
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_PREDICTED_COUNT
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_ACTUAL_COUNT
+  length: [1]  
+- class: accuracy.EOS_HIT_COUNT
+  length: [2,3,5,10,15,20]
+- class: accuracy.EOS_HIT_RATE
+  length: [2,3,5,10,15,20]
+
+
+algorithms:
+- class: filemodel.resultfile.ResultFile
+  params: { file: results/rsc15/rsc15_64_sessionLengthEOS/test_single_sgnn_rsc-Saver@50.csv}
+  key: rsc15FileModelclicks64Short
+  

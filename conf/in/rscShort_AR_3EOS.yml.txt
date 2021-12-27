@@ -13,6 +13,10 @@ results:
 metrics:
 - class: accuracy.EOS_FP
   length: [2,3,5,10,15,20]
+- class: accuracy.EOS_PREDICTED_COUNT
+  length: [2,3,5,10,15,20]
+-class accuracy.EOS_ACTUAL_COUNT
+  length: [1]  
 
 algorithms:
 - class: baselines.ar.AssociationRules
