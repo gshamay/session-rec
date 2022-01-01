@@ -49,6 +49,7 @@ class resultfileLogReg:
 
         ###############################
         # train the LR model / Begin
+        aEOSBaseIDValue = -1
         sc = time.clock()
         st = time.time()
         time_sum = 0
@@ -60,6 +61,8 @@ class resultfileLogReg:
         prev_iid, prev_sid = -1, -1
         pos = 0
         actions = len(train)
+        LRx = []
+        LRy = []
 
         for i in range(len(train)):
             if count % 1000 == 0:
@@ -95,7 +98,6 @@ class resultfileLogReg:
                 ############################################################
                 # Look for aEOS predictions --> take it's max score
                 maxUsedK = len(preds) # 50 # todo: consider limit this to top K
-                aEOSBaseIDValue = -1
                 foundAEOS = False
                 aEOSMaxPredictedValue = 0
                 #defaultMinValueToPushDownPrediction = -0.01
@@ -110,7 +112,8 @@ class resultfileLogReg:
                 ############################################################
                 # train the LR model
                 sessionLen = pos + 1
-                # print(str(aEOSMaxPredictedValue) + str(sessionLen) + str(isEOS) )
+                LRx.append([aEOSMaxPredictedValue,sessionLen])
+                LRy.append(isEOS)
                 ############################################################
                 time_sum_clock += time.clock() - crs
                 time_sum += time.time() - trs
@@ -126,6 +129,8 @@ class resultfileLogReg:
         # train the LR model / End
         ###############################
 
+        self.pos = 0
+        self.session_id = -1
 
         return
 
@@ -180,7 +185,7 @@ class resultfileLogReg:
             self.missingPredicitons += 1
             recs = self.recommendations.iloc[[self.pos]]
             print('missing predictions session[' + str(session_id) + ']pos[' + str(
-                self.pos) + ']missingPredicitons[' + str(self.missingPredicitons))
+                self.pos) + ']missingPredicitons[' + str(self.missingPredicitons) + ']')
 
         try:
             items = recs.Recommendations.values[0]
