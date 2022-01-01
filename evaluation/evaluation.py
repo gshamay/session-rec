@@ -269,6 +269,10 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         (metric_name, value)
     
     '''
+
+    for m in metrics:
+        m.reset();
+
     train_data = train_data.drop( columns='index')
     for test_data in [train_data,test_data_]: # create predictions on train AND test
 
@@ -284,8 +288,6 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         time_sum_clock = 0
         time_count = 0
 
-        for m in metrics:
-            m.reset();
 
         test_data.sort_values([session_key, time_key], inplace=True)
         items_to_predict = train_data[item_key].unique()
