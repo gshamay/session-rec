@@ -236,7 +236,7 @@ def evaluate_sessions_batch_org(pr, metrics, test_data, train_data, items=None, 
     return recall/evalutation_point_count, mrr/evalutation_point_count
 
 
-def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, items=None, cut_off=20,
+def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, items=None, cut_off=20,
                       session_key='SessionId', item_key='ItemId', time_key='Time'):
     '''
     Evaluates the baselines wrt. recommendation accuracy measured by recall@N and MRR@N. Has no batch evaluation capabilities. Breaks up ties.
@@ -269,111 +269,116 @@ def evaluate_sessions(pr, metrics, test_data, train_data, algorithmKey, conf, it
         (metric_name, value)
     
     '''
-    
-    actions = len(test_data)
-    sessions = len(test_data[session_key].unique())
-    count = 0
-    print('START evaluation of ', actions, ' actions in ', sessions, ' sessions')
-    
-    sc = time.clock();
-    st = time.time();
-    
-    time_sum = 0
-    time_sum_clock = 0
-    time_count = 0
-    
-    for m in metrics:
-        m.reset();
-    
-    test_data.sort_values([session_key, time_key], inplace=True)
-    items_to_predict = train_data[item_key].unique()
-    prev_iid, prev_sid = -1, -1
-    pos = 0
-    
-    for i in range(len(test_data)):
-        
-        if count % 1000 == 0:
-            print( '    eval process: ', count, ' of ', actions, ' actions: ', ( count / actions * 100.0 ), ' % in',(time.time()-st), 's')
-        
-        sid = test_data[session_key].values[i]
-        iid = test_data[item_key].values[i]
-        ts = test_data[time_key].values[i]
-        if prev_sid != sid:
-            prev_sid = sid
-            pos = 0
-        else:
-            if items is not None:
-                if np.in1d(iid, items): items_to_predict = items
-                else: items_to_predict = np.hstack(([iid], items))  
-                    
-            crs = time.clock()
-            trs = time.time()
-            
-            for m in metrics:
-                if hasattr(m, 'start_predict'):
-                    m.start_predict( pr ) # only some of the metrics, as the running time metric (Time_usage_training), has 'start_predict' variable
-            
-            preds = pr.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
-            # preds contain now a list of all possible items with their probabilities to be the next item
+    train_data = train_data.drop( columns='index')
+    for test_data in [train_data,test_data_]: # create predictions on train AND test
 
-            for m in metrics:
-                if hasattr(m, 'stop_predict'):
-                    m.stop_predict( pr ) # same as 'start_predict' above
+        actions = len(test_data)
+        sessions = len(test_data[session_key].unique())
+        count = 0
+        print('START evaluation of ', actions, ' actions in ', sessions, ' sessions')
 
-            # todo: refactor. Duplicated code that is handled differently between the
-            #  different evaluate_sessions methods;  Also appear as preds.fillna(0, inplace=True)
-            preds[np.isnan(preds)] = 0 # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+        sc = time.clock();
+        st = time.time();
 
-#             preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
-            preds.sort_values( ascending=False, inplace=True ) # sort preds according to the predicted probability
+        time_sum = 0
+        time_sum_clock = 0
+        time_count = 0
 
-            ############################################################
-            # Handle multiple aEOS predictions
-            #  in case there are more then a single aEOS, we need to select the top one,
-            #  set it's value to -1, and push all the rest down as they are not relevant
-            #  change all -1...-N to be -1
-            #  'pushUp' all other results to cover the unneeded -2...-N
-            #  this will keep only  the -1 with the highest probability value
-            maxUsedK = 50
-            aEOSBaseIDValue = -1
-            foundAEOS = False
-            aEOSMaxPredictedValue = 0
-            defaultMinValueToPushDownPrediction = -0.01
-            for i in range(maxUsedK):
-                iKey = preds.index[i]
-                if (iKey <= aEOSBaseIDValue):
-                    if (not foundAEOS):
-                        foundAEOS = True
-                        aEOSMaxPredictedValue = preds[iKey]
-                    preds[iKey] = defaultMinValueToPushDownPrediction  # push the result down the results list
+        for m in metrics:
+            m.reset();
 
-            if (aEOSMaxPredictedValue > 0):
-                preds[aEOSBaseIDValue] = aEOSMaxPredictedValue
-                # re sort preds according to the new  predicted probabilities
-                preds.sort_values(ascending=False, inplace=True)
+        test_data.sort_values([session_key, time_key], inplace=True)
+        items_to_predict = train_data[item_key].unique()
+        prev_iid, prev_sid = -1, -1
+        pos = 0
 
-            # if the predicted aEOS is < -1 (-2, -3....-N), we change it to -1 as it's the default aEOS id
-            if (iid <= aEOSBaseIDValue):
-                iid = aEOSBaseIDValue
-            ############################################################
+        for i in range(len(test_data)):
+            if count % 1000 == 0:
+                print( '    eval process: ', count, ' of ', actions, ' actions: ', ( count / actions * 100.0 ), ' % in',(time.time()-st), 's')
 
-            time_sum_clock += time.clock()-crs
-            time_sum += time.time()-trs
-            time_count += 1
-            
-            for m in metrics:
-                if hasattr(m, 'add'):
-                    m.add( preds, iid, for_item=prev_iid, session=sid, position=pos )
+            sid = test_data[session_key].values[i]
+            iid = test_data[item_key].values[i]
+            ts = test_data[time_key].values[i]
+            if prev_sid != sid:
+                prev_sid = sid
+                pos = 0
+            else:
+                if items is not None:
+                    if np.in1d(iid, items): items_to_predict = items
+                    else: items_to_predict = np.hstack(([iid], items))
 
-            pos += 1
+                crs = time.clock()
+                trs = time.time()
 
-        prev_iid = iid
+                for m in metrics:
+                    if hasattr(m, 'start_predict'):
+                        m.start_predict( pr ) # only some of the metrics, as the running time metric (Time_usage_training), has 'start_predict' variable
 
-        count += 1
+                try:
+                    preds = pr.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+                except IndexError:
+                    print("predict_next failed")
 
-    print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
-    print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
-    print('    time count ', (time_count), 'count/', (time_sum), ' sum')
+                # preds contain now a list of all possible items with their probabilities to be the next item
+
+                for m in metrics:
+                    if hasattr(m, 'stop_predict'):
+                        m.stop_predict( pr ) # same as 'start_predict' above
+
+                # todo: refactor. Duplicated code that is handled differently between the
+                #  different evaluate_sessions methods;  Also appear as preds.fillna(0, inplace=True)
+                preds[np.isnan(preds)] = 0 # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+
+    #             preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
+                preds.sort_values( ascending=False, inplace=True ) # sort preds according to the predicted probability
+
+                ############################################################
+                # Handle multiple aEOS predictions
+                #  in case there are more then a single aEOS, we need to select the top one,
+                #  set it's value to -1, and push all the rest down as they are not relevant
+                #  change all -1...-N to be -1
+                #  'pushUp' all other results to cover the unneeded -2...-N
+                #  this will keep only  the -1 with the highest probability value
+                maxUsedK = 50
+                aEOSBaseIDValue = -1
+                foundAEOS = False
+                aEOSMaxPredictedValue = 0
+                defaultMinValueToPushDownPrediction = -0.01
+                for i in range(maxUsedK):
+                    iKey = preds.index[i]
+                    if (iKey <= aEOSBaseIDValue):
+                        if (not foundAEOS):
+                            foundAEOS = True
+                            aEOSMaxPredictedValue = preds[iKey]
+                        preds[iKey] = defaultMinValueToPushDownPrediction  # push the result down the results list
+
+                if (aEOSMaxPredictedValue > 0):
+                    preds[aEOSBaseIDValue] = aEOSMaxPredictedValue
+                    # re sort preds according to the new  predicted probabilities
+                    preds.sort_values(ascending=False, inplace=True)
+
+                # if the predicted aEOS is < -1 (-2, -3....-N), we change it to -1 as it's the default aEOS id
+                if (iid <= aEOSBaseIDValue):
+                    iid = aEOSBaseIDValue
+                ############################################################
+
+                time_sum_clock += time.clock()-crs
+                time_sum += time.time()-trs
+                time_count += 1
+
+                for m in metrics:
+                    if hasattr(m, 'add'):
+                        m.add( preds, iid, for_item=prev_iid, session=sid, position=pos )
+
+                pos += 1
+
+            prev_iid = iid
+
+            count += 1
+
+        print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+        print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
+        print('    time count ', (time_count), 'count/', (time_sum), ' sum')
 
     res = []
     for m in metrics:
