@@ -38,8 +38,19 @@ v Fix Diginetica 20 (was done with 10)
 v fix  extra sessions with size =2 with aEOS - recsys
 fix  extra sessions with size =2 with aEOS- digi
 
-create results xls
-find in the papers teh best Algos to use beside gnn (2)
+v create results xls
+v find in the papers the best Algos to use beside gnn (2)
+
+test on train and test - to be able to build CSV that include the train - to build predictions for the LR
+Logistic regression
+    LR - AUC
+    LR - P/R graph LR
+Session Length distribution
+FP / FN - over Session Length distribution
+sign test
+
+
+
 select one more db
 
 recreate all aEOS (1..session Len)
@@ -49,20 +60,24 @@ update results XLS
 run on recsys64 on all aEOS N --> Find best N aEOS
 run on diginetica on all aEOS N --> Find best N aEOS --> N is valid for two datasets
 run another algo on recsys --> Find best N aEOS --> N is valid for two algos
-aEOS vs random (is aEOS better than random) ; Random on resFile train w/o EOS, test with EOS
-aEOS vs standard (is aEOS much worst on all but EOS) ; aEOS resFile, test w/o EOS
+
+v aEOS vs random (is aEOS better than random) ; Random on resFile train w/o EOS, test with EOS
+v aEOS vs standard (is aEOS much worst on all but EOS) ; aEOS resFile, test w/o EOS
+
+v add FP FN evaluations
+
+Check ensamble
+
+use a a classifir and not as @20
+Recall/precition graph for EOS estimation
+calc AUC
 
 fix Precision and Recall (multiple)
-
 short Run on EC2 GPU - compare runTime
-
 try Colab
-
 Document the run in EC2
 load db from web ZIP
 Load --> Train --> Run --> save in one command
-
-
 gen rsc64 dbs with N
 gen rsc4 dbs with N
 gen more dbs
