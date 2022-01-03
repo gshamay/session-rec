@@ -2,6 +2,7 @@ import theano.misc.pkl_utils as pickle
 import pandas as pd
 import numpy as np
 import time
+from sklearn.linear_model import LogisticRegression
 
 SEED = 42
 np.random.seed(SEED)
@@ -11,6 +12,8 @@ class resultfileLogReg:
     addOn = None
     file2 = None
     recommendations2 = None
+    clf = None
+    clfBaseLine = None
     '''
     resultfileLogReg( modelfile )
     Uses a trained algorithm, which was pickled to a file.
@@ -92,22 +95,31 @@ class resultfileLogReg:
                 preds[np.isnan(preds)] = 0
                 # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
                 # preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties # todo: ?
-                preds.sort_values(ascending=False,inplace=True)
-                # sort preds according to the predicted probability
+
+
+
+
 
                 ############################################################
-                # Look for aEOS predictions --> take it's max score
-                maxUsedK = len(preds) # 50 # todo: consider limit this to top K
-                foundAEOS = False
                 aEOSMaxPredictedValue = 0
-                #defaultMinValueToPushDownPrediction = -0.01
-                for i in range(maxUsedK):
-                    iKey = preds.index[i]
-                    if (iKey <= aEOSBaseIDValue):
-                        if (not foundAEOS):
-                            foundAEOS = True
-                            aEOSMaxPredictedValue = preds[iKey]
-                            break
+                EOSPreds = preds[preds.index <= aEOSBaseIDValue]
+                if len(EOSPreds) > 0:
+                    EOSPreds.sort_values(ascending=False, inplace=True)
+                    aEOSMaxPredictedValue = EOSPreds.values[0]
+
+                # Look for aEOS predictions --> take it's max score
+                # maxUsedK = len(preds) # 50 # todo: consider limit this to top K
+                # # sort preds according to the predicted probability
+                # preds.sort_values(ascending=False,inplace=True)
+                # foundAEOS = False
+                # #defaultMinValueToPushDownPrediction = -0.01
+                # for i in range(maxUsedK):
+                #     iKey = preds.index[i]
+                #     if (iKey <= aEOSBaseIDValue):
+                #         if (not foundAEOS):
+                #             foundAEOS = True
+                #             aEOSMaxPredictedValue = preds[iKey]
+                #             break
 
                 ############################################################
                 # train the LR model
@@ -122,6 +134,12 @@ class resultfileLogReg:
 
             prev_iid = iid #
             count += 1 # position in the train set
+
+        print('start train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+        self.clf = LogisticRegression(random_state=0).fit(LRx, LRy)
+
+        LRxBaseLine = list(map(lambda x: [x[1]], LRx))
+        self.clfBaseLine = LogisticRegression(random_state=0).fit(LRxBaseLine, LRy)
 
         print('END train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
@@ -241,6 +259,7 @@ class resultfileLogReg:
             #     randValue = randRate * highestValue
             #     res[aEOSItemId] = randValue
 
+        #self.clf.predict_proba(X[:2, :])
         return res
 
     def clear(self):

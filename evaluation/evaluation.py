@@ -1,6 +1,11 @@
 import time
 import numpy as np
 
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import precision_recall_curve
+#from sklearn.metrics import PrecisionRecallDisplay, f1_score
+import matplotlib.pyplot as plt
+
 def evaluate_sessions_batch(pr, metrics, test_data, train_data, items=None, cut_off=20, session_key='SessionId', item_key='ItemId', time_key='Time', batch_size=100, break_ties=True ):
     '''
     Evaluates the GRU4Rec network wrt. recommendation accuracy measured by recall@N and MRR@N.
@@ -274,7 +279,14 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         m.reset();
 
     train_data = train_data.drop( columns='index')
-    for test_data in [train_data,test_data_]: # create predictions on train AND test
+
+    # do evaluation on both train and test
+    #  This is required for generating data that is readable from file for the LR
+    dataToTest = [test_data_]
+    if 'useBothTrainAndTest' in conf['data'] and conf['data']['useBothTrainAndTest'] is True:
+        dataToTest = [train_data, test_data_]
+
+    for test_data in dataToTest: # create predictions on train AND test
 
         actions = len(test_data)
         sessions = len(test_data[session_key].unique())
@@ -294,6 +306,8 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         prev_iid, prev_sid = -1, -1
         pos = 0
 
+        LRTestX = []
+        LRTestY = []
         for i in range(len(test_data)):
             if count % 1000 == 0:
                 print( '    eval process: ', count, ' of ', actions, ' actions: ', ( count / actions * 100.0 ), ' % in',(time.time()-st), 's')
@@ -346,6 +360,9 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                 foundAEOS = False
                 aEOSMaxPredictedValue = 0
                 defaultMinValueToPushDownPrediction = -0.01
+
+                # todo: refactor and use such style : EOSPreds = preds[preds.index <= aEOSBaseIDValue]
+
                 for i in range(maxUsedK):
                     iKey = preds.index[i]
                     if (iKey <= aEOSBaseIDValue):
@@ -363,6 +380,10 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                 if (iid <= aEOSBaseIDValue):
                     iid = aEOSBaseIDValue
                 ############################################################
+                # Prepare data for LR [[aEOSMaxPredictedValue,sessionLen]...]
+                LRTestX.append([aEOSMaxPredictedValue,pos])
+                LRTestY.append(iid<=aEOSBaseIDValue)
+                ############################################################
 
                 time_sum_clock += time.clock()-crs
                 time_sum += time.time()-trs
@@ -375,12 +396,42 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                 pos += 1
 
             prev_iid = iid
-
             count += 1
 
         print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
         print('    time count ', (time_count), 'count/', (time_sum), ' sum')
+        if hasattr(pr, 'clf'):
+            clfProbs = pr.clf.predict_proba(LRTestX)
+            clfProbs = list(map(lambda x: x[1], clfProbs))
+            AUC = roc_auc_score(LRTestY, clfProbs)
+            print('AUC Model['+str(AUC)+']')
+
+            precision, recall, _ = precision_recall_curve(LRTestY, clfProbs)
+            # disp = PrecisionRecallDisplay(precision, recall)
+            # disp.plot()
+            plt.plot(recall, precision, label="model")
+
+            ################################################
+
+            LRTestXBaseLine = list(map(lambda x: [x[1]], LRTestX))
+            clfProbsBaseLine = pr.clfBaseLine.predict_proba(LRTestXBaseLine)
+            clfProbsBaseLine = list(map(lambda x: x[1], clfProbsBaseLine))
+            AUCBaseLine = roc_auc_score(LRTestY, clfProbsBaseLine)
+            print('AUC BaseLine[' + str(AUCBaseLine) + ']')
+
+            precisionBaseLine, recallBaseLine, _ = precision_recall_curve(LRTestY, clfProbsBaseLine)
+            # disp = PrecisionRecallDisplay(precision, recall)
+            # disp.plot()
+            plt.plot(recallBaseLine, precisionBaseLine, label="baseline")
+
+            plt.xlabel('recall')
+            plt.ylabel('precision')
+
+            plt.legend()
+            plt.savefig('plot.png')
+            plt.show()
+
 
     res = []
     for m in metrics:
