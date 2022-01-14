@@ -1,5 +1,6 @@
 import time
 import numpy as np
+import pandas as pd
 
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import precision_recall_curve
@@ -442,33 +443,65 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
     if runLR:
         clfProbs = clf.predict_proba(LRTestX)
         clfProbs = list(map(lambda x: x[1], clfProbs))
-        AUC = roc_auc_score(LRTestY, clfProbs)
-        print('AUC Model['+str(AUC)+']')
 
-        precision, recall, _ = precision_recall_curve(LRTestY, clfProbs)
+        clfProbsBaseLinedf = pd.DataFrame(clfProbs)
+        clfProbsBaseLinedf.to_csv(conf['results']['folder'] + 'clfProbs.csv', sep=";", header=False, index=False)
+
+        AUC = roc_auc_score(LRTestY, clfProbs)
+        print('AUC Model[' + str(AUC) + ']')
+
+        precision, recall, thresholds = precision_recall_curve(LRTestY, clfProbs)
         # disp = PrecisionRecallDisplay(precision, recall)
         # disp.plot()
-        plt.plot(recall, precision, label="model")
+        plt.figure(0)
+        plt.plot(recall, precision, label="Model")
+
 
         ################################################
 
         LRTestXBaseLine = list(map(lambda x: [x[1]], LRTestX))
         clfProbsBaseLine = clfBaseLine.predict_proba(LRTestXBaseLine)
+
         clfProbsBaseLine = list(map(lambda x: x[1], clfProbsBaseLine))
+        clfProbsBaseLinedf = pd.DataFrame(clfProbsBaseLine)
+        clfProbsBaseLinedf.to_csv(conf['results']['folder'] + 'clfProbsBaseLine.csv', sep=";",header=False,index=False)
+
         AUCBaseLine = roc_auc_score(LRTestY, clfProbsBaseLine)
         print('AUC BaseLine[' + str(AUCBaseLine) + ']')
 
-        precisionBaseLine, recallBaseLine, _ = precision_recall_curve(LRTestY, clfProbsBaseLine)
+        precisionBaseLine, recallBaseLine, thresholdsBaseLine = precision_recall_curve(LRTestY, clfProbsBaseLine)
         # disp = PrecisionRecallDisplay(precision, recall)
         # disp.plot()
-        plt.plot(recallBaseLine, precisionBaseLine, label="baseline")
+        plt.plot(recallBaseLine, precisionBaseLine, label="Baseline")
 
-        plt.xlabel('recall')
-        plt.ylabel('precision')
-
-        plt.legend()
+        plt.xlabel('Recall')
+        plt.ylabel('Precision')
         name = conf['algorithms'][0]['key']+'_' + conf['data']['name']
-        plt.savefig(conf['results']['folder'] + 'plot_' + name + '.png')
+        plt.legend()
+        plt.savefig(conf['results']['folder'] + 'plot_PrecisionRecall_' + name + '.png')
+
+
+        # todo: Check why we get the Pr/Rec values > thresholds
+        while (len(thresholds) < len(precision)):
+            precision = np.delete(precision, len(precision) - 1)
+
+        while (len(thresholds) < len(recall)):
+            recall = np.delete(recall, len(recall) - 1)
+
+        while (len(thresholds) > len(precision)):
+            thresholds = np.delete(thresholds, len(thresholds) - 1)
+
+        thresholdsPrecisionRecall = np.array([thresholds, precision, recall])
+        np.savetxt(conf['results']['folder'] + 'ThresholdsPrecisionRecall_' + name + '.csv', thresholdsPrecisionRecall, delimiter=";")
+
+        plt.figure(1)
+        plt.plot(thresholds, precision, label="precision")
+        plt.plot(thresholds, recall, label="recall")
+        plt.xlabel('Threshold')
+        plt.ylabel('Precision,Recall')
+        plt.legend()
+        plt.savefig(conf['results']['folder'] + 'plot_PrecisionRecallThresholds_' + name + '.png')
+
         # plt.show()  # Avoid showing plt - it hang the process
 
         # todo: save recall / Pre values
