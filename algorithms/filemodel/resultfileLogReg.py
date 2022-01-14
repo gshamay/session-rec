@@ -12,8 +12,6 @@ class resultfileLogReg:
     addOn = None
     file2 = None
     recommendations2 = None
-    clf = None
-    clfBaseLine = None
     '''
     resultfileLogReg( modelfile )
     Uses a trained algorithm, which was pickled to a file.
@@ -49,107 +47,6 @@ class resultfileLogReg:
     def fit(self, train, test=None,session_key='SessionId', item_key='ItemId', time_key='Time'):
         self.pos = 0
         self.session_id = -1
-
-        ###############################
-        # train the LR model / Begin
-        aEOSBaseIDValue = -1
-        sc = time.clock()
-        st = time.time()
-        time_sum = 0
-        time_sum_clock = 0
-        time_count = 0
-        count = 0
-        train.sort_values([session_key, time_key], inplace=True)
-        items_to_predict = train[item_key].unique()
-        prev_iid, prev_sid = -1, -1
-        pos = 0
-        actions = len(train)
-        LRx = []
-        LRy = []
-
-        for i in range(len(train)):
-            if count % 1000 == 0:
-                print('    eval process: ', count, ' of ', actions, ' actions: ', (count / actions * 100.0), ' % in',
-                      (time.time() - st), 's')
-
-            iid = train[item_key].values[i] # the actual Item ID
-            isEOS = (iid <= aEOSBaseIDValue)
-
-            sid = train[session_key].values[i]
-            ts = train[time_key].values[i]
-            if prev_sid != sid:
-                prev_sid = sid
-                pos = 0
-                # there is no seesion in len == 1 therefore there os no need to check EOS here ;
-                # todo: need to add it to the LR ? (seesionLen=1 --> no ?  )
-            else:
-                crs = time.clock()
-                trs = time.time()
-
-                # get the prediction from the model / file results
-                preds = self.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
-                # preds contain now a list of all possible items with their probabilities to be the next item
-                # todo : Replace here self. to predict model to use with none file model
-
-                # refine the predictions
-                preds[np.isnan(preds)] = 0
-                # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
-                # preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties # todo: ?
-
-
-
-
-
-                ############################################################
-                aEOSMaxPredictedValue = 0
-                EOSPreds = preds[preds.index <= aEOSBaseIDValue]
-                if len(EOSPreds) > 0:
-                    EOSPreds.sort_values(ascending=False, inplace=True)
-                    aEOSMaxPredictedValue = EOSPreds.values[0]
-
-                # Look for aEOS predictions --> take it's max score
-                # maxUsedK = len(preds) # 50 # todo: consider limit this to top K
-                # # sort preds according to the predicted probability
-                # preds.sort_values(ascending=False,inplace=True)
-                # foundAEOS = False
-                # #defaultMinValueToPushDownPrediction = -0.01
-                # for i in range(maxUsedK):
-                #     iKey = preds.index[i]
-                #     if (iKey <= aEOSBaseIDValue):
-                #         if (not foundAEOS):
-                #             foundAEOS = True
-                #             aEOSMaxPredictedValue = preds[iKey]
-                #             break
-
-                ############################################################
-                # train the LR model
-                sessionLen = pos + 1
-                LRx.append([aEOSMaxPredictedValue,sessionLen])
-                LRy.append(isEOS)
-                ############################################################
-                time_sum_clock += time.clock() - crs
-                time_sum += time.time() - trs
-                time_count += 1
-                pos += 1
-
-            prev_iid = iid #
-            count += 1 # position in the train set
-
-        print('start train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
-        self.clf = LogisticRegression(random_state=0).fit(LRx, LRy)
-
-        LRxBaseLine = list(map(lambda x: [x[1]], LRx))
-        self.clfBaseLine = LogisticRegression(random_state=0).fit(LRxBaseLine, LRy)
-
-        print('END train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
-        print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
-        print('    time count ', (time_count), 'count/', (time_sum), ' sum')
-        # train the LR model / End
-        ###############################
-
-        self.pos = 0
-        self.session_id = -1
-
         return
 
 

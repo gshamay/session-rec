@@ -21,6 +21,7 @@ from telegram.ext.commandhandler import CommandHandler
 import telegram
 import random
 import gc
+from sklearn.linear_model import LogisticRegression
 
 # telegram notificaitons
 CHAT_ID = -1
@@ -34,6 +35,9 @@ if TELEGRAM_STATUS:
 if NOTIFY:
     bot = telegram.Bot(token=BOT_TOKEN)
 
+
+clf = None
+clfBaseLine = None
 
 def main(conf, out=None):
     '''
@@ -466,6 +470,7 @@ def run_bayopt(conf):
 
 
 def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, slice=None, iteration=None, out=True):
+    global clf,clfBaseLine
     '''
     Evaluate one single algorithm
         --------
@@ -502,6 +507,102 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     # train the model
     # todo: Why do we provide the test data to the train ?
     algorithm.fit(train, test)
+
+    ###############################
+    # train the LR model / Begin
+    aEOSBaseIDValue = -1
+    sc = time.clock()
+    st = time.time()
+    time_sum = 0
+    time_sum_clock = 0
+    time_count = 0
+    count = 0
+    session_key = 'SessionId'
+    item_key = 'ItemId'
+    time_key = 'Time'
+    train.sort_values([session_key, time_key], inplace=True)
+    items_to_predict = train[item_key].unique()
+    prev_iid, prev_sid = -1, -1
+    pos = 0
+    actions = len(train)
+
+    # data used for the LR
+    LRx = []
+    LRy = []
+    # todo: use only if set in the yml
+
+    for i in range(len(train)):
+        if count % 1000 == 0:
+            print('    eval process: ', count, ' of ', actions, ' actions: ', (count / actions * 100.0), ' % in',
+                  (time.time() - st), 's')
+
+        iid = train[item_key].values[i]  # the actual Item ID
+        isEOS = (iid <= aEOSBaseIDValue)
+
+        sid = train[session_key].values[i]
+        ts = train[time_key].values[i]
+        if prev_sid != sid:
+            prev_sid = sid
+            pos = 0
+            # there is no seesion in len == 1 therefore there os no need to check EOS here ;
+            # todo: need to add it to the LR ? (seesionLen=1 --> no ?  )
+        else:
+            crs = time.clock()
+            trs = time.time()
+
+            # get the prediction from the model / file results
+            preds = algorithm.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+            # preds contain now a list of all possible items with their probabilities to be the next item
+
+            # refine the predictions
+            preds[np.isnan(preds)] = 0
+            # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+            # preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties # todo: ?
+
+            ############################################################
+            # LR MODEL - collect the data to train the LR model
+            if (LRx is not None):
+                aEOSMaxPredictedValue = 0
+                EOSPreds = preds[preds.index <= aEOSBaseIDValue]  # filter only aEOS predictions
+                if len(EOSPreds) > 0:
+                    # if there are aEOS in the prediction - take the rank of the top one
+                    EOSPreds.sort_values(ascending=False, inplace=True)
+                    aEOSMaxPredictedValue = EOSPreds.values[0]
+
+                # Set the data to train the LR model
+                sessionLen = pos + 1
+                LRx.append([aEOSMaxPredictedValue, sessionLen])
+                LRy.append(isEOS)
+            ############################################################
+
+            time_sum_clock += time.clock() - crs
+            time_sum += time.time() - trs
+            time_count += 1
+            pos += 1
+            # if/else end
+
+        prev_iid = iid  #
+        count += 1  # position in the train set
+        # for end
+
+    ###############################
+    # train the LR model / Begin
+    if (LRx is not None):
+        print('start train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+        clf = LogisticRegression(random_state=0).fit(LRx, LRy)
+
+        LRxBaseLine = list(map(lambda x: [x[1]], LRx))
+        clfBaseLine = LogisticRegression(random_state=0).fit(LRxBaseLine, LRy)
+        # the clf and the clfBaseLine are used externally - in the evaluation.py
+        # todo: Save clf
+
+        print('END train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+        print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
+        print('    time count ', (time_count), 'count/', (time_sum), ' sum')
+        conf['clf'] = clf
+        conf['clfBaseLine'] = clfBaseLine
+    # train the LR model / End
+    ###############################
 
     print(key, ' time: ', (time.time() - ts))
 

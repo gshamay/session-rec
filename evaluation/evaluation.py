@@ -5,7 +5,6 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import precision_recall_curve
 #from sklearn.metrics import PrecisionRecallDisplay, f1_score
 import matplotlib.pyplot as plt
-
 def evaluate_sessions_batch(pr, metrics, test_data, train_data, items=None, cut_off=20, session_key='SessionId', item_key='ItemId', time_key='Time', batch_size=100, break_ties=True ):
     '''
     Evaluates the GRU4Rec network wrt. recommendation accuracy measured by recall@N and MRR@N.
@@ -276,38 +275,53 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
     '''
 
     for m in metrics:
-        m.reset();
+        m.reset()
 
     train_data = train_data.drop( columns='index')
 
     # do evaluation on both train and test
-    #  This is required for generating data that is readable from file for the LR
+    #  This is required for generating data that is readable later from the csv file for the usage of LR
+
     dataToTest = [test_data_]
     if 'useBothTrainAndTest' in conf['data'] and conf['data']['useBothTrainAndTest'] is True:
+        # todo: when useBothTrainAndTest avoid calculating statistics for train_data
         dataToTest = [train_data, test_data_]
 
-    for test_data in dataToTest: # create predictions on train AND test
 
+    LRTestX = None
+    LRTestY = None
+    for test_data in dataToTest:  # create predictions on either test only or on train AND test
         actions = len(test_data)
         sessions = len(test_data[session_key].unique())
         count = 0
         print('START evaluation of ', actions, ' actions in ', sessions, ' sessions')
 
-        sc = time.clock();
-        st = time.time();
+        sc = time.clock()
+        st = time.time()
 
         time_sum = 0
         time_sum_clock = 0
         time_count = 0
-
 
         test_data.sort_values([session_key, time_key], inplace=True)
         items_to_predict = train_data[item_key].unique()
         prev_iid, prev_sid = -1, -1
         pos = 0
 
+        # LR #############################
+        runLR = False
+        clf = None
+        clfBaseLine = None
+        if 'clf' in conf and 'clfBaseLine' in conf:
+            clfBaseLine = conf['clfBaseLine']
+            clf = conf['clf']
+
+        if clf is not None and clfBaseLine is not None:
+            runLR = True
+
         LRTestX = []
         LRTestY = []
+        #######################################
         for i in range(len(test_data)):
             if count % 1000 == 0:
                 print( '    eval process: ', count, ' of ', actions, ' actions: ', ( count / actions * 100.0 ), ' % in',(time.time()-st), 's')
@@ -355,14 +369,14 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                 #  change all -1...-N to be -1
                 #  'pushUp' all other results to cover the unneeded -2...-N
                 #  this will keep only  the -1 with the highest probability value
-                maxUsedK = 50
                 aEOSBaseIDValue = -1
-                foundAEOS = False
                 aEOSMaxPredictedValue = 0
                 defaultMinValueToPushDownPrediction = -0.01
 
-                # todo: refactor and use such style : EOSPreds = preds[preds.index <= aEOSBaseIDValue]
-
+                # Method 1
+                # eval process:  1000  of  3006  actions:  33.266799733865604  % in 10.690671920776367 s
+                foundAEOS = False
+                maxUsedK = 50
                 for i in range(maxUsedK):
                     iKey = preds.index[i]
                     if (iKey <= aEOSBaseIDValue):
@@ -376,13 +390,32 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                     # re sort preds according to the new  predicted probabilities
                     preds.sort_values(ascending=False, inplace=True)
 
-                # if the predicted aEOS is < -1 (-2, -3....-N), we change it to -1 as it's the default aEOS id
+                # # Method 2
+                # # eval process:  1000  of  3006  actions:  33.266799733865604  % in 14.598280906677246 s
+                # EOSPreds = preds[preds.index <= aEOSBaseIDValue]  # filter only aEOS predictions
+                # if len(EOSPreds) > 0:
+                #     # if there are aEOS in the prediction - take the rank of the top one
+                #     EOSPreds.sort_values(ascending=False, inplace=True)
+                #     aEOSMaxPredictedValue = EOSPreds.values[0]
+                #     # Set all EOS Preds to be with rank defaultMinValueToPushDownPrediction (pushUp all other results)
+                #     for eosPredIKey in EOSPreds.keys():
+                #         preds[eosPredIKey] = defaultMinValueToPushDownPrediction
+                #
+                #     # Set a single EOS item aEOSBaseIDValue (-1) pred to b with the max EOS rank  aEOSMaxPredictedValue (-0.01)
+                #     preds[aEOSBaseIDValue] = aEOSMaxPredictedValue
+                #     # re sort preds according to the new  predicted probabilities
+                #     preds.sort_values(ascending=False, inplace=True)
+
+
+                # if the test actual data next id is aEOS with id < -1 (-2, -3....-N),
+                # we change it to -1 as it's the default aEOS id
                 if (iid <= aEOSBaseIDValue):
                     iid = aEOSBaseIDValue
                 ############################################################
                 # Prepare data for LR [[aEOSMaxPredictedValue,sessionLen]...]
-                LRTestX.append([aEOSMaxPredictedValue,pos])
-                LRTestY.append(iid<=aEOSBaseIDValue)
+                if runLR:
+                    LRTestX.append([aEOSMaxPredictedValue, pos])
+                    LRTestY.append(iid <= aEOSBaseIDValue)
                 ############################################################
 
                 time_sum_clock += time.clock()-crs
@@ -401,39 +434,51 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
         print('    time count ', (time_count), 'count/', (time_sum), ' sum')
-        if hasattr(pr, 'clf'):
-            clfProbs = pr.clf.predict_proba(LRTestX)
-            clfProbs = list(map(lambda x: x[1], clfProbs))
-            AUC = roc_auc_score(LRTestY, clfProbs)
-            print('AUC Model['+str(AUC)+']')
-
-            precision, recall, _ = precision_recall_curve(LRTestY, clfProbs)
-            # disp = PrecisionRecallDisplay(precision, recall)
-            # disp.plot()
-            plt.plot(recall, precision, label="model")
-
-            ################################################
-
-            LRTestXBaseLine = list(map(lambda x: [x[1]], LRTestX))
-            clfProbsBaseLine = pr.clfBaseLine.predict_proba(LRTestXBaseLine)
-            clfProbsBaseLine = list(map(lambda x: x[1], clfProbsBaseLine))
-            AUCBaseLine = roc_auc_score(LRTestY, clfProbsBaseLine)
-            print('AUC BaseLine[' + str(AUCBaseLine) + ']')
-
-            precisionBaseLine, recallBaseLine, _ = precision_recall_curve(LRTestY, clfProbsBaseLine)
-            # disp = PrecisionRecallDisplay(precision, recall)
-            # disp.plot()
-            plt.plot(recallBaseLine, precisionBaseLine, label="baseline")
-
-            plt.xlabel('recall')
-            plt.ylabel('precision')
-
-            plt.legend()
-            plt.savefig('plot.png')
-            plt.show()
 
 
     res = []
+    #############################################
+    # Predict with LR and produce AUC
+    if runLR:
+        clfProbs = clf.predict_proba(LRTestX)
+        clfProbs = list(map(lambda x: x[1], clfProbs))
+        AUC = roc_auc_score(LRTestY, clfProbs)
+        print('AUC Model['+str(AUC)+']')
+
+        precision, recall, _ = precision_recall_curve(LRTestY, clfProbs)
+        # disp = PrecisionRecallDisplay(precision, recall)
+        # disp.plot()
+        plt.plot(recall, precision, label="model")
+
+        ################################################
+
+        LRTestXBaseLine = list(map(lambda x: [x[1]], LRTestX))
+        clfProbsBaseLine = clfBaseLine.predict_proba(LRTestXBaseLine)
+        clfProbsBaseLine = list(map(lambda x: x[1], clfProbsBaseLine))
+        AUCBaseLine = roc_auc_score(LRTestY, clfProbsBaseLine)
+        print('AUC BaseLine[' + str(AUCBaseLine) + ']')
+
+        precisionBaseLine, recallBaseLine, _ = precision_recall_curve(LRTestY, clfProbsBaseLine)
+        # disp = PrecisionRecallDisplay(precision, recall)
+        # disp.plot()
+        plt.plot(recallBaseLine, precisionBaseLine, label="baseline")
+
+        plt.xlabel('recall')
+        plt.ylabel('precision')
+
+        plt.legend()
+        name = conf['algorithms'][0]['key']+'_' + conf['data']['name']
+        plt.savefig(conf['results']['folder'] + 'plot_' + name + '.png')
+        # plt.show()  # Avoid showing plt - it hang the process
+
+        # todo: save recall / Pre values
+        # todo: calc HR @ X
+
+        res.append("AUCBaseLine:"+str(AUCBaseLine))
+        # todo: add more LR related results here
+    #############################################
+
+
     for m in metrics:
         if type(m).__name__ == 'Time_usage_testing':
             res.append(m.result_second(time_sum_clock / time_count))
