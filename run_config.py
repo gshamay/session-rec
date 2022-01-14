@@ -526,10 +526,13 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     pos = 0
     actions = len(train)
 
+    enableLR = False;
+    if 'LogisticRegressionOnEOS' in conf :
+        enableLR = (conf['LogisticRegressionOnEOS'] == True)
+
     # data used for the LR
     LRx = []
     LRy = []
-    # todo: use only if set in the yml
 
     for i in range(len(train)):
         if count % 1000 == 0:
@@ -561,7 +564,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
 
             ############################################################
             # LR MODEL - collect the data to train the LR model
-            if (LRx is not None):
+            if (enableLR):
                 aEOSMaxPredictedValue = 0
                 EOSPreds = preds[preds.index <= aEOSBaseIDValue]  # filter only aEOS predictions
                 if len(EOSPreds) > 0:
@@ -587,14 +590,14 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
 
     ###############################
     # train the LR model / Begin
-    if (LRx is not None):
+    if (enableLR):
         print('start train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         clf = LogisticRegression(random_state=0).fit(LRx, LRy)
 
         LRxBaseLine = list(map(lambda x: [x[1]], LRx))
         clfBaseLine = LogisticRegression(random_state=0).fit(LRxBaseLine, LRy)
         # the clf and the clfBaseLine are used externally - in the evaluation.py
-        # todo: Save clf
+        # todo: Save clf to pickle
 
         print('END train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
