@@ -41,6 +41,45 @@ fix  extra sessions with size =2 with aEOS- digi
 v create results xls
 v find in the papers the best Algos to use beside gnn (2)
 
+Add parameter to do LR
+move LR model to the run config
+Add LR Results to the out
+save LR results in CSV
+Save LR Pres/Recall values in CSV
+Save PR/RC graph to file
+calculate HR,FP,FN@0.1...0.9  and save to CSV
+Statistical significance pair base vs LR ?
+Save LR models pickle
+Save LR models results
+tests: EOS1,NaiveTrue,random
+fix useBothTrainAndTest - avoid using the train data for HR statistics
+
+support run with a single yml
+
+support more datasets
+
+prepare Run in Linux
+Save out files location
+
+Run tests
+x DB x Algorithm:
+RunOnAllData - Generate 'complete file model'
+
+EOS1...n
+moving window EOSX
+
+find in the papers the best Algos to use beside gnn - must not use time value
+    NARM, HGRU4Rec, SGNN, AR (assosication Rule),bpr,Pop,ContextTree, HGRU4Rec(Sort only) , IIRNN,NCFS,Seq2SeqAttNN(STAMP)
+No: Using Time
+    Markov,csrm,SKNN(ContextKNN), STAN,USTAN,VMContextKNN(VSKNN)
+?:
+    ItemKNN (only sort ?)
+
+Another db
+
+
+
+
 test on train and test - to be able to build CSV that include the train - to build predictions for the LR
 Logistic regression
     LR - AUC
