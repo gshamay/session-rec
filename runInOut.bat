@@ -1,0 +1,1 @@
+python.exe C:\bgu\session-rec\run_config.py conf/in conf/out
