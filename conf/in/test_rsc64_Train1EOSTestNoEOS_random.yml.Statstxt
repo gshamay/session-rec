@@ -4,7 +4,7 @@ key: sgnn
 evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple
 data:
   name: rsc
-  folder: data/rsc15/prepared/rsc15_64_noEOS/
+  folder: data/rsc15/prepared/rsc15_64_noEOS/sEOSStats
   prefix: rsc15-clicks64
 
 results:
@@ -12,7 +12,6 @@ results:
   #pickle_models: results/rsc15/1EOSTestNoEOS_random
 
 metrics:
-Time_usage_testing
 - class: accuracy.EOS_FN
   length: [2,3,5,10,15,20]
 - class: accuracy.EOS_FP
@@ -25,6 +24,7 @@ Time_usage_testing
   length: [2,3,5,10,15,20]
 - class: accuracy.EOS_HIT_RATE
   length: [2,3,5,10,15,20]
+
 
 algorithms:
 - class: filemodel.resultfile.ResultFile

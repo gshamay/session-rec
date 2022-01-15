@@ -1,0 +1,28 @@
+---
+type: single
+key: sgnn 
+evaluation: evaluation 
+
+data:
+  name: rsc
+  folder: data/rsc15/prepared/rsc15_64_5EOS/
+  prefix: rsc15-clicks64
+  useBothTrainAndTest: False
+
+results:
+  folder: results/rsc15/rsc15_64_5EOS/LogReg/
+
+metrics:
+- class: accuracy.HitRate
+  length: [2]
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: filemodel.resultfileLogReg.resultfileLogReg
+  params: { file: results/rsc15/rsc15_64_5EOS_trainAndTest/sgnn/test_single_sgnn_rsc-Saver@50.csv}
+  key: rsc15FileModelclicks64Short
+  
+

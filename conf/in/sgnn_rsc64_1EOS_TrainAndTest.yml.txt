@@ -1,0 +1,27 @@
+---
+type: single
+key: sgnn 
+evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple
+
+data:
+  name: rsc
+  folder: data/rsc15/prepared/rsc15_64_1EOS/
+  prefix: rsc15-clicks64
+  useBothTrainAndTest: True
+
+results:
+  folder: results/rsc15/rsc15_64_1EOS_trainAndTest/sgnn/
+
+metrics:
+- class: accuracy.HitRate
+  length: [2]
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: sgnn.gnn.GGNN
+  params: { lr: 0.008, l2: 0.0001, lr_dc: 0.45, lr_dc_step: 3, epoch_n: 10}
+  key: sgnn-best
+

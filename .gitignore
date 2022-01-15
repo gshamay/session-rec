@@ -127,3 +127,19 @@ conf/in/test_csrm - RecSys.yml.txt
 conf/in/test_csrm - Digi_1.yml.txt
 conf/in/test_csrm - Digi.yml - Copy.txt
 conf/in/test_csrm - Copy.yml - Copy.txt
+conf/in/test_rcsShort.yml.txt
+conf/in/test_rcsShort1.yml.txt
+conf/in/test_rcsShort_fromFile.yml.txt
+conf/in/test_rcsShort.yml.txt
+conf/in/test_rcsShort.yml.txt
+conf/in/test_rcsShort.yml.txt
+papers/Empirical analysis of session‑based recommendation.pdf
+papers/Session-Based Recommendation with Graph Neural Networks.pdf
+conf/in/test_rcsShort.yml.txt
+conf/in/output.txt
+conf/in/test_rcsShort.yml.txt
+conf/in/test_diginetica_Train1EOSTestNoEOS.yml
+conf/in/test_diginetica_TrainNoEOSTest1EOS_naiveTrue.yml
+conf/in/test_diginetica_TrainNoEOSTest1EOS_random.yml
+conf/in/test_rcsShort.yml.txt
+results/**/*Short*
