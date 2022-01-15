@@ -156,7 +156,7 @@ class resultfileLogReg:
             #     randValue = randRate * highestValue
             #     res[aEOSItemId] = randValue
 
-        #self.clf.predict_proba(X[:2, :])
+        # self.clf.predict_proba(X[:2, :])
         return res
 
     def clear(self):
