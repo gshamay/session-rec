@@ -193,7 +193,7 @@ def run_single(conf, slice=None):
     evaluation = load_evaluation(conf['evaluation'])
 
     if ('results' in conf) and ('folder' in conf['results']):
-        # Check and create if needed the results dir  
+        # Check and create if needed the results dir
         outPath = conf['results']['folder']
         if os.path.exists(outPath):
             print("Path [" + outPath + "]exists")
@@ -516,9 +516,16 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     # train the model
     # todo: Why do we provide the test data to the train ?
     algorithm.fit(train, test)
+    print('fit ', key, ' End')
 
     ###############################
     # train the LR model / Begin
+    enableLR = False
+    if 'LogisticRegressionOnEOS' in conf :
+        enableLR = (conf['LogisticRegressionOnEOS'] == True)
+
+    # todo: enableLR from here
+
     aEOSBaseIDValue = -1
     sc = time.clock()
     st = time.time()
@@ -535,17 +542,13 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     pos = 0
     actions = len(train)
 
-    enableLR = False;
-    if 'LogisticRegressionOnEOS' in conf :
-        enableLR = (conf['LogisticRegressionOnEOS'] == True)
-
     # data used for the LR
     LRx = []
     LRy = []
 
     for i in range(len(train)):
         if count % 1000 == 0:
-            print('    eval process: ', count, ' of ', actions, ' actions: ', (count / actions * 100.0), ' % in',
+            print('    predict for training LR model: ', count, ' of ', actions, ' actions: ', (count / actions * 100.0), ' % in',
                   (time.time() - st), 's')
 
         iid = train[item_key].values[i]  # the actual Item ID
@@ -595,7 +598,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
 
         prev_iid = iid  #
         count += 1  # position in the train set
-        # for end
+        # for 'on train' end
 
     ###############################
     # train the LR model / Begin
