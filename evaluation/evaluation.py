@@ -448,40 +448,11 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         clfProbsBaseLinedf = pd.DataFrame(clfProbs)
         clfProbsBaseLinedf.to_csv(conf['results']['folder'] + 'clfProbs.csv', sep=";", header=False, index=False)
 
-        totalProbs = len(clfProbs)
-        for accuracyMul in range(9):
-            acc = accuracyMul * 0.1 + 0.1
-            checkAcc = lambda t: t >= acc
-            vfuncCheckAcc = np.vectorize(checkAcc)
-            clfInAcc = vfuncCheckAcc(clfProbs)
-
-            # todo: move to a method (shared with teh baseline)
-            HR = 0
-            FP = 0
-            FN = 0
-            for predictedWithAcc, y in zip(clfInAcc, LRTestY):
-                if (predictedWithAcc == y):
-                    HR += 1
-                else:
-                    if y:
-                        FN += 1
-                    else:
-                        FP += 1
-            print('ACC=' + ("%.1f" % acc) + ':'
-                  + 'HR=' + str(HR / totalProbs) + ';'
-                  + 'FP=' + str(FP / totalProbs) + ';'
-                  + 'FN=' + str(FN / totalProbs)
-                  )
-
-        AUC = roc_auc_score(LRTestY, clfProbs)
-        print('AUC Model[' + str(AUC) + ']')
+        printLREvaluationValues("", LRTestY, clfProbs, res)
 
         precision, recall, thresholds = precision_recall_curve(LRTestY, clfProbs)
-        # disp = PrecisionRecallDisplay(precision, recall)
-        # disp.plot()
         plt.figure(0)
         plt.plot(recall, precision, label="Model")
-
 
         ################################################
 
@@ -492,34 +463,9 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         clfProbsBaseLinedf = pd.DataFrame(clfProbsBaseLine)
         clfProbsBaseLinedf.to_csv(conf['results']['folder'] + 'clfProbsBaseLine.csv', sep=";",header=False,index=False)
 
-        for accuracyMul in range(9):
-            acc = accuracyMul * 0.1 + 0.1
-            checkAcc = lambda t: t >= acc
-            vfuncCheckAcc = np.vectorize(checkAcc)
-            clfInAcc = vfuncCheckAcc(clfProbsBaseLine)
-            HR = 0
-            FP = 0
-            FN = 0
-            for predictedWithAcc, y in zip(clfInAcc, LRTestY):
-                if (predictedWithAcc == y):
-                    HR += 1
-                else:
-                    if y:
-                        FN += 1
-                    else:
-                        FP += 1
-            print('ACC_BaseLine=' + ("%.1f" % acc) + ':'
-                  + 'HR_BaseLine=' + str(HR / totalProbs) + ';'
-                  + 'FP_BaseLine=' + str(FP / totalProbs) + ';'
-                  + 'FN_BaseLine=' + str(FN / totalProbs)
-                  )
-
-        AUCBaseLine = roc_auc_score(LRTestY, clfProbsBaseLine)
-        print('AUC BaseLine[' + str(AUCBaseLine) + ']')
+        printLREvaluationValues("BaseLine", LRTestY, clfProbsBaseLine, res)
 
         precisionBaseLine, recallBaseLine, thresholdsBaseLine = precision_recall_curve(LRTestY, clfProbsBaseLine)
-        # disp = PrecisionRecallDisplay(precision, recall)
-        # disp.plot()
         plt.plot(recallBaseLine, precisionBaseLine, label="Baseline")
 
         plt.xlabel('Recall')
@@ -552,12 +498,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
 
         # plt.show()  # Avoid showing plt - it hang the process
 
-        # todo: save recall / Pre values
-        # todo: calc HR @ X
-
-        res.append("AUCBaseLine:"+str(AUCBaseLine))
-        # todo: add more LR related results here
-    #############################################
+    ############################################# if LR End
 
 
     for m in metrics:
@@ -568,6 +509,54 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
             res.append(m.result())
 
     return res
+
+
+def printLREvaluationValues(prefix, LRTestY, clfProbs, res):
+    AUC = roc_auc_score(LRTestY, clfProbs)
+    print('AUC' + prefix + '[' + str(AUC) + ']')
+    res.append(("AUC" + prefix, str(AUC)))
+    totalProbs = len(clfProbs)
+    maxHR = 0
+    maxHRAcc = 0
+    posToPushMax = len(res)
+    for accuracyMul in range(9):
+        acc = accuracyMul * 0.1 + 0.1
+        checkAcc = lambda t: t >= acc
+        vfuncCheckAcc = np.vectorize(checkAcc)
+        clfInAcc = vfuncCheckAcc(clfProbs)
+
+        HR = 0
+        FP = 0
+        FN = 0
+        for predictedWithAcc, y in zip(clfInAcc, LRTestY):
+            if (predictedWithAcc == y):
+                HR += 1
+            else:
+                if y:
+                    FN += 1
+                else:
+                    FP += 1
+
+        accStr = ("%.1f" % acc)
+        HR = (HR / totalProbs)
+        FP = (FP / totalProbs)
+        FN = (FN / totalProbs)
+        print('ACC' + prefix + '=' + accStr + ':'
+              + 'HR' + prefix + '=' + str(HR) + ';'
+              + 'FP' + prefix + '=' + str(FP) + ';'
+              + 'FN' + prefix + '=' + str(FN)
+              )
+        if (maxHR < HR):
+            maxHR = HR
+            maxHRAcc = acc
+
+        # todo: Create a method to add results
+        res.append(("Hr" + prefix + "@" + accStr, str(HR)))
+        res.append(("Fp" + prefix + "@" + accStr, str(FP)))
+        res.append(("Fn" + prefix + "@" + accStr, str(FN)))
+    res.insert(posToPushMax, ("maxHR" + prefix + "@" + str(("%.1f" % maxHRAcc)), str(maxHR)))
+    return AUC, totalProbs
+
 
 def evaluate_sessions_org(pr, metrics, test_data, train_data, items=None, cut_off=20, session_key='SessionId', item_key='ItemId', time_key='Time'):
     '''
