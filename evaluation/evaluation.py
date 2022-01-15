@@ -49,11 +49,11 @@ def evaluate_sessions_batch(pr, metrics, test_data, train_data, items=None, cut_
     actions = len(test_data)
     sessions = len(test_data[session_key].unique())
     print('START batch eval ', actions, ' actions in ', sessions, ' sessions')
-    sc = time.clock();
-    st = time.time();
+    sc = time.clock()
+    st = time.time()
 
     for m in metrics:
-        m.reset();
+        m.reset()
 
     pr.predict = None #In case someone would try to run with both items=None and not None on the same model without realizing that the predict function needs to be replaced
     test_data.sort_values([session_key, time_key], inplace=True)
@@ -166,8 +166,8 @@ def evaluate_sessions_batch_org(pr, metrics, test_data, train_data, items=None, 
     actions = len(test_data)
     sessions = len(test_data[session_key].unique())
     print('START batch eval old ', actions, ' actions in ', sessions, ' sessions')
-    sc = time.clock();
-    st = time.time();
+    sc = time.clock()
+    st = time.time()
 
     pr.predict = None #In case someone would try to run with both items=None and not None on the same model without realizing that the predict function needs to be replaced
     test_data.sort_values([session_key, time_key], inplace=True)
@@ -284,15 +284,24 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
     # do evaluation on both train and test
     #  This is required for generating data that is readable later from the csv file for the usage of LR
 
+    bRunningTrainData = False
     dataToTest = [test_data_]
-    if 'useBothTrainAndTest' in conf['data'] and conf['data']['useBothTrainAndTest'] is True:
-        # todo: when useBothTrainAndTest avoid calculating statistics for train_data
+    if 'useBothTrainAndTest' in conf['results'] and conf['results']['useBothTrainAndTest'] is True:
+        # when useBothTrainAndTest avoid calculating statistics for train_data - test data must be SECOND !!!
         dataToTest = [train_data, test_data_]
+        bRunningTrainData = True
+        print('running vealuation on Both Train And Test - only for filling csv results')
+        print('train Size[' + str(len(train_data)) + ']')
 
-
+    print('test Size[' + str(len(test_data_)) + ']')
     LRTestX = None
     LRTestY = None
     for test_data in dataToTest:  # create predictions on either test only or on train AND test
+        if(bRunningTrainData):
+            print("start running evaluation on train")
+        else:
+            print("start running evaluation on test")
+
         actions = len(test_data)
         sessions = len(test_data[session_key].unique())
         count = 0
@@ -318,7 +327,11 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
             clfBaseLine = conf['clfBaseLine']
             clf = conf['clf']
 
-        if clf is not None and clfBaseLine is not None:
+        if clf is not None \
+                and clfBaseLine is not None \
+                and not bRunningTrainData:
+            # avoid getting LR info on train data
+            # enable LR only when it's available
             runLR = True
 
         LRTestX = []
@@ -361,7 +374,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                 #  different evaluate_sessions methods;  Also appear as preds.fillna(0, inplace=True)
                 preds[np.isnan(preds)] = 0 # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
 
-    #             preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
+                #  preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
                 preds.sort_values( ascending=False, inplace=True ) # sort preds according to the predicted probability
 
                 ############################################################
@@ -413,6 +426,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                 # we change it to -1 as it's the default aEOS id
                 if (iid <= aEOSBaseIDValue):
                     iid = aEOSBaseIDValue
+
                 ############################################################
                 # Prepare data for LR [[aEOSMaxPredictedValue,sessionLen]...]
                 if runLR:
@@ -420,13 +434,19 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                     LRTestY.append(iid <= aEOSBaseIDValue)
                 ############################################################
 
-                time_sum_clock += time.clock()-crs
-                time_sum += time.time()-trs
+                time_sum_clock += time.clock() - crs
+                time_sum += time.time() - trs
                 time_count += 1
 
                 for m in metrics:
+                    if bRunningTrainData and type(m).__name__ != 'Saver':
+                        # only save metrics should be active when evaluating train data
+                        # for saving it in the csv
+                        # other metrics must be avoided
+                        continue
+
                     if hasattr(m, 'add'):
-                        m.add( preds, iid, for_item=prev_iid, session=sid, position=pos )
+                        m.add(preds, iid, for_item=prev_iid, session=sid, position=pos)
 
                 pos += 1
 
@@ -436,6 +456,16 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
         print('    time count ', (time_count), 'count/', (time_sum), ' sum')
+
+        if(bRunningTrainData):
+            print("finished running evaluation on train")
+        else:
+            print("finished running evaluation on test")
+
+
+        bRunningTrainData = False
+        #  end for test_data in dataToTest
+
 
 
     res = []
@@ -451,7 +481,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         printLREvaluationValues("", LRTestY, clfProbs, res)
 
         precision, recall, thresholds = precision_recall_curve(LRTestY, clfProbs)
-        plt.figure(0)
+        plt.figure(0, clear=True)
         plt.plot(recall, precision, label="Model")
 
         ################################################
@@ -488,7 +518,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         thresholdsPrecisionRecall = np.array([thresholds, precision, recall])
         np.savetxt(conf['results']['folder'] + 'ThresholdsPrecisionRecall_' + name + '.csv', thresholdsPrecisionRecall, delimiter=";")
 
-        plt.figure(1)
+        plt.figure(1, clear=True)
         plt.plot(thresholds, precision, label="precision")
         plt.plot(thresholds, recall, label="recall")
         plt.xlabel('Threshold')
@@ -499,7 +529,9 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         # plt.show()  # Avoid showing plt - it hang the process
 
     ############################################# if LR End
-
+    plt.close()
+    plt.cla()
+    plt.clf()
 
     for m in metrics:
         if type(m).__name__ == 'Time_usage_testing':
