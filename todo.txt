@@ -51,10 +51,10 @@ v Save PR/RC graph to png file
 v calculate HR,FP,FN@0.1...0.9  and save to CSV
 v Add LR Results to the out csv BEST hr, auc,
 v fix useBothTrainAndTest - avoid using the train data for HR statistics
+v Save LR models results
 
+v Save LR models pickle
 Statistical significance pair base vs LR ?
-Save LR models pickle
-Save LR models results
 support more datasets
 
 prepare tests for : EOS1,NaiveTrue,random

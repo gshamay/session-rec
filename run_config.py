@@ -610,6 +610,9 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
         clfBaseLine = LogisticRegression(random_state=0).fit(LRxBaseLine, LRy)
         # the clf and the clfBaseLine are used externally - in the evaluation.py
         # todo: Save clf to pickle
+        outPath = conf['results']['folder']
+        pickle.dump(clf, open(outPath + 'clf.pkl', 'wb'))
+        pickle.dump(clfBaseLine, open(outPath + 'clfBaseLine.pkl', 'wb'))
 
         print('END train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
