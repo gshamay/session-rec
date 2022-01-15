@@ -1,0 +1,2 @@
+Metrics;HitRate@2: ;Saver@50: ;Training time:;Testing time seconds:;Testing time cpu:;
+sgnn-best-lr=0.008-l2=0.0001-lr_dc=0.45-lr_dc_step=3-epoch_n=10;0.36800545659644796;1;21452.0798766613;0.018169954004497987;0.018169954004497987;
