@@ -54,7 +54,7 @@ v fix useBothTrainAndTest - avoid using the train data for HR statistics
 v Save LR models results
 
 v Save LR models pickle
-Statistical significance pair base vs LR ?
+v Statistical significance pair base vs LR ?
 support more datasets
 
 prepare tests for : EOS1,NaiveTrue,random

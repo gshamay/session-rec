@@ -6,6 +6,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import precision_recall_curve
 #from sklearn.metrics import PrecisionRecallDisplay, f1_score
 import matplotlib.pyplot as plt
+from scipy.stats import wilcoxon
 
 def evaluate_sessions_batch(pr, metrics, test_data, train_data, items=None, cut_off=20, session_key='SessionId', item_key='ItemId', time_key='Time', batch_size=100, break_ties=True):
     '''
@@ -474,7 +475,6 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
     if runLR:
         clfProbs = clf.predict_proba(LRTestX)
         clfProbs = list(map(lambda x: x[1], clfProbs))
-
         clfProbsBaseLinedf = pd.DataFrame(clfProbs)
         clfProbsBaseLinedf.to_csv(conf['results']['folder'] + 'clfProbs.csv', sep=";", header=False, index=False)
 
@@ -488,7 +488,6 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
 
         LRTestXBaseLine = list(map(lambda x: [x[1]], LRTestX))
         clfProbsBaseLine = clfBaseLine.predict_proba(LRTestXBaseLine)
-
         clfProbsBaseLine = list(map(lambda x: x[1], clfProbsBaseLine))
         clfProbsBaseLinedf = pd.DataFrame(clfProbsBaseLine)
         clfProbsBaseLinedf.to_csv(conf['results']['folder'] + 'clfProbsBaseLine.csv', sep=";",header=False,index=False)
@@ -525,8 +524,11 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         plt.ylabel('Precision,Recall')
         plt.legend()
         plt.savefig(conf['results']['folder'] + 'plot_PrecisionRecallThresholds_' + name + '.png')
-
         # plt.show()  # Avoid showing plt - it hang the process
+
+        stat, p = wilcoxon(x=clfProbs, y=clfProbsBaseLine)
+        res.append(("Pvalue", str(p)))
+        res.append(("stat", str(stat)))
 
     ############################################# if LR End
     plt.close()
