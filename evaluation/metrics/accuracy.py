@@ -361,8 +361,7 @@ class EOS_FP:
         '''
         Return a tuple of a description string and the current averaged value
         '''
-        return ("EOS_FP@" + str(self.length) + ": "), (
-                    self.fp / self.test), self.result_pop_bin(), self.result_position()
+        return ("EOS_FP@" + str(self.length) + ": "), (self.fp / self.test), self.result_pop_bin(), self.result_position()
 
     def result_pop_bin(self):
         '''
@@ -496,8 +495,7 @@ class EOS_FN:
         '''
         Return a tuple of a description string and the current averaged value
         '''
-        return ("EOS_FN@" + str(self.length) + ": "), (
-                    self.fn / self.test), self.result_pop_bin(), self.result_position()
+        return ("EOS_FN@" + str(self.length) + ": "), (self.fn / self.test), self.result_pop_bin(), self.result_position()
 
     def result_pop_bin(self):
         '''
