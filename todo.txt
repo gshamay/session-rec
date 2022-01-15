@@ -39,6 +39,7 @@ v fix  extra sessions with size =2 with aEOS - recsys
 fix  extra sessions with size =2 with aEOS- digi
 
 v create results xls
+
 v find in the papers the best Algos to use beside gnn (2)
 
 v Add parameter to do LR
@@ -48,7 +49,7 @@ v save LR prediction  results values in CSV
 v Save LR Pres/Recall results values in CSV
 v Save PR/RC graph to png file
 calculate HR,FP,FN@0.1...0.9  and save to CSV
-Add LR Results to the out csv
+Add LR Results to the out csv BEST hr, auc,
 Statistical significance pair base vs LR ?
 Save LR models pickle
 Save LR models results
