@@ -35,13 +35,21 @@ v generate recsys64 0,1,5,10,20,100, aEOS
 
 v Fix Diginetica 20 (was done with 10)
 
+v aEOS vs random (is aEOS better than random) ; Random on resFile train w/o EOS, test with EOS
+v aEOS vs standard (is aEOS much worst on all but EOS) ; aEOS resFile, test w/o EOS
+v add FP FN evaluations
+
 v fix  extra sessions with size =2 with aEOS - recsys
+
 fix  extra sessions with size =2 with aEOS- digi
 
 v create results xls
 
 v find in the papers the best Algos to use beside gnn (2)
 
+v Logistic regression
+v    LR - AUC
+v    LR - P/R graph LR
 v Add parameter to do LR
 v move LR model to the run config
 v Save Pr/Rec - threshhold graph
@@ -55,63 +63,44 @@ v Save LR models results
 
 v Save LR models pickle
 v Statistical significance pair base vs LR ?
-support more datasets
 
-prepare tests for : EOS1,NaiveTrue,random
+Run tests x DB x Algorithm:
+    rsc digi X
+        P1 HGRU4Rec, STAMP, SGNN,
+        P2 bpr,SR
+        P3 NARM,  AR
+
+    EOS
+        P1 0 (for later random and naive) 1 10 100
+        P2 5 20 sessionLen
+        P3 50 200 1000
+    [test on train and test - to be able to build CSV that include the train - to build predictions for the LR]
+
+support more datasets
+prepare tests for : NaiveTrue,random
 support run with a single yml
+moving window EOSX
 
 prepare Run in Linux
 Save out files location
 
-Run tests
-x DB x Algorithm:
-moving window EOSX
+ ? RunOnAllData - Generate 'complete file model'
+ ? EOS1...n
 
-RunOnAllData - Generate 'complete file model'
-EOS1...n
+v find in the papers the best Algos to use beside gnn - must not use time value
+        Yes: NARM, HGRU4Rec, SGNN, AR (assosication Rule),bpr,Pop,ContextTree, HGRU4Rec(Sort only) , IIRNN,NCFS,Seq2SeqAttNN(STAMP), SR
+        No: Using Time: Markov,csrm,SKNN(ContextKNN), STAN,USTAN,VMContextKNN(VSKNN)
+        Maybe : ItemKNN (only sort ?)
 
-find in the papers the best Algos to use beside gnn - must not use time value
-    NARM, HGRU4Rec, SGNN, AR (assosication Rule),bpr,Pop,ContextTree, HGRU4Rec(Sort only) , IIRNN,NCFS,Seq2SeqAttNN(STAMP)
-No: Using Time
-    Markov,csrm,SKNN(ContextKNN), STAN,USTAN,VMContextKNN(VSKNN)
-?:
-    ItemKNN (only sort ?)
-
-Another db
-
-
-test on train and test - to be able to build CSV that include the train - to build predictions for the LR
-Logistic regression
-    LR - AUC
-    LR - P/R graph LR
 Session Length distribution
-FP / FN - over Session Length distribution
-sign test
-
-
-
-select one more db
-
-recreate all aEOS (1..session Len)
-re run algos on results to get more accurate results
-update results XLS
 
 run on recsys64 on all aEOS N --> Find best N aEOS
 run on diginetica on all aEOS N --> Find best N aEOS --> N is valid for two datasets
 run another algo on recsys --> Find best N aEOS --> N is valid for two algos
 
-v aEOS vs random (is aEOS better than random) ; Random on resFile train w/o EOS, test with EOS
-v aEOS vs standard (is aEOS much worst on all but EOS) ; aEOS resFile, test w/o EOS
-
-v add FP FN evaluations
 
 Check ensamble
 
-use a a classifir and not as @20
-Recall/precition graph for EOS estimation
-calc AUC
-
-fix Precision and Recall (multiple)
 short Run on EC2 GPU - compare runTime
 try Colab
 Document the run in EC2
