@@ -1,15 +1,15 @@
 type: single
 key: AR
 evaluation: evaluation
-LogisticRegressionOnEOS: True
+LogisticRegressionOnEOS: False
 
 data:
-  name: rsc15_64_1EOS
-  folder: data/rsc15/prepared/rsc15_64_1EOS/
+  name: rsc15_64_noEOS
+  folder: data/rsc15/prepared/rsc15_64_noEOS/
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/rsc15_64_1EOS_LR/ar/
+  folder: results/rsc15/rsc15_64_noEOS_LR/ar/
   useBothTrainAndTest: True
  
 metrics:

@@ -1,5 +1,5 @@
 type: single
-key: AR
+key: STAMP
 evaluation: evaluation
 LogisticRegressionOnEOS: True
 
@@ -9,7 +9,7 @@ data:
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/rsc15_64_1EOS_LR/ar/
+  folder: results/rsc15/rsc15_64_1EOS_LR/STAMP/
   useBothTrainAndTest: True
  
 metrics:
@@ -41,9 +41,9 @@ metrics:
 - class: time_memory_usage.Time_usage_testing
 
 algorithms:
-- class: baselines.ar.AssociationRules
-  params: {}
-  key: ar
+- class: STAMP.model.STAMP.Seq2SeqAttNN
+  params: { init_lr: 0.0004, n_epochs: 30, decay_rate: 0.4}
+  key: stamp
  
   
 

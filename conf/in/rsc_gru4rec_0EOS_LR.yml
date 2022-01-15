@@ -1,15 +1,15 @@
 type: single
-key: AR
+key: GRU4Rec
 evaluation: evaluation
-LogisticRegressionOnEOS: True
+LogisticRegressionOnEOS: False
 
 data:
-  name: rsc15_64_1EOS
-  folder: data/rsc15/prepared/rsc15_64_1EOS/
+  name: rsc15_64_noEOS
+  folder: data/rsc15/prepared/rsc15_64_noEOS/
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/rsc15_64_1EOS_LR/ar/
+  folder: results/rsc15/rsc15_64_noEOS_LR/GRU4Rec/
   useBothTrainAndTest: True
  
 metrics:
@@ -41,10 +41,10 @@ metrics:
 - class: time_memory_usage.Time_usage_testing
 
 algorithms:
-- class: baselines.ar.AssociationRules
-  params: {}
-  key: ar
- 
+- class: gru4rec.gru4rec.GRU4Rec
+  params: { loss: 'bpr-max', final_act: 'elu-0.5', dropout_p_hidden: 0.5, learning_rate: 0.01, momentum: 0.8 }
+  key: gru4rec
+
   
 
   
