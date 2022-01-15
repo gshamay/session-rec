@@ -187,12 +187,21 @@ def run_single(conf, slice=None):
     '''
     print('run test single')
 
+
     algorithms = create_algorithms_dict(conf['algorithms'])
     metrics = create_metric_list(conf['metrics'])
     evaluation = load_evaluation(conf['evaluation'])
 
-    buys = pd.DataFrame()
+    if ('results' in conf) and ('folder' in conf['results']):
+        # Check and create if needed the results dir  
+        outPath = conf['results']['folder']
+        if os.path.exists(outPath):
+            print("Path [" + outPath + "]exists")
+        else:
+            print("Path [" + outPath + "] does not exists")
+            os.makedirs(outPath, exist_ok=True)
 
+    buys = pd.DataFrame()
     if 'type' in conf['data']:
         if conf['data']['type'] == 'hdf':  # hdf5 file
             if 'opts' in conf['data']:
