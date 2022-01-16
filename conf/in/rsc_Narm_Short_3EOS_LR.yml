@@ -1,0 +1,24 @@
+type: single
+key: STAMP
+evaluation: evaluation
+LogisticRegressionOnEOS: True
+data:
+  name: rscShort3EOS
+  folder: data/rsc15/prepared/rsc15_64Short_3EOS/
+  prefix: rsc15-clicks64ShortaEOS3
+
+results:
+  folder: results/rsc15/rsc15_64Short_3EOS_LR/STAMP/
+  useBothTrainAndTest: False
+ 
+metrics:
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: narm.narm.NARM
+  params: { epochs: 20, lr: 0.007, hidden_units: 100, factors: 100 }
+  key: narm
+  
