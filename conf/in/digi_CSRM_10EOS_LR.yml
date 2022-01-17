@@ -1,0 +1,49 @@
+type: single
+key: CSRM
+evaluation: evaluation
+LogisticRegressionOnEOS: True
+
+data:
+  name: diginetica_10EOS
+  folder: data/diginetica/prepared/diginetica_10EOS/
+  prefix: train-item-views_full
+
+results:
+  folder: results/diginetica/diginetica_10EOS_LR/CSRM/
+  useBothTrainAndTest: True
+ 
+metrics:
+- class: accuracy.HitRate
+  length: [5,10,20]
+- class: accuracy.MRR
+  length: [5,10,20]
+- class: accuracy_multiple.NDCG
+  length: [5,10,20]
+- class: coverage.Coverage
+  length: [20]
+- class: popularity.Popularity
+  length: [20]
+- class: accuracy.EOS_FN
+  length: [5,10,20]
+- class: accuracy.EOS_FP
+  length: [5,10,20]
+- class: accuracy.EOS_PREDICTED_COUNT
+  length: [5,10,20]
+- class: accuracy.EOS_ACTUAL_COUNT
+  length: [1]  
+- class: accuracy.EOS_HIT_COUNT
+  length: [5,10,20]
+- class: accuracy.EOS_HIT_RATE
+  length: [5,10,20]    
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: CSRM.csrm.CSRM
+  params: { hidden_units: 100, epoch: 10, lr: 0.001, memory_size: 128}
+  key: csrm
+  
+
+  
