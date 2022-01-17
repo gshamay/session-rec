@@ -88,8 +88,8 @@ Save out files location
 
 v find in the papers the best Algos to use beside gnn - must not use time value
         Yes: NARM, HGRU4Rec, SGNN, AR (assosication Rule),bpr,Pop,ContextTree, HGRU4Rec(Sort only) , IIRNN,NCFS,Seq2SeqAttNN(STAMP), SR
-        No: Using Time: Markov,csrm,SKNN(ContextKNN), STAN,USTAN,VMContextKNN(VSKNN)
-        Maybe : ItemKNN (only sort ?)
+        No: Using Time: Markov,SKNN(ContextKNN), STAN,USTAN,VMContextKNN(VSKNN)
+        Maybe : ItemKNN (only sort ?),csrm
 
 Session Length distribution
 
