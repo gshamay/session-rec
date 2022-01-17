@@ -395,7 +395,7 @@ class Seq2SeqAttNN(NN):
         self.optimize = super(Seq2SeqAttNN, self).optimize_normal(
             self.loss, self.params)
 
-    def fit(self, train, test):
+    def fit(self, train, test): # TODO: THE FACT THAT THE FIT GET TESTDATA AS INPUT IS PROBLEMATIC
         self.train_data, self.test_data, self.item2idx = self.load_tt_datas(train, test, self.reload)
         # generate the pre_embedding mask.
         self.pre_embedding_mask = np.ones(np.shape(self.pre_embedding))
@@ -574,6 +574,8 @@ class Seq2SeqAttNN(NN):
             Prediction scores given the input_item_id and session_id for the next item.
             Columns: 1 column containing the scores; rows: items. Rows are indexed by the item IDs.'''
 
+        # TODO: THE FACT THAT THE WHOLE TEST DATA IS USED IN THE PREDICTION, IS PROBLEMATIC
+        #  Why using x.session_id == session_id and not item_id
         sample = [x for x in self.test_data.samples if x.session_id == session_id]
         if self.old_session_id != session_id:
             self.s = 0
