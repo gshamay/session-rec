@@ -1,0 +1,23 @@
+type: single
+key: AR
+evaluation: evaluation
+LogisticRegressionOnEOS: True
+data:
+  name: rscShort3EOS
+  folder: data/rsc15/prepared/rsc15_64Short_3EOS/
+  prefix: rsc15-clicks64ShortaEOS3
+
+results:
+  folder: results/rsc15/rsc15_64Short_3EOS_LR/AR/
+  useBothTrainAndTest: False
+ 
+metrics:
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: baselines.ar.AssociationRules
+  params: {}
+  key: ar
