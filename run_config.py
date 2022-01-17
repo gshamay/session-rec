@@ -108,18 +108,31 @@ def main(conf, out=None):
                         print('finished config', list[0])
                         send_message('finished config ' + list[0])
 
-                        os.rename(list[0], out + '/' + file.name + str(time.time()) + '.done')
+                        if(os.path.exists(list[0])):
+                            os.rename(list[0], out + '/' + file.name + str(time.time()) + '.done')
+
+                        else:
+                            print('file does not exists - avoid rename to done ', list[0])
 
                     except (KeyboardInterrupt, SystemExit):
 
                         send_message('manually aborted config ' + list[0])
-                        os.rename(list[0], out + '/' + file.name + str(time.time()) + '.cancled')
+                        if(os.path.exists(list[0])):
+                            os.rename(list[0], out + '/' + file.name + str(time.time()) + '.cancled')
+
+                        else:
+                            print('file does not exists - avoid rename to cancled ', list[0])
 
                         raise
 
                     except Exception:
                         print('error for config ', list[0])
-                        os.rename(list[0], out + '/' + file.name + str(time.time()) + '.error')
+                        if(os.path.exists(list[0])):
+                            os.rename(list[0], out + '/' + file.name + str(time.time()) + '.error')
+
+                        else:
+                            print('file does not exists - avoid rename to error ', list[0])
+
                         send_exception('error for config ' + list[0])
                         traceback.print_exc()
 
@@ -514,8 +527,15 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
             m.start(algorithm)
 
     # train the model
-    # todo: Why do we provide the test data to the train ?
-    algorithm.fit(train, test)
+    # todo: Why do we provide the test data to the fit ?
+
+
+    test_ = test
+    # todo: consider setting both train and test in the test data (see stamp)
+    # if 'useBothTrainAndTest' in conf['results'] and conf['results']['useBothTrainAndTest'] is True:
+    #     test_ = train
+
+    algorithm.fit(train, test_)
     print('fit ', key, ' End')
 
     ###############################
@@ -570,13 +590,23 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
             # preds contain now a list of all possible items with their probabilities to be the next item
 
             # refine the predictions
+
+            # IN stamp
+            # preds[np.isnan(preds)] = 0
+            # TypeError: ufunc
+            # 'isnan'
+            # not supported
+            # for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
+
+            # if preds is not None: # todo: stamp return empty res
             preds[np.isnan(preds)] = 0
+
             # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
             # preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties # todo: ?
 
             ############################################################
             # LR MODEL - collect the data to train the LR model
-            if (enableLR):
+            if (enableLR and preds is not None):  # todo check STAMP on train
                 aEOSMaxPredictedValue = 0
                 EOSPreds = preds[preds.index <= aEOSBaseIDValue]  # filter only aEOS predictions
                 if len(EOSPreds) > 0:
