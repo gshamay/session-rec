@@ -297,6 +297,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
     print('test Size[' + str(len(test_data_)) + ']')
     LRTestX = None
     LRTestY = None
+    failedPredictions  = 0
     for test_data in dataToTest:  # create predictions on either test only or on train AND test
         if(bRunningTrainData):
             print("start running evaluation on train")
@@ -360,10 +361,22 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                     if hasattr(m, 'start_predict'):
                         m.start_predict( pr ) # only some of the metrics, as the running time metric (Time_usage_training), has 'start_predict' variable
 
+                doContinue = False
                 try:
                     preds = pr.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+                except Exception:
+                    doContinue = True
                 except IndexError:
-                    print("predict_next failed")
+                    doContinue = True
+
+                if doContinue:
+                    failedPredictions += 1
+                    pos += 1
+                    prev_iid = iid
+                    count += 1
+                    if (failedPredictions % 10 == 0):
+                        print('failedPredictions.predict_next[' + str(failedPredictions) + ']')
+                    continue
 
                 # preds contain now a list of all possible items with their probabilities to be the next item
 
@@ -454,6 +467,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
             prev_iid = iid
             count += 1
 
+        print('evaluation Model ; errors In predict_next[' + str(failedPredictions) + ']')
         print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
         print('    time count ', (time_count), 'count/', (time_sum), ' sum')

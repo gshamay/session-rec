@@ -565,6 +565,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     # data used for the LR
     LRx = []
     LRy = []
+    errorsInTrain = 0
 
     for i in range(len(train)):
         if count % 1000 == 0:
@@ -586,7 +587,23 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
             trs = time.time()
 
             # get the prediction from the model / file results
-            preds = algorithm.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+            doContinue = False
+            try:
+                preds = algorithm.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+            except Exception:
+                doContinue = True
+            except IndexError:
+                doContinue = True
+
+            if doContinue:
+                errorsInTrain += 1
+                prev_iid = iid  #
+                count += 1  # position in the train set
+                if (errorsInTrain % 10 == 0):
+                    print('errorsInLRTrain.predict_next[' + str(errorsInTrain) + ']')
+
+                continue
+
             # preds contain now a list of all possible items with their probabilities to be the next item
 
             # refine the predictions
@@ -624,12 +641,13 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
             time_sum += time.time() - trs
             time_count += 1
             pos += 1
-            # if/else end
+            # if/else end (prev_sid != sid)
 
         prev_iid = iid  #
         count += 1  # position in the train set
         # for 'on train' end
 
+    print('predict on train for LR Done ; errors In predict_next[' + str(errorsInTrain) + ']')
     ###############################
     # train the LR model / Begin
     if (enableLR):
