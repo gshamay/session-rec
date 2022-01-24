@@ -62,6 +62,7 @@ v fix useBothTrainAndTest - avoid using the train data for HR statistics
 v Save LR models results
 v Save LR models pickle
 v Statistical significance pair base vs LR ?
+v handle errors in run
 
 Run tests x DB x Algorithm:
     rsc digi X
