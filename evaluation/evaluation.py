@@ -50,7 +50,7 @@ def evaluate_sessions_batch(pr, metrics, test_data, train_data, items=None, cut_
     actions = len(test_data)
     sessions = len(test_data[session_key].unique())
     print('START batch eval ', actions, ' actions in ', sessions, ' sessions')
-    sc = time.clock()
+    sc = time.perf_counter()
     st = time.time()
 
     for m in metrics:
@@ -117,7 +117,7 @@ def evaluate_sessions_batch(pr, metrics, test_data, train_data, items=None, cut_
                 start[idx] = offset_sessions[maxiter]
                 end[idx] = offset_sessions[maxiter+1]
 
-    print( 'END batch eval ', (time.clock()-sc), 'c / ', (time.time()-st), 's' )
+    print( 'END batch eval ', (time.perf_counter()-sc), 'c / ', (time.time()-st), 's' )
 
     res = []
     for m in metrics:
@@ -167,7 +167,7 @@ def evaluate_sessions_batch_org(pr, metrics, test_data, train_data, items=None, 
     actions = len(test_data)
     sessions = len(test_data[session_key].unique())
     print('START batch eval old ', actions, ' actions in ', sessions, ' sessions')
-    sc = time.clock()
+    sc = time.perf_counter()
     st = time.time()
 
     pr.predict = None #In case someone would try to run with both items=None and not None on the same model without realizing that the predict function needs to be replaced
@@ -236,7 +236,7 @@ def evaluate_sessions_batch_org(pr, metrics, test_data, train_data, items=None, 
                 start[idx] = offset_sessions[maxiter]
                 end[idx] = offset_sessions[maxiter+1]
 
-    print( 'END batch eval old', (time.clock()-sc), 'c / ', (time.time()-st), 's' )
+    print( 'END batch eval old', (time.perf_counter()-sc), 'c / ', (time.time()-st), 's' )
     print( 'hit rate ', recall/evalutation_point_count )
     print( 'mrr ', mrr/evalutation_point_count )
 
@@ -309,7 +309,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         count = 0
         print('START evaluation of ', actions, ' actions in ', sessions, ' sessions')
 
-        sc = time.clock()
+        sc = time.perf_counter()
         st = time.time()
 
         time_sum = 0
@@ -354,7 +354,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                     if np.in1d(iid, items): items_to_predict = items
                     else: items_to_predict = np.hstack(([iid], items))
 
-                crs = time.clock()
+                crs = time.perf_counter()
                 trs = time.time()
 
                 for m in metrics:
@@ -448,7 +448,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                     LRTestY.append(iid <= aEOSBaseIDValue)
                 ############################################################
 
-                time_sum_clock += time.clock() - crs
+                time_sum_clock += time.perf_counter() - crs
                 time_sum += time.time() - trs
                 time_count += 1
 
@@ -468,7 +468,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
             count += 1
 
         print('evaluation Model ; errors In predict_next[' + str(failedPredictions) + ']')
-        print('END evaluation in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+        print('END evaluation in ', (time.perf_counter() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
         print('    time count ', (time_count), 'count/', (time_sum), ' sum')
 
@@ -643,7 +643,7 @@ def evaluate_sessions_org(pr, metrics, test_data, train_data, items=None, cut_of
     sessions = len(test_data[session_key].unique())
     count = 0
     print('START org evaluation of ', actions, ' actions in ', sessions, ' sessions')
-    st, sc = time.time(), time.clock()
+    st, sc = time.time(), time.perf_counter()
 
     test_data.sort_values([session_key, time_key], inplace=True)
     items_to_predict = train_data[item_key].unique()
@@ -680,7 +680,7 @@ def evaluate_sessions_org(pr, metrics, test_data, train_data, items=None, cut_of
 
         count += 1
 
-    print( 'END evaluation org in ', (time.clock()-sc), 'c / ', (time.time()-st), 's' )
+    print( 'END evaluation org in ', (time.perf_counter()-sc), 'c / ', (time.time()-st), 's' )
     print( '    HitRate ', recall/evalutation_point_count )
     print( '    MRR ', mrr/evalutation_point_count )
 

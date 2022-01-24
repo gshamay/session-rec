@@ -547,7 +547,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     # todo: enableLR from here
 
     aEOSBaseIDValue = -1
-    sc = time.clock()
+    sc = time.perf_counter()
     st = time.time()
     time_sum = 0
     time_sum_clock = 0
@@ -583,7 +583,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
             # there is no seesion in len == 1 therefore there os no need to check EOS here ;
             # todo: need to add it to the LR ? (seesionLen=1 --> no ?  )
         else:
-            crs = time.clock()
+            crs = time.perf_counter()
             trs = time.time()
 
             # get the prediction from the model / file results
@@ -637,7 +637,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
                 LRy.append(isEOS)
             ############################################################
 
-            time_sum_clock += time.clock() - crs
+            time_sum_clock += time.perf_counter() - crs
             time_sum += time.time() - trs
             time_count += 1
             pos += 1
@@ -651,7 +651,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     ###############################
     # train the LR model / Begin
     if (enableLR):
-        print('start train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+        print('start train LR in ', (time.perf_counter() - sc), 'c / ', (time.time() - st), 's')
         clf = LogisticRegression(random_state=0).fit(LRx, LRy)
 
         LRxBaseLine = list(map(lambda x: [x[1]], LRx))
@@ -662,7 +662,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
         pickle.dump(clf, open(outPath + 'clf.pkl', 'wb'))
         pickle.dump(clfBaseLine, open(outPath + 'clfBaseLine.pkl', 'wb'))
 
-        print('END train LR in ', (time.clock() - sc), 'c / ', (time.time() - st), 's')
+        print('END train LR in ', (time.perf_counter() - sc), 'c / ', (time.time() - st), 's')
         print('    avg rt ', (time_sum / time_count), 's / ', (time_sum_clock / time_count), 'c')
         print('    time count ', (time_count), 'count/', (time_sum), ' sum')
         conf['clf'] = clf
