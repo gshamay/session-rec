@@ -280,7 +280,12 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
     for m in metrics:
         m.reset()
 
-    train_data = train_data.drop( columns='index')
+    try:
+        train_data = train_data.drop(columns='index')
+    except KeyError:
+        print('Error - KeyError - train_data = train_data.drop( columns=index) failed!')
+    except Exception:
+        print('Error - Exception - train_data = train_data.drop( columns=index) failed!')
 
     # do evaluation on both train and test
     #  This is required for generating data that is readable later from the csv file for the usage of LR
