@@ -329,7 +329,7 @@ def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=
     valid = train[np.in1d(train.SessionId, session_valid)]
     valid = valid[np.in1d(valid.ItemId, train_tr.ItemId)]
     tslength = valid.groupby('SessionId').size()
-    valid = valid[np.in1d(valid.SessionId, tslength[tslength >= 2].index)]
+    valid = valid[np.in1d(valid.SessionId, tslength[tslength >= minSessionLength].index)]
     print('Train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train_tr), train_tr.SessionId.nunique(),
                                                                         train_tr.ItemId.nunique()))
     train_tr.to_csv(output_file + '_train_tr.txt', sep='\t', index=False)
