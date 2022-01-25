@@ -1,0 +1,201 @@
+Deep Learning Base AMI (Ubuntu 18.04) Version 48.0
+c5ad.xlarge 	4 8  1 x 150 (SSD)  $0.038 per Hour
+c5ad.2xlarge 	8 16 1 x 300 (SSD) 	$0.076 per Hour	$0.444 per Hour
+c5n.2xlarge  	8 21 EBS only  		$0.083 per Hour	$0.444 per Hour
+
+GPU 
+g3s.xlarge		4	30.5	1 		g3s.xlarge		$0.225 per Hour		$0.409 per Hour
+g4ad.xlarge		4	16		1     	g4ad.xlarge		$0.2585 per Hour	$0.2976 per Hour
+g4ad.2xlarge	8	32		1 		g4ad.2xlarge	$0.1624 per Hour	$0.5304 per Hour
+
+
+
+Download pythin 3.7
+https://phoenixnap.com/kb/how-to-install-python-3-ubuntu
+
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.7
+python3 --version
+
+
+set installed python3 as default
+https://www.itsupportwale.com/blog/how-to-upgrade-to-python-3-7-on-ubuntu-18-10/
+
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2
+sudo update-alternatives --config python3
+python3 -V
+
+download pip3
+https://linuxize.com/post/how-to-install-pip-on-ubuntu-18.04/
+
+sudo apt install python3-pip
+pip3 --version
+python3 -m pip install --upgrade pip
+
+upgrade pip
+https://stackoverflow.com/questions/38613316/how-to-upgrade-pip3/56917379
+sudo -H pip3 install --upgrade pip
+pip3 install --upgrade setuptools pip
+
+
+Check Cuda GPU
+https://hsf-training.github.io/hsf-training-ml-gpu-webpage/02-whichgpu/index.html
+pip3 install GPUtil
+in Python3
+import GPUtil
+GPUtil.getAvailable()
+
+or 
+
+pip3 install torch
+in Python3
+import torch
+use_cuda = torch.cuda.is_available()
+
+install packages
+(see down) 
+bash installPacks.sh
+
+Data
+download python data
+-using fileZila 
+SSH (new site / SSH / User = ubuntu / ket.cep / ) 
+
+or 
+All DBs https://drive.google.com/drive/folders/1ritDnO_Zc6DFEU6UND9C8VCisT0ETVp5
+download  ZIP:
+pip3 install gdown
+>>> import gdown 
+-recsys 
+>>> gdown.download("https://drive.google.com/u/0/uc?id=19mMXCZeiiK1i4TOLb2VdFPmF0bDqRqcY&export=download","rsc15.zip")
+unzip rsc15.zip -d ./data/
+-digi
+gdown.download("https://drive.google.com/u/0/uc?id=1z6Uk9LFYi0i4wEXY2fJ30pX6oF2IZUPs&export=download","digi.zip")
+unzip digi.zip -d ./data/
+
+
+
+download python code
+git clone https://github.com/gshamay/session-rec
+ls -l
+git fetch
+git merge 
+
+
+
+---------------------------------------------
+https://linuxize.com/post/getting-started-with-tmux/
+tmux 
+tmux ls
+tmux new -s sgnn_rsc_0
+tmux new -s sgnn_digi_1
+tmux attach-session -t sgnn_rsc_0
+tmux attach-session -t sgnn_digi_1
+tmux kill-session -t otherSession
+pkill -f tmux
+
+
+---------------------------------------------
+CPU exl 
+export TF_XLA_FLAGS=--tf_xla_cpu_global_jit
+--vmodule=xla_compilation_cache=1
+---------------------------------------------
+
+
+Preprocess 
+preprocess db 
+python3 run_preprocessing.py ./conf/preprocess/session_based/single/rsc15_64_1EOS.yml
+
+Run
+python3 run_config.py ./conf/in/rsc_sgnn_1EOS_LR.yml  
+python3 run_config.py ./conf/in/digi_sgnn_0EOS_LR.yml                                                                                                                                                                                           1EOS_LR.yml
+
+df -hT
+
+
+
+pip3 install scipy==1.6.2
+pip3 install python-dateutil==2.8.1
+pip3 install pytz==2021.1
+pip3 install certifi==2020.12.5
+pip3 install numpy==1.20.2
+pip3 install dill==0.3.3
+pip3 install pyyaml==5.4.1
+pip3 install networkx==2.5.1
+pip3 install scikit-learn==0.24.2
+pip3 install numexpr==2.7.3
+pip3 install keras==2.3.1
+pip3 install six==1.15.0
+pip3 install theano==1.0.3
+pip3 install pandas==1.2.4
+pip3 install psutil==5.8.0
+pip3 install pympler==0.9
+pip3 install tensorflow==1.14
+pip3 install pytables==3.6.1
+pip3 install scikit-optimize==0.8.1
+pip3 install python-telegram-bot==13.5
+pip3 install matplotlib
+
+
+
+  WARNING: The scripts fonttools, pyftmerge, pyftsubset and ttx are installed in '/home/ubuntu/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+Installing collected packages: theano
+  WARNING: The scripts theano-cache and theano-nose are installed in '/home/ubuntu/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+  WARNING: The scripts f2py, f2py3 and f2py3.7 are installed in '/home/ubuntu/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+  WARNING: The script markdown_py is installed in '/home/ubuntu/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script tensorboard is installed in '/home/ubuntu/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts freeze_graph, saved_model_cli, tensorboard, tf_upgrade_v2, tflite_convert, toco and toco_from_protos are installed in '/home/ubuntu/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+
+ubuntu@ip-172-31-29-33:~$ pip3 install pytables==3.6.1
+WARNING: pip is being invoked by an old script wrapper. This will fail in a future version of pip.
+Please see https://github.com/pypa/pip/issues/5599 for advice on fixing the underlying issue.
+To avoid this problem you can invoke Python with '-m pip' instead of running pip directly.
+Defaulting to user installation because normal site-packages is not writeable
+ERROR: Could not find a version that satisfies the requirement pytables==3.6.1 (from versions: none)
+ERROR: No matching distribution found for pytables==3.6.1
+ubuntu@ip-172-31-29-33:~$ pip3 install pytable
+WARNING: pip is being invoked by an old script wrapper. This will fail in a future version of pip.
+Please see https://github.com/pypa/pip/issues/5599 for advice on fixing the underlying issue.
+To avoid this problem you can invoke Python with '-m pip' instead of running pip directly.
+Defaulting to user installation because normal site-packages is not writeable
+Collecting pytable
+  Downloading pytable-0.8.23a.zip (264 kB)
+     |████████████████████████████████| 264 kB 4.3 MB/s
+  Preparing metadata (setup.py) ... done
+  Downloading pytable-0.8.22a.zip (264 kB)
+     |████████████████████████████████| 264 kB 86.6 MB/s
+  Preparing metadata (setup.py) ... done
+  Downloading pytable-0.8.21a.tar.gz (200 kB)
+     |████████████████████████████████| 200 kB 83.0 MB/s
+  Preparing metadata (setup.py) ... done
+ERROR: Cannot install pytable==0.8.21a0, pytable==0.8.22a0 and pytable==0.8.23a0 because these package versions have conflicting dependencies.
+
+The conflict is caused by:
+    pytable 0.8.23a0 depends on basicproperty>=0.6.9a
+    pytable 0.8.22a0 depends on basicproperty>=0.6.9a
+    pytable 0.8.21a0 depends on basicproperty>=0.6.9a
+
+To fix this you could try to:
+1. loosen the range of package versions you've specified
+2. remove package versions to allow pip attempt to solve the dependency conflict
+
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/user_guide/#fixing-conflicting-dependencies
+
+
