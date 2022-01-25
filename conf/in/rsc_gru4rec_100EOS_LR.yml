@@ -42,9 +42,8 @@ metrics:
 
 algorithms:
 - class: gru4rec.gru4rec.GRU4Rec
-  params: { loss: 'bpr-max', final_act: 'elu-0.5', dropout_p_hidden: 0.5, learning_rate: 0.01, momentum: 0.8 }
+  params: { loss: 'top1-max', final_act: 'linear', dropout_p_hidden: 0.1, learning_rate: 0.08, momentum: 0.1, constrained_embedding: True }
   key: gru4rec
-
   
 
   

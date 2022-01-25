@@ -1,15 +1,15 @@
 type: single
-key: GRU4Rec
+key: CT
 evaluation: evaluation
-LogisticRegressionOnEOS: True
+LogisticRegressionOnEOS: False
 
 data:
-  name: rsc15_64_10EOS
-  folder: data/rsc15/prepared/rsc15_64_10EOS/
+  name: rsc15_64_noEOS
+  folder: data/rsc15/prepared/rsc15_64_noEOS/
   prefix: rsc15-clicks64
 
 results:
-  folder: results/rsc15/rsc15_64_10EOS_LR/GRU4Rec/
+  folder: results/rsc15/rsc15_64_noEOS_LR/CT/
   useBothTrainAndTest: True
  
 metrics:
@@ -41,8 +41,9 @@ metrics:
 - class: time_memory_usage.Time_usage_testing
 
 algorithms:
-- class: gru4rec.gru4rec.GRU4Rec
-  params: { loss: 'top1-max', final_act: 'linear', dropout_p_hidden: 0.1, learning_rate: 0.08, momentum: 0.1, constrained_embedding: True }
-  key: gru4rec
+- class: ct.ct.ContextTree
+  params: {}
+  key: ct-pre
+  
 
   
