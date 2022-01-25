@@ -1,0 +1,23 @@
+type: single
+key: AR
+evaluation: evaluation
+LogisticRegressionOnEOS: True
+data:
+  name: digiShort1EOS
+  folder: data/diginetica/prepared/diginetica_1EOS_short/
+  prefix: train-item-views_full
+
+results:
+  folder: results/diginetica/diginetica_Short_1EOS_LR/AR/
+  useBothTrainAndTest: False
+ 
+metrics:
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: baselines.ar.AssociationRules
+  params: {}
+  key: ar
