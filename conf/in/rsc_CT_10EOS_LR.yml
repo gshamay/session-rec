@@ -1,0 +1,48 @@
+type: single
+key: CT
+evaluation: evaluation
+LogisticRegressionOnEOS: True
+
+data:
+  name: rsc15_64_10EOS
+  folder: data/rsc15/prepared/rsc15_64_10EOS/
+  prefix: rsc15-clicks64
+
+results:
+  folder: results/rsc15/rsc15_64_10EOS_LR/CT/
+  useBothTrainAndTest: True
+ 
+metrics:
+- class: accuracy.HitRate
+  length: [5,10,20]
+- class: accuracy.MRR
+  length: [5,10,20]
+- class: accuracy_multiple.NDCG
+  length: [5,10,20]
+- class: coverage.Coverage
+  length: [20]
+- class: popularity.Popularity
+  length: [20]
+- class: accuracy.EOS_FN
+  length: [5,10,20]
+- class: accuracy.EOS_FP
+  length: [5,10,20]
+- class: accuracy.EOS_PREDICTED_COUNT
+  length: [5,10,20]
+- class: accuracy.EOS_ACTUAL_COUNT
+  length: [1]  
+- class: accuracy.EOS_HIT_COUNT
+  length: [5,10,20]
+- class: accuracy.EOS_HIT_RATE
+  length: [5,10,20]    
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: ct.ct.ContextTree
+  params: {}
+  key: ct-pre
+
+  
