@@ -83,7 +83,7 @@ def run_file( conf ):
     min_item_support = conf['filter']['min_item_support']
     min_session_length = conf['filter']['min_session_length']
     ######################################################### aEOS
-    #Add aEOS
+    # Add aEOS
     #  diginetica Index(['SessionId', 'Time', 'ItemId', 'Date', 'Datestamp', 'TimeO', 'ItemSupport'],   dtype='object')
     ######################################################### aEOS
     aEOS = None
