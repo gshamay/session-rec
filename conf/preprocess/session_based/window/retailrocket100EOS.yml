@@ -9,7 +9,7 @@ filter:
   min_item_support: 5
   min_session_length: 2
 
-aEOS : 1
+aEOS : 100
   
 params:
   days_test: 2
@@ -19,4 +19,4 @@ params:
   days_shift: 27 #only window
 
 output:
-  folder: data/retailrocket/slices/1EOS/
+  folder: data/retailrocket/slices/100EOS/
