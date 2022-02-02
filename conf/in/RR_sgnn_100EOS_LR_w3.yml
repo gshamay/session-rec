@@ -1,0 +1,52 @@
+type: window
+key: SGNN
+evaluation: evaluation
+LogisticRegressionOnEOS: True
+
+data:
+  name: retailrocket_1EOS
+  folder: data/retailrocket/slices/1EOS/
+  prefix: events
+  slices: 5
+  skip: [0,1,3,4] # we need only slice 4 (smallest one)
+
+results:
+  folder: results/retailrocket/retailrocket_1EOS_LR/SGNN/
+  useBothTrainAndTest: True
+ 
+metrics:
+- class: accuracy.HitRate
+  length: [5,10,20]
+- class: accuracy.MRR
+  length: [5,10,20]
+- class: accuracy_multiple.NDCG
+  length: [5,10,20]
+- class: coverage.Coverage
+  length: [20]
+- class: popularity.Popularity
+  length: [20]
+- class: accuracy.EOS_FN
+  length: [5,10,20]
+- class: accuracy.EOS_FP
+  length: [5,10,20]
+- class: accuracy.EOS_PREDICTED_COUNT
+  length: [5,10,20]
+- class: accuracy.EOS_ACTUAL_COUNT
+  length: [1]  
+- class: accuracy.EOS_HIT_COUNT
+  length: [5,10,20]
+- class: accuracy.EOS_HIT_RATE
+  length: [5,10,20]    
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: sgnn.gnn.GGNN
+  params: { lr: 0.008, l2: 0.0001, lr_dc: 0.45, lr_dc_step: 3, epoch_n: 10}
+  key: sgnn-best
+ 
+  
+
+  
