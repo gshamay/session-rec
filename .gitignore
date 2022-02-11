@@ -141,5 +141,7 @@ conf/in/test_rcsShort.yml.txt
 conf/in/test_diginetica_Train1EOSTestNoEOS.yml
 conf/in/test_diginetica_TrainNoEOSTest1EOS_naiveTrue.yml
 conf/in/test_diginetica_TrainNoEOSTest1EOS_random.yml
-conf/in/test_rcsShort.yml.txt
-results/**/*Short*
+conf/**/out*.txt
+results/**/*
+data/**/*
+unknown/*

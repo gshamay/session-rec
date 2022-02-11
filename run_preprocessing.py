@@ -64,7 +64,7 @@ def main( conf ):
 
 #this method is used for loading yml
 def run_file( conf ):
-    
+    sessionLenMap = {}
     #include preprocessing
     preprocessor = load_preprocessor( conf )
     
@@ -147,6 +147,13 @@ def run_file( conf ):
                     #  timeBetweenLastTwoEnties = entry_1.iloc[0]['Time'] - entry_2.iloc[0]['Time']
                     #  print('adding new line' + str(timeBetweenLastTwoEnties))
                     newEntry = entry_1.copy()
+
+                    if session_length in sessionLenMap:
+                        num = sessionLenMap[session_length]
+                        num+=1
+                        sessionLenMap[session_length] = num
+                    else:
+                        sessionLenMap[session_length] = 1
 
                     newEntryItemID = -1
                     if(sessionLength):

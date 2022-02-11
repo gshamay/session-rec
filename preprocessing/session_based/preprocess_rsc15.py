@@ -109,7 +109,7 @@ def filter_data( data, min_item_support=MIN_ITEM_SUPPORT, min_session_length=MIN
     data_start = datetime.fromtimestamp( data.Time.min(), timezone.utc )
     data_end = datetime.fromtimestamp( data.Time.max(), timezone.utc )
     
-    print('Filtered data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {}\n\n'.
+    print('Filtered data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {} \n\n'.
           format( len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(), data_end.date().isoformat() ) )
     
     return data;
@@ -181,8 +181,7 @@ def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=
     train = data[np.in1d(data.SessionId, session_train)]
 
     if last_nth is not None:
-        train.sort_values(['SessionId', 'Time'], inplace=True)  
-    
+        train.sort_values(['SessionId', 'Time'], inplace=True)
         session_data = list(data['SessionId'].values)
         lenth = int(len(session_data) / last_nth)
         session_data = session_data[-lenth:]
@@ -194,31 +193,33 @@ def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=
         train = train[-lenth + i + 1:]
     
     test = data[np.in1d(data.SessionId, session_test)]
-    test = test[np.in1d(test.ItemId, train.ItemId)]
+    test = test[np.in1d(test.ItemId, train.ItemId)] # filter out from the test items that are not in the train
     tslength = test.groupby('SessionId').size()
 
-    # Fix sessionLength Always = 2 #Remove sessions with less then X items
-    # after splitting and removing items that does not appear on train
+    # Fix sessionLength Always = 2 # Remove sessions with less then X items
+    #  (again) after splitting and removing items that does not appear on train ; missing removing items < 5 ...(bug)
     test = test[np.in1d(test.SessionId, tslength[tslength >= minSessionLength].index)]
 
+    # todo: Count session length after train / test split  - train_full
     print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'
           .format(len(train), train.SessionId.nunique(), train.ItemId.nunique()))
-
     train.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_train_full.txt', sep='\t',index=False)
+
+    # todo: Count session length after train / test split  - test
     print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(test), test.SessionId.nunique(), test.ItemId.nunique()))
     test.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_test.txt', sep='\t', index=False)
     
     data_end = datetime.fromtimestamp( train.Time.max(), timezone.utc )
     test_from = data_end - timedelta( days_test )
-    
     session_max_times = train.groupby('SessionId').Time.max()
     session_train = session_max_times[ session_max_times < test_from.timestamp() ].index
     session_valid = session_max_times[ session_max_times >= test_from.timestamp() ].index
+
     train_tr = train[np.in1d(train.SessionId, session_train)]
     valid = train[np.in1d(train.SessionId, session_valid)]
     valid = valid[np.in1d(valid.ItemId, train_tr.ItemId)]
     tslength = valid.groupby('SessionId').size()
-    valid = valid[np.in1d(valid.SessionId, tslength[tslength>=2].index)]
+    valid = valid[np.in1d(valid.SessionId, tslength[tslength >= 2].index)]
     print('Train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train_tr), train_tr.SessionId.nunique(), train_tr.ItemId.nunique()))
     train_tr.to_csv( output_file + (str(last_nth) if last_nth is not None else '') + '_train_tr.txt', sep='\t', index=False)
     print('Validation set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(valid), valid.SessionId.nunique(), valid.ItemId.nunique()))
