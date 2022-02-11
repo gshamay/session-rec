@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timezone, timedelta
+from preprocess_rsc15 import dataStatistics
 
 # data config (all methods)
 DATA_PATH = '../data/diginetica/raw/'
@@ -270,13 +271,15 @@ def split_data_org(data, output_file):
     test = data[np.in1d(data.SessionId, session_test)]
     test = test[np.in1d(test.ItemId, train.ItemId)]
     tslength = test.groupby('SessionId').size()
+
     test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)]
-    print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train), train.SessionId.nunique(),
-                                                                             train.ItemId.nunique()))
+    print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train), train.SessionId.nunique(), train.ItemId.nunique()))
     train.to_csv(output_file + '_train_full.txt', sep='\t', index=False)
-    print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(test), test.SessionId.nunique(),
-                                                                       test.ItemId.nunique()))
+    print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(test), test.SessionId.nunique(), test.ItemId.nunique()))
     test.to_csv(output_file + '_test.txt', sep='\t', index=False)
+
+    dataStatistics(test, output_file + '_testDataStatistics.csv')
+    dataStatistics(train, output_file + '_trainDataStatistics.csv')
 
     tmax = train.Time.max()
     session_max_times = train.groupby('SessionId').Time.max()
@@ -319,6 +322,9 @@ def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=
     print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(test), test.SessionId.nunique(),
                                                                        test.ItemId.nunique()))
     test.to_csv(output_file + '_test.txt', sep='\t', index=False)
+
+    dataStatistics(test, output_file + '_testDataStatistics.csv')
+    dataStatistics(train, output_file + '_trainDataStatistics.csv')
 
     data_end = datetime.fromtimestamp(train.Time.max(), timezone.utc)
     valid_from = data_end - timedelta(days=days_test)
@@ -381,18 +387,21 @@ def split_data_slice(data, output_file, slice_id, days_offset, days_train, days_
     test = test[np.in1d(test.ItemId, train.ItemId)]
 
     tslength = test.groupby('SessionId').size()
-    test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)] # todo: tslength suppose to be read from a parameter in the yml
+    test = test[np.in1d(test.SessionId, tslength[tslength >= 2].index)]  # todo: tslength suppose to be read from a parameter in the yml
 
     print('Test set {}\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {} \n\n'.
           format(slice_id, len(test), test.SessionId.nunique(), test.ItemId.nunique(), middle.date().isoformat(),
                  end.date().isoformat()))
 
     test.to_csv(output_file + '_test.' + str(slice_id) + '.txt', sep='\t', index=False)
+    
+    dataStatistics(test, output_file + '.' + str(slice_id) + '_testDataStatistics.csv')
+    dataStatistics(train, output_file + '.' + str(slice_id) + '_trainDataStatistics.csv')
 
 
 # def retrain_data(data, output_file_path, output_file_name, days_train=DAYS_TRAIN, days_test=DAYS_TEST, days_retrain=DAYS_RETRAIN):
 def retrain_data(data, output_file, days_train=DAYS_TRAIN, days_test=DAYS_TEST, days_retrain=DAYS_RETRAIN):
-    retrain_num = int(days_test/days_retrain)
+    retrain_num = int(days_test / days_retrain)
     for retrain_n in range(0, retrain_num):
         # output_f = output_file_path + 'set_' + str(retrain_n) + '/' + output_file_name
         # split_data_retrain(data, output_file, days_train, days_retrain, retrain_n)  #split_data_retrain(data, output_file, days_train, days_test, file_num)
@@ -429,6 +438,7 @@ def split_data_retrain_train(data, output_file, days_train, days_test, retrain_n
           format(len(train), train.SessionId.nunique(), train.ItemId.nunique(), train_from.date().isoformat(),
                  train_to.date().isoformat()))
     train.to_csv(output_file + '_train_full.' + str(retrain_num) + '.txt', sep='\t', index=False)
+
     # print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(test), test.SessionId.nunique(),
     #                                                                    test.ItemId.nunique()))
     # test.to_csv(output_file + '_test.' + str(retrain_num) + '.txt', sep='\t', index=False)

@@ -167,7 +167,7 @@ def split_data_org( data, output_file ) :
     valid.to_csv( output_file + '_train_valid.txt', sep='\t', index=False)
 
 
-def dataStatistics(data, conf=None):
+def dataStatistics(data, fileOut , conf=None):
     sessionLenMap = {}
     print('dataStatistics start')  # same aEOS for all dbs
     bDataStatistics = False
@@ -240,6 +240,11 @@ def dataStatistics(data, conf=None):
     else:
         print('avoid getting dataStatistics')
 
+    # print dataStatistics to csv
+    with open(fileOut, 'w') as f:
+        for key in sessionLenMap.keys():
+            f.write("%s,%s\n" % (key, sessionLenMap[key]))
+
     print('dataStatistics Done')
     return sessionLenMap, totalSessions,
     #########################################################
@@ -282,21 +287,15 @@ def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=
     #  (again) after splitting and removing items that does not appear on train ; missing removing items < 5 ...(bug)
     test = test[np.in1d(test.SessionId, tslength[tslength >= minSessionLength].index)]
 
-    sessionLenMapTrain, TotalSessionsTrain, = dataStatistics(train)
+    sessionLenMapTrain, TotalSessionsTrain, = dataStatistics(train, output_file + '_trainSessionsLen.csv')
     print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {} TotalSessionsTrain: {}'
           .format(len(train), train.SessionId.nunique(), train.ItemId.nunique(), TotalSessionsTrain))
     train.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_train_full.txt', sep='\t', index=False)
-    with open(output_file + '_trainSessionsLen.csv', 'w') as f:
-        for key in sessionLenMapTrain.keys():
-            f.write("%s,%s\n" % (key, sessionLenMapTrain[key]))
 
-    sessionLenMapTest, TotalSessionsTest, = dataStatistics(test)
+    sessionLenMapTest, TotalSessionsTest = dataStatistics(test, output_file + '_testSessionsLen.csv')
     print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {} TotalSessionsTest: {}'
           .format(len(test), test.SessionId.nunique(), test.ItemId.nunique(), TotalSessionsTest))
     test.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_test.txt', sep='\t', index=False)
-    with open(output_file + '_testSessionsLen.csv', 'w') as f:
-        for key in sessionLenMapTest.keys():
-            f.write("%s,%s\n" % (key, sessionLenMapTest[key]))
     
     data_end = datetime.fromtimestamp( train.Time.max(), timezone.utc )
     test_from = data_end - timedelta( days_test )
