@@ -262,7 +262,6 @@ def split_data_slice( data, output_file, slice_id, days_offset, days_train, days
     
     print('Train set {}\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {}'.
           format( slice_id, len(train), train.SessionId.nunique(), train.ItemId.nunique(), start.date().isoformat(), middle.date().isoformat() ) )
-    train.to_csv(output_file + '_train_full.'+str(slice_id)+'.txt', sep='\t', index=False)
 
     train.to_csv(output_file + '_train_full.' + str(slice_id) + '.txt', sep='\t', index=False)
     dataStatistics(train,output_file + '_train_full.SessionLen.' + str(slice_id) + '.csv')
