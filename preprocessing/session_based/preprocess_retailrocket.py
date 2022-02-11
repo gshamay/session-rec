@@ -225,7 +225,7 @@ def split_data( data, output_file, days_test ) :
     test.to_csv(output_file + '_test.txt', sep='\t', index=False)
     
     
-    
+# todo: remove < 2 Sessions (< 3 with aEOS)
 def slice_data( data, output_file, num_slices, days_offset, days_shift, days_train, days_test ): 
     
     for slice_id in range( 0, num_slices ) :
