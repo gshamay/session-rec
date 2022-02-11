@@ -195,7 +195,7 @@ def dataStatistics(data, fileOut , conf=None):
         dataLen = len(data)
 
         while i < len(data):
-            if (i % 1000 == 0):
+            if (i % 100000 == 0):
                 print('processed dataStatistics' + str(i) + "/" + str(dataLen))
 
             entryList = dataAsListOfLists[i]

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timezone, timedelta
-from preprocess_rsc15 import dataStatistics
+from preprocessing.session_based.preprocess_rsc15 import dataStatistics
 
 # data config (all methods)
 DATA_PATH = '../data/diginetica/raw/'
@@ -394,7 +394,7 @@ def split_data_slice(data, output_file, slice_id, days_offset, days_train, days_
                  end.date().isoformat()))
 
     test.to_csv(output_file + '_test.' + str(slice_id) + '.txt', sep='\t', index=False)
-    
+
     dataStatistics(test, output_file + '.' + str(slice_id) + '_testDataStatistics.csv')
     dataStatistics(train, output_file + '.' + str(slice_id) + '_trainDataStatistics.csv')
 
