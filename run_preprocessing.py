@@ -192,8 +192,6 @@ def run_file( conf ):
         print('new data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\n'.
               format(len(data), data.SessionId.nunique(), data.ItemId.nunique()))
         min_session_length += 1
-
-    writeSessionLenMapToCsvFile(conf['output']['folder'] + conf['data']['prefix'] + '_fullDataSessionLen.csv', sessionLenMap)
     ######################################################### aEOS
     ensure_dir( conf['output']['folder'] + conf['data']['prefix'] )
     #call method according to config
@@ -210,6 +208,7 @@ def run_file( conf ):
         else:
             print( 'preprocessing type not supported' )
 
+    writeSessionLenMapToCsvFile(conf['output']['folder'] + conf['data']['prefix'] + '_fullDataSessionLen.csv', sessionLenMap)
 
 ###option...
 def insert_row(idx, df, df_insert):
