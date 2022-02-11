@@ -184,6 +184,7 @@ def dataStatistics(data, conf=None):
         dataAsListOfLists = data.values.tolist()
         # look for variables locations
         indexOfSessionId = data.columns.get_loc("SessionId")
+        indexOfItemId = data.columns.get_loc("ItemId")
         session_length = 1
         firstEntry = dataAsListOfLists[0]
         currentSessionID = firstEntry[indexOfSessionId]
@@ -192,6 +193,7 @@ def dataStatistics(data, conf=None):
         i = 1
         totalSessions = 1
         dataLen = len(data)
+
         while i < len(data):
             if (i % 1000 == 0):
                 print('processed dataStatistics' + str(i) + "/" + str(dataLen))
@@ -204,7 +206,12 @@ def dataStatistics(data, conf=None):
                 currentSessionID = entryList[indexOfSessionId]
                 entry_2 = entry_1
                 entry_1 = entry
-                session_length += 1
+                currentItemID = entryList[indexOfItemId]
+                if (currentItemID > 0):
+                    session_length += 1
+                # else:
+                #     # EOS  item - do not count it
+
             else:
                 # moved to a new session
                 if (entry_2 is None or entry_1 is None):
@@ -219,8 +226,8 @@ def dataStatistics(data, conf=None):
                     else:
                         sessionLenMap[session_length] = 1
 
+                    # prepare next session count
                     totalSessions += 1
-
                     session_length = 1
                     currentSessionID = entry[indexOfSessionId]  # entry is a df in len  1
                     entry_1 = entry
