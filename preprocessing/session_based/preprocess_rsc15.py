@@ -195,7 +195,7 @@ def dataStatistics(data, fileOut , conf=None):
         dataLen = len(data)
 
         while i < len(data):
-            if (i % 100000 == 0):
+            if (i % 10000 == 0):
                 print('processed dataStatistics' + str(i) + "/" + str(dataLen))
 
             entryList = dataAsListOfLists[i]
@@ -241,15 +241,17 @@ def dataStatistics(data, fileOut , conf=None):
         print('avoid getting dataStatistics')
 
     # print dataStatistics to csv
-    with open(fileOut, 'w') as f:
-        for key in sessionLenMap.keys():
-            f.write("%s,%s\n" % (key, sessionLenMap[key]))
+    writeSessionLenMapToCsvFile(fileOut, sessionLenMap)
 
     print('dataStatistics Done')
     return sessionLenMap, totalSessions,
     #########################################################
 
 
+def writeSessionLenMapToCsvFile(fileOut, sessionLenMap):
+    with open(fileOut, 'w') as f:
+        for key in sessionLenMap.keys():
+            f.write("%s,%s\n" % (key, sessionLenMap[key]))
 
 
 def split_data(data, output_file, days_test=DAYS_TEST, last_nth=None):

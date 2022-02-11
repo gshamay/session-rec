@@ -19,6 +19,8 @@ import os
 import pandas as pd
 import numpy as np
 
+from preprocessing.session_based.preprocess_rsc15 import writeSessionLenMapToCsvFile
+
 SEED = 42
 np.random.seed(SEED)
 
@@ -121,7 +123,7 @@ def run_file( conf ):
         totalAEOSAdded = 0
         dataLen = len(data)
         while i < len(data):
-            if (i % 100000 == 0):
+            if (i % 10000 == 0):
                 print('processed aEOS' + str(i) + "/" + str(dataLen))
 
             entryList = dataAsListOfLists[i]
@@ -191,7 +193,7 @@ def run_file( conf ):
               format(len(data), data.SessionId.nunique(), data.ItemId.nunique()))
         min_session_length += 1
 
-
+    writeSessionLenMapToCsvFile(conf['output']['folder'] + conf['data']['prefix'] + '_fullDataSessionLen.csv', sessionLenMap)
     ######################################################### aEOS
     ensure_dir( conf['output']['folder'] + conf['data']['prefix'] )
     #call method according to config

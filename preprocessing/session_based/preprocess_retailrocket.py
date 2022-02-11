@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timezone, timedelta
+from preprocessing.session_based.preprocess_rsc15 import dataStatistics
 
 #data config (all methods)
 DATA_PATH = '../data/retailrocket/raw/'
@@ -261,8 +262,11 @@ def split_data_slice( data, output_file, slice_id, days_offset, days_train, days
     
     print('Train set {}\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {}'.
           format( slice_id, len(train), train.SessionId.nunique(), train.ItemId.nunique(), start.date().isoformat(), middle.date().isoformat() ) )
-    
     train.to_csv(output_file + '_train_full.'+str(slice_id)+'.txt', sep='\t', index=False)
+
+    train.to_csv(output_file + '_train_full.' + str(slice_id) + '.txt', sep='\t', index=False)
+    dataStatistics(train,output_file + '_train_full.SessionLen.' + str(slice_id) + '.csv')
+
     
     test = data[np.in1d(data.SessionId, sessions_test)]
     test = test[np.in1d(test.ItemId, train.ItemId)]
@@ -272,8 +276,9 @@ def split_data_slice( data, output_file, slice_id, days_offset, days_train, days
     
     print('Test set {}\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {} \n\n'.
           format( slice_id, len(test), test.SessionId.nunique(), test.ItemId.nunique(), middle.date().isoformat(), end.date().isoformat() ) )
-    
-    test.to_csv(output_file + '_test.'+str(slice_id)+'.txt', sep='\t', index=False)
+
+    test.to_csv(output_file + '_test.' + str(slice_id) + '.txt', sep='\t', index=False)
+    dataStatistics(test, output_file + '_test.SessionLen.' + str(slice_id) + '.csv')
 
 
 def store_buys( buys, target ):
