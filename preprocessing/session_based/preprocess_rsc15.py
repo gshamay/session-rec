@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timezone, timedelta
+import csv
 
 #data config (all methods)
 DATA_PATH = '../data/raw/'
@@ -166,11 +167,85 @@ def split_data_org( data, output_file ) :
     valid.to_csv( output_file + '_train_valid.txt', sep='\t', index=False)
 
 
+def dataStatistics(data, conf=None):
+    sessionLenMap = {}
+    print('dataStatistics start')  # same aEOS for all dbs
+    bDataStatistics = False
+    if (conf is not None):
+        bDataStatistics = False
+        try:
+            bDataStatistics = conf['dataStatistics']
+        except Exception:
+            bDataStatistics = False
+    else:
+        bDataStatistics = True
+
+    if (bDataStatistics):
+        dataAsListOfLists = data.values.tolist()
+        # look for variables locations
+        indexOfSessionId = data.columns.get_loc("SessionId")
+        session_length = 1
+        firstEntry = dataAsListOfLists[0]
+        currentSessionID = firstEntry[indexOfSessionId]
+        entry_1 = firstEntry
+        entry_2 = None
+        i = 1
+        totalSessions = 1
+        dataLen = len(data)
+        while i < len(data):
+            if (i % 1000 == 0):
+                print('processed dataStatistics' + str(i) + "/" + str(dataLen))
+
+            entryList = dataAsListOfLists[i]
+            entry = dataAsListOfLists[i]
+            i += 1
+            if (currentSessionID == entryList[indexOfSessionId] or currentSessionID == -1):
+                # didn't moved to a new session
+                currentSessionID = entryList[indexOfSessionId]
+                entry_2 = entry_1
+                entry_1 = entry
+                session_length += 1
+            else:
+                # moved to a new session
+                if (entry_2 is None or entry_1 is None):
+                    print('unexpected less then 2 entries session')
+                else:
+                    # build new raw entry - based last two raws
+
+                    if session_length in sessionLenMap:
+                        num = sessionLenMap[session_length]
+                        num += 1
+                        sessionLenMap[session_length] = num
+                    else:
+                        sessionLenMap[session_length] = 1
+
+                    totalSessions += 1
+
+                    session_length = 1
+                    currentSessionID = entry[indexOfSessionId]  # entry is a df in len  1
+                    entry_1 = entry
+                    entry_2 = None
+
+        print('finished getting dataStatistics' + ' totalSessions[' + str(totalSessions) + ']data size[' + str(len(data)))
+        print(str(data))
+        print('new data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\n'.
+              format(len(data), data.SessionId.nunique(), data.ItemId.nunique()))
+    else:
+        print('avoid getting dataStatistics')
+
+    print('dataStatistics Done')
+    return sessionLenMap, totalSessions,
+    #########################################################
+
+
+
+
 def split_data(data, output_file, days_test=DAYS_TEST, last_nth=None):
     return split_dataEx(data, output_file, 5, 2, days_test, last_nth)
 
 
 def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=DAYS_TEST, last_nth=None):
+
     data_end = datetime.fromtimestamp(data.Time.max(), timezone.utc)
     test_from = data_end - timedelta(days_test)
 
@@ -200,14 +275,21 @@ def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=
     #  (again) after splitting and removing items that does not appear on train ; missing removing items < 5 ...(bug)
     test = test[np.in1d(test.SessionId, tslength[tslength >= minSessionLength].index)]
 
-    # todo: Count session length after train / test split  - train_full
-    print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'
-          .format(len(train), train.SessionId.nunique(), train.ItemId.nunique()))
-    train.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_train_full.txt', sep='\t',index=False)
+    sessionLenMapTrain, TotalSessionsTrain, = dataStatistics(train)
+    print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {} TotalSessionsTrain: {}'
+          .format(len(train), train.SessionId.nunique(), train.ItemId.nunique(), TotalSessionsTrain))
+    train.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_train_full.txt', sep='\t', index=False)
+    with open(output_file + '_trainSessionsLen.csv', 'w') as f:
+        for key in sessionLenMapTrain.keys():
+            f.write("%s,%s\n" % (key, sessionLenMapTrain[key]))
 
-    # todo: Count session length after train / test split  - test
-    print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(test), test.SessionId.nunique(), test.ItemId.nunique()))
+    sessionLenMapTest, TotalSessionsTest, = dataStatistics(test)
+    print('Test set\n\tEvents: {}\n\tSessions: {}\n\tItems: {} TotalSessionsTest: {}'
+          .format(len(test), test.SessionId.nunique(), test.ItemId.nunique(), TotalSessionsTest))
     test.to_csv(output_file + (str(last_nth) if last_nth is not None else '') + '_test.txt', sep='\t', index=False)
+    with open(output_file + '_testSessionsLen.csv', 'w') as f:
+        for key in sessionLenMapTest.keys():
+            f.write("%s,%s\n" % (key, sessionLenMapTest[key]))
     
     data_end = datetime.fromtimestamp( train.Time.max(), timezone.utc )
     test_from = data_end - timedelta( days_test )

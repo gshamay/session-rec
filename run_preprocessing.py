@@ -104,7 +104,7 @@ def run_file( conf ):
         #  DataFrame --> List of lists --> add aEOS --> DataFrame
         dataAsListOfLists = data.values.tolist()
 
-        # look for variable locations 'SessionId'
+        # look for variables locations (Time, 'SessionId', ...)
         indexOfSessionId = data.columns.get_loc("SessionId")
         indexOfTime = data.columns.get_loc("Time")
         indexOfItemId = data.columns.get_loc("ItemId")
