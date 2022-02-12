@@ -88,7 +88,7 @@ def load_data( file ) :
     print('Loaded data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {}\n\n'.
           format(len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(), data_end.date().isoformat()))
 
-    dataStatistics(data, file + 'Sessions_histogram.csv')
+    dataStatistics(data, file + 'Sessions_histogram.csv',True)
     return data
 
 
@@ -167,7 +167,7 @@ def split_data_org( data, output_file ) :
     valid.to_csv( output_file + '_train_valid.txt', sep='\t', index=False)
 
 
-def dataStatistics(data, fileOut , conf=None):
+def dataStatistics(data, fileOut, rawDataStatistics=False, conf=None):
     sessionLenMap = {}
     print('dataStatistics start')  # same aEOS for all dbs
     bDataStatistics = False
@@ -181,6 +181,7 @@ def dataStatistics(data, fileOut , conf=None):
         bDataStatistics = True
 
     if (bDataStatistics):
+        sessionsInSize1 = []
         dataAsListOfLists = data.values.tolist()
         # look for variables locations
         indexOfSessionId = data.columns.get_loc("SessionId")
@@ -214,17 +215,20 @@ def dataStatistics(data, fileOut , conf=None):
 
             else:
                 # moved to a new session
-                if (entry_2 is None or entry_1 is None):
+                if ((entry_2 is None or entry_1 is None) and not rawDataStatistics):
                     print('unexpected less then 2 entries session')
+                    # rawDataStatistics can contain single item sessions
                 else:
                     # build new raw entry - based last two raws
-
                     if session_length in sessionLenMap:
                         num = sessionLenMap[session_length]
                         num += 1
                         sessionLenMap[session_length] = num
                     else:
                         sessionLenMap[session_length] = 1
+
+                    if(session_length == 1):
+                        sessionsInSize1.append(currentSessionID)
 
                     # prepare next session count
                     totalSessions += 1
@@ -233,6 +237,7 @@ def dataStatistics(data, fileOut , conf=None):
                     entry_1 = entry
                     entry_2 = None
 
+        # print('sessionsInSize1[' + str(sessionsInSize1) + ']')
         print('finished getting dataStatistics' + ' totalSessions[' + str(totalSessions) + ']data size[' + str(len(data)))
         print(str(data))
         print('new data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\n'.
