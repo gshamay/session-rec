@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timezone, timedelta
-import csv
 
 #data config (all methods)
 DATA_PATH = '../data/raw/'
@@ -83,13 +82,14 @@ def load_data( file ) :
     del(data['TimeStr'])
     
     #output
-    data_start = datetime.fromtimestamp( data.Time.min(), timezone.utc )
-    data_end = datetime.fromtimestamp( data.Time.max(), timezone.utc )
-    
+    data_start = datetime.fromtimestamp( data.Time.min(), timezone.utc)
+    data_end = datetime.fromtimestamp(data.Time.max(), timezone.utc)
+
     print('Loaded data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {}\n\n'.
-          format( len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(), data_end.date().isoformat() ) )
-    
-    return data;
+          format(len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(), data_end.date().isoformat()))
+
+    dataStatistics(data, file + 'Sessions_histogram.csv')
+    return data
 
 
 def filter_data( data, min_item_support=MIN_ITEM_SUPPORT, min_session_length=MIN_SESSION_LENGTH ) : 
