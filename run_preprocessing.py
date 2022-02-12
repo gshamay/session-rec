@@ -124,7 +124,7 @@ def run_file( conf ):
         dataLen = len(data)
         while i < len(data):
             if (i % 10000 == 0):
-                print('processed aEOS' + str(i) + "/" + str(dataLen))
+                print('processed aEOS ' + str(i) + "/" + str(dataLen))
 
             entryList = dataAsListOfLists[i]
             entry = dataAsListOfLists[i]

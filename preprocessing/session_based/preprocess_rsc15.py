@@ -197,7 +197,7 @@ def dataStatistics(data, fileOut, rawDataStatistics=False, conf=None):
 
         while i < len(data):
             if (i % 10000 == 0):
-                print('processed dataStatistics' + str(i) + "/" + str(dataLen))
+                print('processed dataStatistics ' + str(i) + "/" + str(dataLen))
 
             entryList = dataAsListOfLists[i]
             entry = dataAsListOfLists[i]
@@ -274,6 +274,7 @@ def split_dataEx(data, output_file, minItemSupport, minSessionLength, days_test=
     session_test = session_max_times[session_max_times >= test_from.timestamp()].index
     train = data[np.in1d(data.SessionId, session_train)]
 
+    # the Split to: Yoochoos64 ; 1/64 ; rsc64
     if last_nth is not None:
         train.sort_values(['SessionId', 'Time'], inplace=True)
         session_data = list(data['SessionId'].values)
