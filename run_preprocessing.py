@@ -198,7 +198,7 @@ def run_file( conf ):
     if conf['type'] == 'single':
         preprocessor.split_dataEx( data, conf['output']['folder'] + conf['data']['prefix'], min_item_support, min_session_length, **conf['params'])
     elif conf['type'] == 'window':
-        preprocessor.slice_data(data, conf['output']['folder'] + conf['data']['prefix'], **conf['params'])
+        preprocessor.slice_dataEx(data, conf['output']['folder'] + conf['data']['prefix'], min_item_support, min_session_length, **conf['params'])
     elif conf['type'] == 'retrain':
         preprocessor.retrain_data(data, conf['output']['folder'] + conf['data']['prefix'], **conf['params'])
     else:

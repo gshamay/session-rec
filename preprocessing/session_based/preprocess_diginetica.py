@@ -201,8 +201,11 @@ def load_data(file):
     #This line take long to run..
     data = data.groupby('SessionId').apply(lambda x: x.sort_values('Time'))
     # data = data.sort_values(['SessionId'],['Time'])
+
+    dataStatistics(data, file + 'Sessions_histogram.csv', True)
+
     data.index = data.index.get_level_values(1)
-    return data;
+    return data
 
 
 def filter_data(data, min_item_support=MIN_ITEM_SUPPORT, min_session_length=MIN_SESSION_LENGTH):

@@ -101,7 +101,7 @@ def load_data( file ) :
     new_user = data['UserId'].values[1:] != data['UserId'].values[:-1]
     new_user = np.r_[True, new_user]
     # a new sessions stars when at least one of the two conditions is verified
-    new_session = np.logical_or(new_user, split_session)
+    new_session = np.logical_or(new_user, split_session) # todo: could this split a user session > 30 min or in the 30 min break ?
     # compute the session ids
     session_ids = np.cumsum(new_session)
     data['SessionId'] = session_ids
@@ -226,12 +226,17 @@ def split_data( data, output_file, days_test ) :
     
     
 # todo: remove < 2 Sessions (< 3 with aEOS)
-def slice_data( data, output_file, num_slices, days_offset, days_shift, days_train, days_test ): 
+
+def slice_data( data, output_file, num_slices, days_offset, days_shift, days_train, days_test):
+    return slice_dataEx(data, output_file, 2, num_slices, days_offset, days_shift, days_train, days_test)
+
+
+def slice_dataEx(data, output_file, min_item_support, min_session_length, num_slices, days_offset, days_shift, days_train, days_test):
     
     for slice_id in range( 0, num_slices ) :
-        split_data_slice( data, output_file, slice_id, days_offset+(slice_id*days_shift), days_train, days_test )
+        split_data_slice( data, output_file, slice_id, days_offset+(slice_id*days_shift), days_train, days_test, min_item_support, min_session_length)
 
-def split_data_slice( data, output_file, slice_id, days_offset, days_train, days_test ) :
+def split_data_slice( data, output_file, slice_id, days_offset, days_train, days_test, min_item_support = 5, min_session_length =2 ) :
     
     data_start = datetime.fromtimestamp( data.Time.min(), timezone.utc )
     data_end = datetime.fromtimestamp( data.Time.max(), timezone.utc )
@@ -271,7 +276,7 @@ def split_data_slice( data, output_file, slice_id, days_offset, days_train, days
     test = test[np.in1d(test.ItemId, train.ItemId)]
     
     tslength = test.groupby('SessionId').size()
-    test = test[np.in1d(test.SessionId, tslength[tslength>=2].index)]
+    test = test[np.in1d(test.SessionId, tslength[tslength >= min_session_length].index)]
     
     print('Test set {}\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {} \n\n'.
           format( slice_id, len(test), test.SessionId.nunique(), test.ItemId.nunique(), middle.date().isoformat(), end.date().isoformat() ) )
