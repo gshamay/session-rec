@@ -89,7 +89,11 @@ def load_data( file ) :
     #specify header names
     data.columns = ['Time','UserId','Type','ItemId']
     data['Time'] = (data.Time / 1000).astype( int )
-    
+
+
+    print('Loaded raw data set\n\tEvents: {}\n\tItems: {}\n\n'.
+          format( len(data),  data.ItemId.nunique()) )
+
     #sessionize
     data.sort_values(by=['UserId', 'Time'], ascending=True, inplace=True)
     # compute the time difference between queries
@@ -125,8 +129,9 @@ def load_data( file ) :
         del data['TimeTmp']
     
     print('Loaded data set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}\n\tSpan: {} / {}\n\n'.
-          format( len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(), data_end.date().isoformat() ) )
-    
+          format( len(data), data.SessionId.nunique(), data.ItemId.nunique(), data_start.date().isoformat(), data_end.date().isoformat()))
+
+    dataStatistics(data, file + 'rawData.SessionLen.' + '.csv', rawDataStatistics=True)
     return data, cart;
 
 
@@ -218,6 +223,8 @@ def split_data( data, output_file, days_test ) :
     test = data[np.in1d(data.SessionId, session_test)]
     test = test[np.in1d(test.ItemId, train.ItemId)]
     tslength = test.groupby('SessionId').size()
+
+
     test = test[np.in1d(test.SessionId, tslength[tslength>=2].index)]
     print('Full train set\n\tEvents: {}\n\tSessions: {}\n\tItems: {}'.format(len(train), train.SessionId.nunique(), train.ItemId.nunique()))
     train.to_csv(output_file + '_train_full.txt', sep='\t', index=False)
