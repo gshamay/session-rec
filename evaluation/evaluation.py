@@ -574,7 +574,7 @@ def printLREvaluationValues(prefix, LRTestY, clfProbs, res):
     posToPushMax = len(res)
     for accuracyMul in range(9):
         acc = accuracyMul * 0.1 + 0.1
-        checkAcc = lambda t: t >= acc
+        checkAcc = lambda t: t >= acc  # t >= acc --> True else False
         vfuncCheckAcc = np.vectorize(checkAcc)
         clfInAcc = vfuncCheckAcc(clfProbs)
 
