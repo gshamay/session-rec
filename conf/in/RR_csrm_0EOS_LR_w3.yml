@@ -1,5 +1,5 @@
 type: window
-key: SGNN
+key: CSRM
 evaluation: evaluation
 LogisticRegressionOnEOS: False
 
@@ -11,7 +11,7 @@ data:
   skip: [0,1,3,4] # we need only slice 4 (smallest one)
 
 results:
-  folder: results/retailrocket/retailrocket_0EOS_W3_LR/SGNN/
+  folder: results/retailrocket/retailrocket_0EOS_W3_LR/CSRM/
   useBothTrainAndTest: False
  
 metrics:
@@ -43,10 +43,7 @@ metrics:
 - class: time_memory_usage.Time_usage_testing
 
 algorithms:
-- class: sgnn.gnn.GGNN
-  params: { lr: 0.008, l2: 0.0001, lr_dc: 0.45, lr_dc_step: 3, epoch_n: 10}
-  key: sgnn-best
- 
-  
-
+- class: CSRM.csrm.CSRM
+  params: { hidden_units: 100, epoch: 10, lr: 0.001, memory_size: 128}
+  key: csrm
   

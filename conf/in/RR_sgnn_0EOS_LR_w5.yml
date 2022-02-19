@@ -5,13 +5,13 @@ LogisticRegressionOnEOS: False
 
 data:
   name: retailrocket_0EOS
-  folder: data/retailrocket/slices/0EOS/
+  folder: data/retailrocket/slices/1EOS/
   prefix: events
   slices: 5
-  skip: [0,1,3,4] # we need only slice 4 (smallest one)
+  skip: [0,1,2,3] # we need only slice 4 (smallest one)
 
 results:
-  folder: results/retailrocket/retailrocket_0EOS_W3_LR/SGNN/
+  folder: results/retailrocket/retailrocket_0EOS_W5_LR/SGNN/
   useBothTrainAndTest: False
  
 metrics:

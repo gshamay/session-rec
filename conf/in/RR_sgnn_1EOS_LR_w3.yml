@@ -11,7 +11,7 @@ data:
   skip: [0,1,3,4] # we need only slice 4 (smallest one)
 
 results:
-  folder: results/retailrocket/retailrocket_1EOS_LR/SGNN/
+  folder: results/retailrocket/retailrocket_1EOS_W3_LR/SGNN/
   useBothTrainAndTest: True
  
 metrics:
