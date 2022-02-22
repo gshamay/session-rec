@@ -1,0 +1,23 @@
+type: single
+key: VSKNN
+evaluation: evaluation
+LogisticRegressionOnEOS: True
+data:
+  name: rscShort3EOS
+  folder: data/rsc15/prepared/rsc15_64Short_3EOS/
+  prefix: rsc15-clicks64ShortaEOS3
+
+results:
+  folder: results/rsc15/rsc15_64Short_3EOS_LR/VSKNN/
+  useBothTrainAndTest: False
+ 
+metrics:
+- class: saver.Saver
+  length: [50]
+- class: time_memory_usage.Time_usage_training
+- class: time_memory_usage.Time_usage_testing
+
+algorithms:
+- class: knn.vsknn.VMContextKNN
+  params: { k: 1000, sample_size: 1000, weighting: same , weighting_score: quadratic, idf_weighting: 2  }
+  key: vsknn

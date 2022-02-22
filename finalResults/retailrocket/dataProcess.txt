@@ -1,0 +1,908 @@
+C:\pycharmEnv\pythin37x64Env\Scripts\python.exe C:/bgu/session-rec/run_preprocessing.py conf/preprocess/session_based/window/retailrocket1EOS.yml
+C:/bgu/session-rec/run_preprocessing.py:43: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  c = yaml.load(stream)
+Checking conf/preprocess/session_based/window/retailrocket1EOS.yml
+Loading file
+processing config conf/preprocess/session_based/window/retailrocket1EOS.yml
+Loaded raw data set
+	Events: 2756101
+	Items: 235061
+
+
+               Time   UserId  ItemId  SessionId
+1361687  1442004589        0  285930          1
+1367212  1442004759        0  357564          1
+1367342  1442004917        0   67045          1
+830385   1439487966        1   72028          2
+742616   1438969904        2  325215          3
+...             ...      ...     ...        ...
+206556   1433972768  1407575  121220    1761656
+47311    1433343689  1407576  356208    1761657
+1762583  1431899284  1407577  427784    1761658
+1744277  1431825683  1407578  188736    1761659
+482559   1435184526  1407579    2521    1761660
+
+[2664312 rows x 4 columns]
+1430622011
+1442545187
+Loaded data set
+	Events: 2664312
+	Sessions: 1755766
+	Items: 234838
+	Span: 2015-05-03 / 2015-09-18
+
+
+dataStatistics start
+processed dataStatistics 10000/2664312
+processed dataStatistics 20000/2664312
+processed dataStatistics 30000/2664312
+processed dataStatistics 40000/2664312
+processed dataStatistics 50000/2664312
+processed dataStatistics 60000/2664312
+processed dataStatistics 70000/2664312
+processed dataStatistics 80000/2664312
+processed dataStatistics 90000/2664312
+processed dataStatistics 100000/2664312
+processed dataStatistics 110000/2664312
+processed dataStatistics 120000/2664312
+processed dataStatistics 130000/2664312
+processed dataStatistics 140000/2664312
+processed dataStatistics 150000/2664312
+processed dataStatistics 160000/2664312
+processed dataStatistics 170000/2664312
+processed dataStatistics 180000/2664312
+processed dataStatistics 190000/2664312
+processed dataStatistics 200000/2664312
+processed dataStatistics 210000/2664312
+processed dataStatistics 220000/2664312
+processed dataStatistics 230000/2664312
+processed dataStatistics 240000/2664312
+processed dataStatistics 250000/2664312
+processed dataStatistics 260000/2664312
+processed dataStatistics 270000/2664312
+processed dataStatistics 280000/2664312
+processed dataStatistics 290000/2664312
+processed dataStatistics 300000/2664312
+processed dataStatistics 310000/2664312
+processed dataStatistics 320000/2664312
+processed dataStatistics 330000/2664312
+processed dataStatistics 340000/2664312
+processed dataStatistics 350000/2664312
+processed dataStatistics 360000/2664312
+processed dataStatistics 370000/2664312
+processed dataStatistics 380000/2664312
+processed dataStatistics 390000/2664312
+processed dataStatistics 400000/2664312
+processed dataStatistics 410000/2664312
+processed dataStatistics 420000/2664312
+processed dataStatistics 430000/2664312
+processed dataStatistics 440000/2664312
+processed dataStatistics 450000/2664312
+processed dataStatistics 460000/2664312
+processed dataStatistics 470000/2664312
+processed dataStatistics 480000/2664312
+processed dataStatistics 490000/2664312
+processed dataStatistics 500000/2664312
+processed dataStatistics 510000/2664312
+processed dataStatistics 520000/2664312
+processed dataStatistics 530000/2664312
+processed dataStatistics 540000/2664312
+processed dataStatistics 550000/2664312
+processed dataStatistics 560000/2664312
+processed dataStatistics 570000/2664312
+processed dataStatistics 580000/2664312
+processed dataStatistics 590000/2664312
+processed dataStatistics 600000/2664312
+processed dataStatistics 610000/2664312
+processed dataStatistics 620000/2664312
+processed dataStatistics 630000/2664312
+processed dataStatistics 640000/2664312
+processed dataStatistics 650000/2664312
+processed dataStatistics 660000/2664312
+processed dataStatistics 670000/2664312
+processed dataStatistics 680000/2664312
+processed dataStatistics 690000/2664312
+processed dataStatistics 700000/2664312
+processed dataStatistics 710000/2664312
+processed dataStatistics 720000/2664312
+processed dataStatistics 730000/2664312
+processed dataStatistics 740000/2664312
+processed dataStatistics 750000/2664312
+processed dataStatistics 760000/2664312
+processed dataStatistics 770000/2664312
+processed dataStatistics 780000/2664312
+processed dataStatistics 790000/2664312
+processed dataStatistics 800000/2664312
+processed dataStatistics 810000/2664312
+processed dataStatistics 820000/2664312
+processed dataStatistics 830000/2664312
+processed dataStatistics 840000/2664312
+processed dataStatistics 850000/2664312
+processed dataStatistics 860000/2664312
+processed dataStatistics 870000/2664312
+processed dataStatistics 880000/2664312
+processed dataStatistics 890000/2664312
+processed dataStatistics 900000/2664312
+processed dataStatistics 910000/2664312
+processed dataStatistics 920000/2664312
+processed dataStatistics 930000/2664312
+processed dataStatistics 940000/2664312
+processed dataStatistics 950000/2664312
+processed dataStatistics 960000/2664312
+processed dataStatistics 970000/2664312
+processed dataStatistics 980000/2664312
+processed dataStatistics 990000/2664312
+processed dataStatistics 1000000/2664312
+processed dataStatistics 1010000/2664312
+processed dataStatistics 1020000/2664312
+processed dataStatistics 1030000/2664312
+processed dataStatistics 1040000/2664312
+processed dataStatistics 1050000/2664312
+processed dataStatistics 1060000/2664312
+processed dataStatistics 1070000/2664312
+processed dataStatistics 1080000/2664312
+processed dataStatistics 1090000/2664312
+processed dataStatistics 1100000/2664312
+processed dataStatistics 1110000/2664312
+processed dataStatistics 1120000/2664312
+processed dataStatistics 1130000/2664312
+processed dataStatistics 1140000/2664312
+processed dataStatistics 1150000/2664312
+processed dataStatistics 1160000/2664312
+processed dataStatistics 1170000/2664312
+processed dataStatistics 1180000/2664312
+processed dataStatistics 1190000/2664312
+processed dataStatistics 1200000/2664312
+processed dataStatistics 1210000/2664312
+processed dataStatistics 1220000/2664312
+processed dataStatistics 1230000/2664312
+processed dataStatistics 1240000/2664312
+processed dataStatistics 1250000/2664312
+processed dataStatistics 1260000/2664312
+processed dataStatistics 1270000/2664312
+processed dataStatistics 1280000/2664312
+processed dataStatistics 1290000/2664312
+processed dataStatistics 1300000/2664312
+processed dataStatistics 1310000/2664312
+processed dataStatistics 1320000/2664312
+processed dataStatistics 1330000/2664312
+processed dataStatistics 1340000/2664312
+processed dataStatistics 1350000/2664312
+processed dataStatistics 1360000/2664312
+processed dataStatistics 1370000/2664312
+processed dataStatistics 1380000/2664312
+processed dataStatistics 1390000/2664312
+processed dataStatistics 1400000/2664312
+processed dataStatistics 1410000/2664312
+processed dataStatistics 1420000/2664312
+processed dataStatistics 1430000/2664312
+processed dataStatistics 1440000/2664312
+processed dataStatistics 1450000/2664312
+processed dataStatistics 1460000/2664312
+processed dataStatistics 1470000/2664312
+processed dataStatistics 1480000/2664312
+processed dataStatistics 1490000/2664312
+processed dataStatistics 1500000/2664312
+processed dataStatistics 1510000/2664312
+processed dataStatistics 1520000/2664312
+processed dataStatistics 1530000/2664312
+processed dataStatistics 1540000/2664312
+processed dataStatistics 1550000/2664312
+processed dataStatistics 1560000/2664312
+processed dataStatistics 1570000/2664312
+processed dataStatistics 1580000/2664312
+processed dataStatistics 1590000/2664312
+processed dataStatistics 1600000/2664312
+processed dataStatistics 1610000/2664312
+processed dataStatistics 1620000/2664312
+processed dataStatistics 1630000/2664312
+processed dataStatistics 1640000/2664312
+processed dataStatistics 1650000/2664312
+processed dataStatistics 1660000/2664312
+processed dataStatistics 1670000/2664312
+processed dataStatistics 1680000/2664312
+processed dataStatistics 1690000/2664312
+processed dataStatistics 1700000/2664312
+processed dataStatistics 1710000/2664312
+processed dataStatistics 1720000/2664312
+processed dataStatistics 1730000/2664312
+processed dataStatistics 1740000/2664312
+processed dataStatistics 1750000/2664312
+processed dataStatistics 1760000/2664312
+processed dataStatistics 1770000/2664312
+processed dataStatistics 1780000/2664312
+processed dataStatistics 1790000/2664312
+processed dataStatistics 1800000/2664312
+processed dataStatistics 1810000/2664312
+processed dataStatistics 1820000/2664312
+processed dataStatistics 1830000/2664312
+processed dataStatistics 1840000/2664312
+processed dataStatistics 1850000/2664312
+processed dataStatistics 1860000/2664312
+processed dataStatistics 1870000/2664312
+processed dataStatistics 1880000/2664312
+processed dataStatistics 1890000/2664312
+processed dataStatistics 1900000/2664312
+processed dataStatistics 1910000/2664312
+processed dataStatistics 1920000/2664312
+processed dataStatistics 1930000/2664312
+processed dataStatistics 1940000/2664312
+processed dataStatistics 1950000/2664312
+processed dataStatistics 1960000/2664312
+processed dataStatistics 1970000/2664312
+processed dataStatistics 1980000/2664312
+processed dataStatistics 1990000/2664312
+processed dataStatistics 2000000/2664312
+processed dataStatistics 2010000/2664312
+processed dataStatistics 2020000/2664312
+processed dataStatistics 2030000/2664312
+processed dataStatistics 2040000/2664312
+processed dataStatistics 2050000/2664312
+processed dataStatistics 2060000/2664312
+processed dataStatistics 2070000/2664312
+processed dataStatistics 2080000/2664312
+processed dataStatistics 2090000/2664312
+processed dataStatistics 2100000/2664312
+processed dataStatistics 2110000/2664312
+processed dataStatistics 2120000/2664312
+processed dataStatistics 2130000/2664312
+processed dataStatistics 2140000/2664312
+processed dataStatistics 2150000/2664312
+processed dataStatistics 2160000/2664312
+processed dataStatistics 2170000/2664312
+processed dataStatistics 2180000/2664312
+processed dataStatistics 2190000/2664312
+processed dataStatistics 2200000/2664312
+processed dataStatistics 2210000/2664312
+processed dataStatistics 2220000/2664312
+processed dataStatistics 2230000/2664312
+processed dataStatistics 2240000/2664312
+processed dataStatistics 2250000/2664312
+processed dataStatistics 2260000/2664312
+processed dataStatistics 2270000/2664312
+processed dataStatistics 2280000/2664312
+processed dataStatistics 2290000/2664312
+processed dataStatistics 2300000/2664312
+processed dataStatistics 2310000/2664312
+processed dataStatistics 2320000/2664312
+processed dataStatistics 2330000/2664312
+processed dataStatistics 2340000/2664312
+processed dataStatistics 2350000/2664312
+processed dataStatistics 2360000/2664312
+processed dataStatistics 2370000/2664312
+processed dataStatistics 2380000/2664312
+processed dataStatistics 2390000/2664312
+processed dataStatistics 2400000/2664312
+processed dataStatistics 2410000/2664312
+processed dataStatistics 2420000/2664312
+processed dataStatistics 2430000/2664312
+processed dataStatistics 2440000/2664312
+processed dataStatistics 2450000/2664312
+processed dataStatistics 2460000/2664312
+processed dataStatistics 2470000/2664312
+processed dataStatistics 2480000/2664312
+processed dataStatistics 2490000/2664312
+processed dataStatistics 2500000/2664312
+processed dataStatistics 2510000/2664312
+processed dataStatistics 2520000/2664312
+processed dataStatistics 2530000/2664312
+processed dataStatistics 2540000/2664312
+processed dataStatistics 2550000/2664312
+processed dataStatistics 2560000/2664312
+processed dataStatistics 2570000/2664312
+processed dataStatistics 2580000/2664312
+processed dataStatistics 2590000/2664312
+processed dataStatistics 2600000/2664312
+processed dataStatistics 2610000/2664312
+processed dataStatistics 2620000/2664312
+processed dataStatistics 2630000/2664312
+processed dataStatistics 2640000/2664312
+processed dataStatistics 2650000/2664312
+processed dataStatistics 2660000/2664312
+finished getting dataStatistics totalSessions[1755766]data size[2664312
+               Time   UserId  ItemId  SessionId
+1361687  1442004589        0  285930          1
+1367212  1442004759        0  357564          1
+1367342  1442004917        0   67045          1
+830385   1439487966        1   72028          2
+742616   1438969904        2  325215          3
+...             ...      ...     ...        ...
+206556   1433972768  1407575  121220    1761656
+47311    1433343689  1407576  356208    1761657
+1762583  1431899284  1407577  427784    1761658
+1744277  1431825683  1407578  188736    1761659
+482559   1435184526  1407579    2521    1761660
+
+[2664312 rows x 4 columns]
+new data set
+	Events: 2664312
+	Sessions: 1755766
+	Items: 234838
+
+
+dataStatistics Done
+Filtered data set
+	Events: 1085214
+	Sessions: 306728
+	Items: 49039
+	Span: 2015-05-03 / 2015-09-18
+
+
+aEOS[1]sessionLength[False]
+add aEOS
+processed aEOS 10000/1085214
+processed aEOS 20000/1085214
+processed aEOS 30000/1085214
+processed aEOS 40000/1085214
+processed aEOS 50000/1085214
+processed aEOS 60000/1085214
+processed aEOS 70000/1085214
+processed aEOS 80000/1085214
+processed aEOS 90000/1085214
+processed aEOS 100000/1085214
+processed aEOS 110000/1085214
+processed aEOS 120000/1085214
+processed aEOS 130000/1085214
+processed aEOS 140000/1085214
+processed aEOS 150000/1085214
+processed aEOS 160000/1085214
+processed aEOS 170000/1085214
+processed aEOS 180000/1085214
+processed aEOS 190000/1085214
+processed aEOS 200000/1085214
+processed aEOS 210000/1085214
+processed aEOS 220000/1085214
+processed aEOS 230000/1085214
+processed aEOS 240000/1085214
+processed aEOS 250000/1085214
+processed aEOS 260000/1085214
+processed aEOS 270000/1085214
+processed aEOS 280000/1085214
+processed aEOS 290000/1085214
+processed aEOS 300000/1085214
+processed aEOS 310000/1085214
+processed aEOS 320000/1085214
+processed aEOS 330000/1085214
+processed aEOS 340000/1085214
+processed aEOS 350000/1085214
+processed aEOS 360000/1085214
+processed aEOS 370000/1085214
+processed aEOS 380000/1085214
+processed aEOS 390000/1085214
+processed aEOS 400000/1085214
+processed aEOS 410000/1085214
+processed aEOS 420000/1085214
+processed aEOS 430000/1085214
+processed aEOS 440000/1085214
+processed aEOS 450000/1085214
+processed aEOS 460000/1085214
+processed aEOS 470000/1085214
+processed aEOS 480000/1085214
+processed aEOS 490000/1085214
+processed aEOS 500000/1085214
+processed aEOS 510000/1085214
+processed aEOS 520000/1085214
+processed aEOS 530000/1085214
+processed aEOS 540000/1085214
+processed aEOS 550000/1085214
+processed aEOS 560000/1085214
+processed aEOS 570000/1085214
+processed aEOS 580000/1085214
+processed aEOS 590000/1085214
+processed aEOS 600000/1085214
+processed aEOS 610000/1085214
+processed aEOS 620000/1085214
+processed aEOS 630000/1085214
+processed aEOS 640000/1085214
+processed aEOS 650000/1085214
+processed aEOS 660000/1085214
+processed aEOS 670000/1085214
+processed aEOS 680000/1085214
+processed aEOS 690000/1085214
+processed aEOS 700000/1085214
+processed aEOS 710000/1085214
+processed aEOS 720000/1085214
+processed aEOS 730000/1085214
+processed aEOS 740000/1085214
+processed aEOS 750000/1085214
+processed aEOS 760000/1085214
+processed aEOS 770000/1085214
+processed aEOS 780000/1085214
+processed aEOS 790000/1085214
+processed aEOS 800000/1085214
+processed aEOS 810000/1085214
+processed aEOS 820000/1085214
+processed aEOS 830000/1085214
+processed aEOS 840000/1085214
+processed aEOS 850000/1085214
+processed aEOS 860000/1085214
+processed aEOS 870000/1085214
+processed aEOS 880000/1085214
+processed aEOS 890000/1085214
+processed aEOS 900000/1085214
+processed aEOS 910000/1085214
+processed aEOS 920000/1085214
+processed aEOS 930000/1085214
+processed aEOS 940000/1085214
+processed aEOS 950000/1085214
+processed aEOS 960000/1085214
+processed aEOS 970000/1085214
+processed aEOS 980000/1085214
+processed aEOS 990000/1085214
+processed aEOS 1000000/1085214
+processed aEOS 1010000/1085214
+processed aEOS 1020000/1085214
+processed aEOS 1030000/1085214
+processed aEOS 1040000/1085214
+processed aEOS 1050000/1085214
+processed aEOS 1060000/1085214
+processed aEOS 1070000/1085214
+processed aEOS 1080000/1085214
+finished adding aEOS total added [306727]new size[1391941
+               Time   UserId  ItemId  SessionId
+0        1442004589        0  285930          1
+1        1442004759        0  357564          1
+2        1442004917        0   67045          1
+3        1442004918        0      -1          1
+4        1438969904        2  325215          3
+...             ...      ...     ...        ...
+1391936  1438402327  1407573  363109    1761653
+1391937  1438402365  1407573  463766    1761653
+1391938  1438402366  1407573      -1    1761653
+1391939  1438648367  1407573   82278    1761654
+1391940  1438648495  1407573   82278    1761654
+
+[1391941 rows x 4 columns]
+new data set
+	Events: 1391941
+	Sessions: 306728
+	Items: 49040
+
+
+Full data set 0
+	Events: 1391941
+	Sessions: 306728
+	Items: 49040
+	Span: 2015-05-03T03:00:33+00:00 / 2015-09-18T02:58:59+00:00
+Slice data set 0
+	Events: 237327
+	Sessions: 51370
+	Items: 30462
+	Span: 2015-05-03 / 2015-05-23 / 2015-05-25
+Train set 0
+	Events: 219936
+	Sessions: 47475
+	Items: 29534
+	Span: 2015-05-03 / 2015-05-23
+dataStatistics start
+processed dataStatistics 10000/219936
+processed dataStatistics 20000/219936
+processed dataStatistics 30000/219936
+processed dataStatistics 40000/219936
+processed dataStatistics 50000/219936
+processed dataStatistics 60000/219936
+processed dataStatistics 70000/219936
+processed dataStatistics 80000/219936
+processed dataStatistics 90000/219936
+processed dataStatistics 100000/219936
+processed dataStatistics 110000/219936
+processed dataStatistics 120000/219936
+processed dataStatistics 130000/219936
+processed dataStatistics 140000/219936
+processed dataStatistics 150000/219936
+processed dataStatistics 160000/219936
+processed dataStatistics 170000/219936
+processed dataStatistics 180000/219936
+processed dataStatistics 190000/219936
+processed dataStatistics 200000/219936
+processed dataStatistics 210000/219936
+finished getting dataStatistics totalSessions[47475]data size[219936
+               Time   UserId  ItemId  SessionId
+18       1431581976        7  139394         10
+19       1431582162        7  164941         10
+20       1431582163        7      -1         10
+38       1430862310       55  399556         73
+39       1430863281       55  399556         73
+...             ...      ...     ...        ...
+1391861  1431654617  1407484      -1    1761551
+1391897  1431924883  1407513  285527    1761587
+1391898  1431924942  1407513  285527    1761587
+1391899  1431924969  1407513  285527    1761587
+1391900  1431924970  1407513      -1    1761587
+
+[219936 rows x 4 columns]
+new data set
+	Events: 219936
+	Sessions: 47475
+	Items: 29534
+
+
+dataStatistics Done
+Test set 0
+	Events: 14856
+	Sessions: 3328
+	Items: 5337
+	Span: 2015-05-23 / 2015-05-25 
+
+
+dataStatistics start
+processed dataStatistics 10000/14856
+finished getting dataStatistics totalSessions[3328]data size[14856
+               Time   UserId  ItemId  SessionId
+287      1432481490      333  254882        423
+288      1432481543      333  254882        423
+289      1432481544      333      -1        423
+331      1432508544      358  198996        454
+332      1432508648      358  159380        454
+...             ...      ...     ...        ...
+1390862  1432452865  1406447  240405    1760192
+1390863  1432452866  1406447      -1    1760192
+1391251  1432418689  1406803  257040    1760676
+1391252  1432418925  1406803  257040    1760676
+1391253  1432418926  1406803      -1    1760676
+
+[14856 rows x 4 columns]
+new data set
+	Events: 14856
+	Sessions: 3328
+	Items: 5337
+
+
+dataStatistics Done
+Full data set 1
+	Events: 1391941
+	Sessions: 306728
+	Items: 49040
+	Span: 2015-05-03T03:00:33+00:00 / 2015-09-18T02:58:59+00:00
+Slice data set 1
+	Events: 235054
+	Sessions: 50392
+	Items: 30642
+	Span: 2015-05-30 / 2015-06-19 / 2015-06-21
+Train set 1
+	Events: 215508
+	Sessions: 46310
+	Items: 29503
+	Span: 2015-05-30 / 2015-06-19
+dataStatistics start
+processed dataStatistics 10000/215508
+processed dataStatistics 20000/215508
+processed dataStatistics 30000/215508
+processed dataStatistics 40000/215508
+processed dataStatistics 50000/215508
+processed dataStatistics 60000/215508
+processed dataStatistics 70000/215508
+processed dataStatistics 80000/215508
+processed dataStatistics 90000/215508
+processed dataStatistics 100000/215508
+processed dataStatistics 110000/215508
+processed dataStatistics 120000/215508
+processed dataStatistics 130000/215508
+processed dataStatistics 140000/215508
+processed dataStatistics 150000/215508
+processed dataStatistics 160000/215508
+processed dataStatistics 170000/215508
+processed dataStatistics 180000/215508
+processed dataStatistics 190000/215508
+processed dataStatistics 200000/215508
+processed dataStatistics 210000/215508
+finished getting dataStatistics totalSessions[46310]data size[215508
+               Time   UserId  ItemId  SessionId
+48       1434408004       64  233200         84
+49       1434408331       64  118401         84
+50       1434408660       64  224700         84
+51       1434409136       64  160984         84
+52       1434409137       64      -1         84
+...             ...      ...     ...        ...
+1391916  1434585240  1407527  254432    1761601
+1391917  1434585258  1407527  260616    1761601
+1391918  1434585284  1407527  254432    1761601
+1391919  1434585451  1407527   85307    1761601
+1391920  1434585452  1407527      -1    1761601
+
+[215508 rows x 4 columns]
+new data set
+	Events: 215508
+	Sessions: 46310
+	Items: 29503
+
+
+dataStatistics Done
+Test set 1
+	Events: 16679
+	Sessions: 3528
+	Items: 6070
+	Span: 2015-06-19 / 2015-06-21 
+
+
+dataStatistics start
+processed dataStatistics 10000/16679
+finished getting dataStatistics totalSessions[3528]data size[16679
+               Time   UserId  ItemId  SessionId
+45       1434846392       60  321706         78
+46       1434846434       60  257070         78
+47       1434846435       60      -1         78
+672      1434754126      763  378223        938
+673      1434754908      763   75994        938
+...             ...      ...     ...        ...
+1391083  1434768344  1406642   27412    1760446
+1391084  1434768385  1406642  165817    1760446
+1391085  1434768432  1406642   27412    1760446
+1391086  1434768461  1406642  196991    1760446
+1391087  1434768462  1406642      -1    1760446
+
+[16679 rows x 4 columns]
+new data set
+	Events: 16679
+	Sessions: 3528
+	Items: 6070
+
+
+dataStatistics Done
+Full data set 2
+	Events: 1391941
+	Sessions: 306728
+	Items: 49040
+	Span: 2015-05-03T03:00:33+00:00 / 2015-09-18T02:58:59+00:00
+Slice data set 2
+	Events: 235194
+	Sessions: 50804
+	Items: 32047
+	Span: 2015-06-26 / 2015-07-16 / 2015-07-18
+Train set 2
+	Events: 215522
+	Sessions: 46495
+	Items: 30896
+	Span: 2015-06-26 / 2015-07-16
+dataStatistics start
+processed dataStatistics 10000/215522
+processed dataStatistics 20000/215522
+processed dataStatistics 30000/215522
+processed dataStatistics 40000/215522
+processed dataStatistics 50000/215522
+processed dataStatistics 60000/215522
+processed dataStatistics 70000/215522
+processed dataStatistics 80000/215522
+processed dataStatistics 90000/215522
+processed dataStatistics 100000/215522
+processed dataStatistics 110000/215522
+processed dataStatistics 120000/215522
+processed dataStatistics 130000/215522
+processed dataStatistics 140000/215522
+processed dataStatistics 150000/215522
+processed dataStatistics 160000/215522
+processed dataStatistics 170000/215522
+processed dataStatistics 180000/215522
+processed dataStatistics 190000/215522
+processed dataStatistics 200000/215522
+processed dataStatistics 210000/215522
+finished getting dataStatistics totalSessions[46495]data size[215522
+               Time   UserId  ItemId  SessionId
+62       1435607175       75  257575         98
+63       1435607242       75  257575         98
+64       1435607243       75      -1         98
+65       1435609434       75  257575         99
+66       1435609596       75  257575         99
+...             ...      ...     ...        ...
+1391877  1436813842  1407511  241555    1761582
+1391878  1436813843  1407511      -1    1761582
+1391930  1436072303  1407560  240708    1761637
+1391931  1436072351  1407560  240708    1761637
+1391932  1436072352  1407560      -1    1761637
+
+[215522 rows x 4 columns]
+new data set
+	Events: 215522
+	Sessions: 46495
+	Items: 30896
+
+
+dataStatistics Done
+Test set 2
+	Events: 16785
+	Sessions: 3700
+	Items: 6116
+	Span: 2015-07-16 / 2015-07-18 
+
+
+dataStatistics start
+processed dataStatistics 10000/16785
+finished getting dataStatistics totalSessions[3700]data size[16785
+               Time   UserId  ItemId  SessionId
+73       1437080010       75  257575        111
+74       1437081580       75  257575        111
+75       1437081581       75      -1        111
+323      1437166805      353   86324        449
+324      1437166878      353  376793        449
+...             ...      ...     ...        ...
+1391164  1437171723  1406721   23707    1760555
+1391165  1437171724  1406721      -1    1760555
+1391438  1437103904  1406982  197862    1760905
+1391439  1437104122  1406982  197862    1760905
+1391440  1437104123  1406982      -1    1760905
+
+[16785 rows x 4 columns]
+new data set
+	Events: 16785
+	Sessions: 3700
+	Items: 6116
+
+
+dataStatistics Done
+Full data set 3
+	Events: 1391941
+	Sessions: 306728
+	Items: 49040
+	Span: 2015-05-03T03:00:33+00:00 / 2015-09-18T02:58:59+00:00
+Slice data set 3
+	Events: 225108
+	Sessions: 50703
+	Items: 30948
+	Span: 2015-07-23 / 2015-08-12 / 2015-08-14
+Train set 3
+	Events: 207723
+	Sessions: 46763
+	Items: 29876
+	Span: 2015-07-23 / 2015-08-12
+dataStatistics start
+processed dataStatistics 10000/207723
+processed dataStatistics 20000/207723
+processed dataStatistics 30000/207723
+processed dataStatistics 40000/207723
+processed dataStatistics 50000/207723
+processed dataStatistics 60000/207723
+processed dataStatistics 70000/207723
+processed dataStatistics 80000/207723
+processed dataStatistics 90000/207723
+processed dataStatistics 100000/207723
+processed dataStatistics 110000/207723
+processed dataStatistics 120000/207723
+processed dataStatistics 130000/207723
+processed dataStatistics 140000/207723
+processed dataStatistics 150000/207723
+processed dataStatistics 160000/207723
+processed dataStatistics 170000/207723
+processed dataStatistics 180000/207723
+processed dataStatistics 190000/207723
+processed dataStatistics 200000/207723
+finished getting dataStatistics totalSessions[46763]data size[207723
+               Time   UserId  ItemId  SessionId
+4        1438969904        2  325215          3
+5        1438970013        2  325215          3
+6        1438970212        2  259884          3
+7        1438970468        2  216305          3
+8        1438970905        2  342816          3
+...             ...      ...     ...        ...
+1391936  1438402327  1407573  363109    1761653
+1391937  1438402365  1407573  463766    1761653
+1391938  1438402366  1407573      -1    1761653
+1391939  1438648367  1407573   82278    1761654
+1391940  1438648495  1407573   82278    1761654
+
+[207723 rows x 4 columns]
+new data set
+	Events: 207723
+	Sessions: 46763
+	Items: 29876
+
+
+dataStatistics Done
+Test set 3
+	Events: 14666
+	Sessions: 3322
+	Items: 5297
+	Span: 2015-08-12 / 2015-08-14 
+
+
+dataStatistics start
+processed dataStatistics 10000/14666
+finished getting dataStatistics totalSessions[3322]data size[14666
+               Time   UserId  ItemId  SessionId
+111      1439442039      105   66752        153
+112      1439442087      105   66752        153
+113      1439442088      105      -1        153
+114      1439355115      108  311484        156
+115      1439355125      108  311484        156
+...             ...      ...     ...        ...
+1391840  1439401517  1407476   74494    1761542
+1391841  1439401555  1407476  207749    1761542
+1391842  1439401576  1407476  258188    1761542
+1391843  1439401581  1407476   74494    1761542
+1391844  1439401582  1407476      -1    1761542
+
+[14666 rows x 4 columns]
+new data set
+	Events: 14666
+	Sessions: 3322
+	Items: 5297
+
+
+dataStatistics Done
+Full data set 4
+	Events: 1391941
+	Sessions: 306728
+	Items: 49040
+	Span: 2015-05-03T03:00:33+00:00 / 2015-09-18T02:58:59+00:00
+Slice data set 4
+	Events: 187668
+	Sessions: 43069
+	Items: 28012
+	Span: 2015-08-19 / 2015-09-08 / 2015-09-10
+Train set 4
+	Events: 167612
+	Sessions: 38551
+	Items: 26553
+	Span: 2015-08-19 / 2015-09-08
+dataStatistics start
+processed dataStatistics 10000/167612
+processed dataStatistics 20000/167612
+processed dataStatistics 30000/167612
+processed dataStatistics 40000/167612
+processed dataStatistics 50000/167612
+processed dataStatistics 60000/167612
+processed dataStatistics 70000/167612
+processed dataStatistics 80000/167612
+processed dataStatistics 90000/167612
+processed dataStatistics 100000/167612
+processed dataStatistics 110000/167612
+processed dataStatistics 120000/167612
+processed dataStatistics 130000/167612
+processed dataStatistics 140000/167612
+processed dataStatistics 150000/167612
+processed dataStatistics 160000/167612
+finished getting dataStatistics totalSessions[38551]data size[167612
+               Time   UserId  ItemId  SessionId
+13       1440916778        6  253615          8
+14       1440916823        6  344723          8
+15       1440917649        6  344723          8
+16       1440917793        6  344723          8
+17       1440917794        6      -1          8
+...             ...      ...     ...        ...
+1391883  1441380208  1407511  241555    1761585
+1391884  1441380209  1407511      -1    1761585
+1391901  1441258211  1407516  371906    1761590
+1391902  1441258428  1407516  371906    1761590
+1391903  1441258429  1407516      -1    1761590
+
+[167612 rows x 4 columns]
+new data set
+	Events: 167612
+	Sessions: 38551
+	Items: 26553
+
+
+dataStatistics Done
+Test set 4
+	Events: 16265
+	Sessions: 3716
+	Items: 5527
+	Span: 2015-09-08 / 2015-09-10 
+
+
+dataStatistics start
+processed dataStatistics 10000/16265
+finished getting dataStatistics totalSessions[3716]data size[16265
+               Time   UserId  ItemId  SessionId
+106      1441756135      100   36054        146
+107      1441756158      100   36054        146
+108      1441756322      100   36054        146
+109      1441756374      100   36054        146
+110      1441756375      100      -1        146
+...             ...      ...     ...        ...
+1391467  1441765673  1407019  383828    1760950
+1391468  1441765675  1407019  383828    1760950
+1391469  1441765705  1407019  383828    1760950
+1391470  1441765713  1407019  383828    1760950
+1391471  1441765714  1407019      -1    1760950
+
+[16265 rows x 4 columns]
+new data set
+	Events: 16265
+	Sessions: 3716
+	Items: 5527
+
+
+dataStatistics Done
+finished config conf/preprocess/session_based/window/retailrocket1EOS.yml
+
+Process finished with exit code 0
