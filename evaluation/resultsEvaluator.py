@@ -129,10 +129,10 @@ else:
     # parser.add_argument('-l','--list', nargs='+', help='<Required> Set flag', required=True)
     # Use like: # python arg.py -l 1234 2345 3456 4567
     # parser.parse_args()
-    resDir = sys.argv[1]
+    resultsFilesDir.append(sys.argv[1])
     # resDir = 'finalResults/diginetica_1EOS_LR/SGNN/'
-    testFile = sys.argv[2]
-    testFileReady = sys.argv[3]
+    dataLocation = sys.argv[2]
+    testFileReady = False
 
 if testFileReady:
     testData = pd.read_csv(dataLocation + '.Y.csv', sep='\t', header=None)
