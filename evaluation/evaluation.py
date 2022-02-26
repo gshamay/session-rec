@@ -494,10 +494,12 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
     if runLR:
         clfProbs = clf.predict_proba(LRTestX)
         clfProbs = list(map(lambda x: x[1], clfProbs))
-        clfProbsBaseLinedf = pd.DataFrame(clfProbs)
-        clfProbsBaseLinedf.to_csv(conf['results']['folder'] + 'clfProbs.csv', sep=";", header=False, index=False)
-
+        clfProbdf = pd.DataFrame(clfProbs)
+        clfProbdf.to_csv(conf['results']['folder'] + 'clfProbs.csv', sep=";", header=False, index=False)
         printLREvaluationValues("", LRTestY, clfProbs, res)
+
+        LRTestYdf = pd.DataFrame(LRTestY)
+        LRTestYdf.to_csv(conf['results']['folder'] + 'LRTestYdf.csv', sep=";", header=False, index=False)
 
         precision, recall, thresholds = precision_recall_curve(LRTestY, clfProbs)
         plt.figure(0, clear=True)
