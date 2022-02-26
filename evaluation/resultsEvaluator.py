@@ -3,8 +3,6 @@ import pandas as pd
 from sklearn.metrics import precision_recall_curve
 import sys
 import matplotlib.pyplot as plt
-from sklearn.metrics import f1_score
-import argparse
 
 # parameters:
 # 1. resuls directory - resultsFile contain 'clfProbs.csv' and 'clfProbsBaseLine.csv'
