@@ -16,7 +16,6 @@ import matplotlib.pyplot as plt
 
 # example:
 # c:\pycharmEnv\pythin37x64Env\Scripts\python.exe C:\bgu\session-rec\evaluation\resultsEvaluator.py C:\bgu\session-rec\finalResults\rsc15_64_1EOS_LR\SGNN\ C:\bgu\session-rec\data\rsc15\prepared_\rsc15_64_1EOS\rsc15-clicks64_test.txt True
-from theano.misc.latence_gpu_transfert import f1
 
 
 def perRec(Y, results):
