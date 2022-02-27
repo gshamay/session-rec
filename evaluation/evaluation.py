@@ -322,6 +322,8 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         time_count = 0
 
         test_data.sort_values([session_key, time_key], inplace=True)
+        test_data.to_csv(conf['results']['folder'] + 'TestDataSorted.csv', sep=";", header=False, index=False)
+
         items_to_predict = train_data[item_key].unique()
         prev_iid, prev_sid = -1, -1
         pos = 0
