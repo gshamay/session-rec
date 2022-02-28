@@ -113,9 +113,246 @@ dataLocation = None
 testFileReady = True
 fileName = ''
 
-def rscAll():
+def printGraphs():
+    global index
+    print(resultsFilesDir)
+    print(dataLocation)
+    if testFileReady:
+        testData = pd.read_csv(dataLocation + '.Y.csv', sep='\t', header=None)
+    else:
+        testData = pd.read_csv(dataLocation, sep='\t', dtype={'ItemId': np.int64})
+        session_key = 'SessionId'
+        time_key = 'Time'
+        testData.sort_values([session_key, time_key], inplace=True)
+        countSessionsInTest = testData.groupby(['SessionId']).count()
+        sessions = testData.groupby(['SessionId']).count()
+
+        # if len(testData) - len(sessions) != len(results):
+        #     print('Error - data Lens not fit;  test' + str(len(testData)) + ' sessions ' + str(len(sessions)) + ' = ' + str(len(testData) - len(sessions)) + ' != ' + str(len(results)))
+        #     exit(0)
+        # else:
+        #     print('data len OK')
+
+        testData = testData[['SessionId', 'ItemId']]
+        testData1 = testData.copy()
+        sessionCount = 0
+        currentSessionId = 0
+        for index, row in testData.iterrows():
+            sessionId = row['SessionId']
+            if (sessionId != currentSessionId):
+                # print(str(sessionId ))
+                currentSessionId = sessionId
+                sessionCount += 1
+                if (sessionCount % 1000 == 0):
+                    print(str(sessionCount))
+
+                testData.loc[index, ['SessionId']] = 0
+
+        testData.drop(testData.index[testData['SessionId'] == 0], inplace=True)
+        testData2 = testData.copy()
+        testData = testData['ItemId'].apply(lambda x: x == -1)
+        testData.to_csv(dataLocation + '.Y.csv', sep=";", header=False, index=False)
+    plt.figure(0, clear=True)
+    Y = testData.values.flatten().tolist()
+    # Y = list(reversed(Y))
+    plotStyle = [
+        '-',  # solid line style
+        '--',  # dashed line style
+        '-.',  # dash-dot line style
+        ':'  # dotted line style
+    ]
+    plotStyleIdx = 0
+    bBaseLineEvaluadted = False
+    if not bBaseLineEvaluadted:
+        resDir = resultsFilesDir[0]
+        resultsFileBL = resDir + 'clfProbsBaseLine.csv'  # baseline is similare to all aEOS sizes
+        resultsBL = pd.read_csv(resultsFileBL, sep='\t', dtype={'ItemId': np.int64}, header=None)
+        print('resultsBL')
+        bBaseLineEvaluadted = True
+        precision, recall, thresholds = perRec(Y, resultsBL)
+
+        while (len(thresholds) < len(precision)):
+            precision = np.delete(precision, len(precision) - 1)
+
+        while (len(thresholds) < len(recall)):
+            recall = np.delete(recall, len(recall) - 1)
+
+        while (len(thresholds) > len(precision)):
+            thresholds = np.delete(thresholds, len(thresholds) - 1)
+
+        plt.figure(0, clear=True)
+        plt.plot(thresholds, precision, label="precision")
+        plt.plot(thresholds, recall, label="recall")
+        plt.xlabel('Threshold')
+        plt.ylabel('Precision,Recall')
+        plt.legend()
+        plt.savefig(dataLocation + ' BaseLineThresholds.png')
+
+        limit = 0.00
+        precision = precision[recall > limit]
+        thresholds = thresholds[recall > limit]
+        recall = recall[recall > limit]
+        # limit = 1.00
+        # precision = precision[recall < limit]
+        # recall = recall[recall < limit]
+        # recall = recall[precision < limit]
+        # precision = precision[precision < limit]
+
+        plt.figure(1, clear=True)
+        plt.plot(recall, precision, plotStyle[plotStyleIdx], label="Baseline")
+        plotStyleIdx += 1
+        plotStyleIdx = plotStyleIdx % len(plotStyle)
+    namesIdx = 0
+    for resDir in resultsFilesDir:
+        resultsFile = resDir + 'clfProbs.csv'  # the current classifier
+        results = pd.read_csv(resultsFile, sep='\t', header=None)
+        precision, recall, thresholds = perRec(Y, results)
+
+        # limit = 0.00
+        # precision = precision[recall > limit]
+        # recall = recall[recall > limit]
+        # recall = recall[precision > limit]
+        # precision = precision[precision > limit]
+        #
+        # limit = 1.00
+        # precision = precision[recall < limit]
+        # recall = recall[recall < limit]
+        # recall = recall[precision < limit]
+        # precision = precision[precision < limit]
+
+        plt.plot(recall, precision, plotStyle[plotStyleIdx], label=names[namesIdx])
+        namesIdx += 1
+        plotStyleIdx += 1
+        plotStyleIdx = plotStyleIdx % len(plotStyle)
+    # ZOOM
+    # plt.axis([0, None, 0, max(precision)])  # plt.axis([x_min, x_max, y_min, y_max])
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.legend()
+    plt.savefig(fileName + '.png')
+
+
+def debug_shortFiles():
+    pass
+    # Debug - Short Files
+    # resultsFilesDir.append("C:/bgu/session-rec/results/diginetica/diginetica_Short_1EOS_LR/AR/")
+    # dataLocation = 'C:/bgu/session-rec/data/diginetica/prepared/diginetica_1EOS_short/train-item-views_full_test.txt'
+
+
+def RR0All():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
     resultsFilesDir = []
     names = []
+    dataLocation = 'C:/bgu/session-rec/data/retailrocket/slices/1EOS/events_test.0.txt'
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W0_LR/CSRM/")
+    names.append('CSRM')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W0_LR/SGNN/")
+    names.append('SR-GNN')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W0_LR/VSKNN/")
+    names.append('VSKNN')
+    fileName = 'RR0_1EOS_all'
+    printGraphs()
+
+def RR3All():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
+    resultsFilesDir = []
+    names = []
+    dataLocation = 'C:/bgu/session-rec/data/retailrocket/slices/1EOS/events_test.2.txt'
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W3_LR/CSRM/")
+    names.append('CSRM')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W3_LR/SGNN/")
+    names.append('SR-GNN')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W3_LR/VSKNN/")
+    names.append('VSKNN')
+    fileName = 'RR3_1EOS_all'
+    printGraphs()
+
+def RR5All():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
+    resultsFilesDir = []
+    names = []
+    dataLocation = 'C:/bgu/session-rec/data/retailrocket/slices/1EOS/events_test.4.txt'
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W5_LR/CSRM/")
+    names.append('CSRM')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W5_LR/SGNN/")
+    names.append('SR-GNN')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W5_LR/VSKNN/")
+    names.append('VSKNN')
+    fileName = 'RR5_1EOS_all'
+    printGraphs()
+
+
+def digiAll():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
+    resultsFilesDir = []
+    names = []
+    dataLocation  = 'C:/bgu/session-rec/data/diginetica/prepared/diginetica_1EOS/train-item-views_full_test.txt'
+
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_10EOS_LR/CSRM/")
+    names.append('CSRM')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_1EOS_LR/SGNN/")
+    names.append('SR-GNN')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_1EOS_LR/VSKNN/")
+    names.append('VSKNN')
+    fileName = 'digi_1EOS_all'
+    printGraphs()
+
+
+def digiSGNN():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
+    resultsFilesDir = []
+    names = []
+    dataLocation  = 'C:/bgu/session-rec/data/diginetica/prepared/diginetica_1EOS/train-item-views_full_test.txt'
+
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_1EOS_LR/SGNN/")
+    names.append('1 aEOS')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_10EOS_LR/SGNN/")
+    names.append('10 aEOS')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_100EOS_LR/SGNN/")
+    names.append('100 aEOS')
+    fileName = 'digi_1-10-100-gnn'
+    printGraphs()
+
+def digiCSRM():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
+    resultsFilesDir = []
+    names = []
+    dataLocation = 'C:/bgu/session-rec/data/diginetica/prepared/diginetica_1EOS/train-item-views_full_test.txt'
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_10EOS_LR/CSRM/")
+    names.append('10 aEOS')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_100EOS_LR/CSRM/")
+    names.append('100 aEOS')
+    fileName = 'digi_10-100-CSRM'
+    printGraphs()
+
+
+def rscAll():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
+    resultsFilesDir = []
+    names = []
+    dataLocation = 'C:/bgu/session-rec/data/rsc15/prepared/rsc15_64_1EOS/rsc15-clicks64_test.txt'
+
     resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_1EOS_LR/CSRM/")
     names.append('CSRM')
     resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_1EOS_LR/SGNN/")
@@ -123,11 +360,18 @@ def rscAll():
     resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_1EOS_LR/VSKNN/")
     names.append('VSKNN')
     fileName = 'rsc_1EOS_all'
+    printGraphs()
 
 
 def rscSGNN():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
     resultsFilesDir = []
     names = []
+    dataLocation = 'C:/bgu/session-rec/data/rsc15/prepared/rsc15_64_1EOS/rsc15-clicks64_test.txt'
+
     resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_1EOS_LR/SGNN/")
     names.append('1 aEOS')
     resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_10EOS_LR/SGNN/")
@@ -135,33 +379,40 @@ def rscSGNN():
     resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_100EOS_LR/SGNN/")
     names.append('100 aEOS')
     fileName = 'rsc_1-10-100-gnn'
+    printGraphs()
+
+def rscCSRM():
+    global resultsFilesDir
+    global names
+    global fileName
+    global dataLocation
+    resultsFilesDir = []
+    names = []
+    dataLocation = 'C:/bgu/session-rec/data/rsc15/prepared/rsc15_64_1EOS/rsc15-clicks64_test.txt'
+
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_1EOS_LR/CSRM/")
+    names.append('1 aEOS')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_10EOS_LR/CSRM/")
+    names.append('10 aEOS')
+    resultsFilesDir.append("C:/bgu/session-rec/finalResults/rsc15_64_100EOS_LR/CSRM/")
+    names.append('100 aEOS')
+    fileName = 'rsc_1-10-100-CSRM'
+    printGraphs()
 
 if (len(sys.argv) <= 1):
     ######################################################
-    # CLASSIFIERS
-    # hard coded test value
+    RR0All()
+    RR3All()
+    RR5All()
 
-    # rscAll()
+    rscAll()
     rscSGNN()
+    rscCSRM()
 
-    # resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_1EOS_LR/SGNN/")
-    # resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_10EOS_LR/SGNN/")
-    # resultsFilesDir.append("C:/bgu/session-rec/finalResults/diginetica_100EOS_LR/SGNN/")
-
-    # resultsFilesDir.append("C:/bgu/session-rec/finalResults/retailrocket_1EOS_W5_LR/SGNN/")
-
-    # DATA
-    # test data for 1-10 or 100 EOS can be similare
-    dataLocation = 'C:/bgu/session-rec/data/rsc15/prepared/rsc15_64_1EOS/rsc15-clicks64_test.txt'
-
-    # dataLocation  = 'C:/bgu/session-rec/data/diginetica/prepared/diginetica_1EOS/train-item-views_full_test.txt'
-
-    # dataLocation = 'C:/bgu/session-rec/data/retailrocket/slices/1EOS/events_test.4.txt'
-
-    ###################################
-    # Debug - Short Files
-    # resultsFilesDir.append("C:/bgu/session-rec/results/diginetica/diginetica_Short_1EOS_LR/AR/")
-    # dataLocation = 'C:/bgu/session-rec/data/diginetica/prepared/diginetica_1EOS_short/train-item-views_full_test.txt'
+    digiAll()
+    digiSGNN()
+    digiCSRM()
+    #debug_shortFiles()
 else:
     # Read values from the cmd
     # parser = argparse.ArgumentParser(description='Process some integers.')
@@ -172,126 +423,6 @@ else:
     # resDir = 'finalResults/diginetica_1EOS_LR/SGNN/'
     dataLocation = sys.argv[2]
     testFileReady = False
+    printGraphs()
 
-print(resultsFilesDir)
-print(dataLocation)
-if testFileReady:
-    testData = pd.read_csv(dataLocation + '.Y.csv', sep='\t', header=None)
-else:
-    testData = pd.read_csv(dataLocation, sep='\t', dtype={'ItemId': np.int64})
-    session_key = 'SessionId'
-    time_key = 'Time'
-    testData.sort_values([session_key, time_key], inplace=True)
-    countSessionsInTest = testData.groupby(['SessionId']).count()
-    sessions = testData.groupby(['SessionId']).count()
-
-    # if len(testData) - len(sessions) != len(results):
-    #     print('Error - data Lens not fit;  test' + str(len(testData)) + ' sessions ' + str(len(sessions)) + ' = ' + str(len(testData) - len(sessions)) + ' != ' + str(len(results)))
-    #     exit(0)
-    # else:
-    #     print('data len OK')
-
-    testData = testData[['SessionId', 'ItemId']]
-    testData1 = testData.copy()
-    sessionCount = 0
-    currentSessionId = 0
-    for index, row in testData.iterrows():
-        sessionId = row['SessionId']
-        if (sessionId != currentSessionId):
-            # print(str(sessionId ))
-            currentSessionId = sessionId
-            sessionCount += 1
-            if (sessionCount % 1000 == 0):
-                print(str(sessionCount))
-
-            testData.loc[index, ['SessionId']] = 0
-
-    testData.drop(testData.index[testData['SessionId'] == 0], inplace=True)
-    testData2 = testData.copy()
-    testData = testData['ItemId'].apply(lambda x: x == -1)
-    testData.to_csv(dataLocation + '.Y.csv', sep=";", header=False, index=False)
-
-plt.figure(0, clear=True)
-Y = testData.values.flatten().tolist()
-# Y = list(reversed(Y))
-
-plotStyle = [
-    '-',  # solid line style
-    '--',  # dashed line style
-    '-.',  # dash-dot line style
-    ':'  # dotted line style
-]
-plotStyleIdx = 0
-
-bBaseLineEvaluadted = False
-if not bBaseLineEvaluadted:
-    resDir = resultsFilesDir[0]
-    resultsFileBL = resDir + 'clfProbsBaseLine.csv'  # baseline is similare to all aEOS sizes
-    resultsBL = pd.read_csv(resultsFileBL, sep='\t', dtype={'ItemId': np.int64}, header=None)
-    print('resultsBL')
-    bBaseLineEvaluadted = True
-    precision, recall, thresholds = perRec(Y, resultsBL)
-
-    while (len(thresholds) < len(precision)):
-        precision = np.delete(precision, len(precision) - 1)
-
-    while (len(thresholds) < len(recall)):
-        recall = np.delete(recall, len(recall) - 1)
-
-    while (len(thresholds) > len(precision)):
-        thresholds = np.delete(thresholds, len(thresholds) - 1)
-
-    plt.figure(0, clear=True)
-    plt.plot(thresholds, precision, label="precision")
-    plt.plot(thresholds, recall, label="recall")
-    plt.xlabel('Threshold')
-    plt.ylabel('Precision,Recall')
-    plt.legend()
-    plt.savefig(dataLocation + ' BaseLineThresholds.png')
-
-    limit = 0.00
-    precision = precision[recall > limit]
-    thresholds = thresholds[recall > limit]
-    recall = recall[recall > limit]
-    # limit = 1.00
-    # precision = precision[recall < limit]
-    # recall = recall[recall < limit]
-    # recall = recall[precision < limit]
-    # precision = precision[precision < limit]
-
-    plt.figure(1, clear=True)
-    plt.plot(recall, precision, plotStyle[plotStyleIdx], label="Baseline")
-    plotStyleIdx += 1
-    plotStyleIdx = plotStyleIdx % len(plotStyle)
-
-namesIdx = 0
-for resDir in resultsFilesDir:
-    resultsFile = resDir + 'clfProbs.csv'  # the current classifier
-    results = pd.read_csv(resultsFile, sep='\t', header=None)
-    precision, recall, thresholds = perRec(Y, results)
-
-    # limit = 0.00
-    # precision = precision[recall > limit]
-    # recall = recall[recall > limit]
-    # recall = recall[precision > limit]
-    # precision = precision[precision > limit]
-    #
-    # limit = 1.00
-    # precision = precision[recall < limit]
-    # recall = recall[recall < limit]
-    # recall = recall[precision < limit]
-    # precision = precision[precision < limit]
-
-    plt.plot(recall, precision, plotStyle[plotStyleIdx], label=names[namesIdx])
-    namesIdx += 1
-    plotStyleIdx += 1
-    plotStyleIdx = plotStyleIdx % len(plotStyle)
-
-# ZOOM
-# plt.axis([0, None, 0, max(precision)])  # plt.axis([x_min, x_max, y_min, y_max])
-
-plt.xlabel('Recall')
-plt.ylabel('Precision')
-plt.legend()
-plt.savefig(dataLocation + '.png')
 print('done ')
