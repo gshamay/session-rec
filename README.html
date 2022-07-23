@@ -26,11 +26,11 @@ This Code was forked from and based on the code published at
 It is a Python-based framework for building and evaluating recommender systems (Python 3.5.x). It
 implements a suite of algorithms and baselines for session-based and session-aware recommendation. <br>
 This state of the art project, published by Ludewig et al. as part of Empirical analysis of session-based recommendation algorithms.
-Their work provided me and other, the ability to use different Session Based Recommendaiton Algorithms, evaluate and research different aspets and new methods in the field.<br>
+Their work provided me and other, the ability to use different Session Based Recommendation Algorithms, evaluate and research different aspects and new methods in the field.<br>
 <br>
 This project extends their code to implement the method we suggested to produce a classification prediction on session based data.<br>
-Detailed description of the different parameters, running options and credit for the authors and the developeds <br>
-can be foune in the original code project <a href= https://github.com/rn5l/session-rec/#readme> detailed read me document.</a><br>
+Detailed description of the different parameters, running options and credit for the authors and the developed <br>
+can be found in the original code project <a href= https://github.com/rn5l/session-rec/#readme> detailed read me document.</a><br>
 <br>
 This code was developed as part of a Thesis submitted in partial fulfillment of the requirements for the Master of Sciences degree
 at Ben-Gurion University of the Negev, Faculty of Engineering Sciences,  
@@ -39,7 +39,7 @@ Department of Software and Information System Engineering, under the supervision
 <h2>Usage</h2>
 We run our experiments on Amazon AES EC2 machines2. We used mainly
 c5ad.2xlarge3 machines, with ”Deep Learning Base AMI (Ubuntu 18.04)
-Version 48.0” configuration4 and Pythin 3.7.12. <br>
+Version 48.0” configuration4 and Python 3.7.12. <br>
 in this section we will describe how to setup the EC2 machine<br>
 <h3>Setup Python</h3>
 Setup Python and required libraries
@@ -106,7 +106,7 @@ unzip rsc15.zip -d ./data/<br>
 unzip digi.zip -d ./data/<br>
 <h3>Running Experiments</h3>
 <h4>Using tmux</h4>
-It is recommended to use tmux to avoid loosing the EC2 session in case of any disconnection<br>
+It is recommended to use tmux to avoid losing the EC2 session in case of any disconnection<br>
 tmux new -s myExperiment<br>
 To disconnect from the tmux session press:<br>
 Ctrl+b, d<br>
@@ -137,4 +137,3 @@ clfProbsBaseLine.csv - the probabilities predictions of the baseline. clf.pkl - 
 The results files will appear under the results directory, under a directory with dataset name and then a directory with the algorithm name. for example:<br>
 ./results/rsc15/rsc15 64 1EOS LR/SGNN<br>
 </article>
-
