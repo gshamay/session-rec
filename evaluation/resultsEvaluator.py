@@ -225,11 +225,11 @@ def printGraphs():
         plotStyleIdx += 1
         plotStyleIdx = plotStyleIdx % len(plotStyle)
     # ZOOM
-    # plt.axis([0, None, 0, max(precision)])  # plt.axis([x_min, x_max, y_min, y_max])
+    plt.axis([0, None, 0.2, 0.5])  # plt.axis([x_min, x_max, y_min, y_max])
     plt.xlabel('Recall')
     plt.ylabel('Precision')
     plt.legend()
-    plt.savefig(fileName + '.png')
+    plt.savefig(fileName +'_0206ZOOM'+ '.png')
 
 
 def debug_shortFiles():

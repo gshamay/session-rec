@@ -36,6 +36,8 @@ if NOTIFY:
     bot = telegram.Bot(token=BOT_TOKEN)
 
 
+# CLF is a logistic regression clisifier used to classif if the session is ending or not, using the se4ssion length and the SRS predicted aEOS rank
+# clfBaseLine is a logistic regression clisifier used as a baseline, to classif if the session is ending or not, using only the se4ssion length 
 clf = None
 clfBaseLine = None
 

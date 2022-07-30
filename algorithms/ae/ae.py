@@ -255,7 +255,7 @@ class AutoEncoder:
         data_grouped_by_user = data.groupby( self.session_key )
         tr_list, te_list = list(), list()
     
-        np.random.seed(98765) # todo: align with all seeds = 42 ?
+        np.random.seed(98765) # todo: #seed why is it not align with all seeds = 42 ?
     
         for i, (_, group) in enumerate(data_grouped_by_user):
             n_items_u = len(group)

@@ -220,6 +220,10 @@ class HitRate(AccuracyBase):
         '''
         return ("HitRate@" + str(self.length) + ": "), (self.hit/self.test), pd.DataFrame( self.table )
 
+
+####################################################################
+# Accuracy methods relevant to the aEOS algorithm
+
 class EOS_FP(AccuracyBase):
     '''
     EOS_FP( length=20 )

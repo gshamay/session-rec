@@ -575,7 +575,7 @@ class Seq2SeqAttNN(NN):
             Columns: 1 column containing the scores; rows: items. Rows are indexed by the item IDs.'''
 
         # TODO: THE FACT THAT THE WHOLE TEST DATA IS USED IN THE PREDICTION, IS PROBLEMATIC
-        #  Why using x.session_id == session_id and not item_id
+        # todo: # bug? Why using x.session_id == session_id and not item_id
         sample = [x for x in self.test_data.samples if x.session_id == session_id]
         if self.old_session_id != session_id:
             self.s = 0

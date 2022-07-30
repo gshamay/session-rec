@@ -259,6 +259,9 @@ class HitRate:
             
         return csv
 
+####################################################################
+# Accuracy methods relevant to the aEOS algorithm
+
 class EOS_FP:
     '''
     EOS_FP( length=20 )

@@ -15,6 +15,8 @@ class ResultFile:
     modelfile : string
         Path of the model to load
 
+    addOn = see class FileModel
+
     '''
 
     def __init__(self, file, addOn =None):
@@ -99,6 +101,9 @@ class ResultFile:
 
         self.pos += 1
 
+
+        ###################################################################
+        # handling speciacase where file id used with an addon mode
         #todo: refactor: identical code to fileModel
         if (self.addOn != None):
             # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
@@ -120,12 +125,11 @@ class ResultFile:
                 newValue5 = (value4 + value5) / 2
                 if (newValue5 == 0):
                     defaultValueToSetInResults = 0.01
-                    newValue5
-                    defaultValueToSetInResults
+                    newValue5 = defaultValueToSetInResults
 
                 res[aEOSItemId] = newValue5
 
-
+        ###################################################################
         return res
 
     def clear(self):

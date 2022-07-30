@@ -5,7 +5,7 @@ SEED = 42
 np.random.seed(SEED)
 
 class FileModel:
-    addOn = None
+    addOn = None #two types of addOn are optional: naiveTrue and random
     '''
     FileModel( modelfile )
     Uses a trained algorithm, which was pickled to a file.
@@ -15,9 +15,18 @@ class FileModel:
     modelfile : string
         Path of the model to load
 
+        addOn  : string - this was added for the aEOS
+        two types of addOn are optional: naiveTrue and random
+        
+        naiveTrue - always return aEOS propb in the X position 
+        where X is set to defaultKLocation = 5
+        
+        random - return aEOS with random rank normalized with the Highest Rank provided by the algorithm 
+        randomRank = Highest Rank * rand value 
+        using only rand can cause huge bias as the usual highest rank can be as small as 0.02  
     '''
 
-    def __init__(self, modelfile,addOn =None):
+    def __init__(self, modelfile, addOn=None):
         # config.experimental.unpickle_gpu_on_cpu = True
         self.model = dill.load(open(modelfile, 'rb'))
         self.addOn = addOn
@@ -54,6 +63,9 @@ class FileModel:
 
         '''
         retVal = self.model.predict_next(session_id, input_item_id, predict_for_item_ids, skip, mode_type)
+
+        ###################################################################
+        # handling special case where file id used with an addon mode
         if (self.addOn != None):
             # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
             retVal[np.isnan(retVal)] = 0
@@ -73,11 +85,13 @@ class FileModel:
                 value5 = retVal[retVal.index[defaultKLocation]]
                 newValue5 = (value4 + value5) / 2
                 if (newValue5 == 0):
+                    # if, for any reason both 4th and 5th places has value of 0 (not expected to happen) -->
+                    #  we will provide a min rank of defaultValueToSetInResults = 0.01
                     defaultValueToSetInResults = 0.01
-                    newValue5
-                    defaultValueToSetInResults
+                    newValue5 = defaultValueToSetInResults
 
                 retVal[aEOSItemId] = newValue5
+        ###################################################################
 
         return retVal
 
@@ -115,5 +129,4 @@ class FileModel:
             print('do naiveTrue')
 
         return retVal
-
 
