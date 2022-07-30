@@ -333,6 +333,7 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
         clf = None
         clfBaseLine = None
         if 'clf' in conf and 'clfBaseLine' in conf:
+            # use the LR models (main and baseline) in case they were created in the run_config
             clfBaseLine = conf['clfBaseLine']
             clf = conf['clf']
 
@@ -366,11 +367,13 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
 
                 for m in metrics:
                     if hasattr(m, 'start_predict'):
-                        m.start_predict( pr ) # only some of the metrics, as the running time metric (Time_usage_training), has 'start_predict' variable
+                        # only some of the metrics, as the running time metric (Time_usage_training), has 'start_predict' variable
+                        m.start_predict( pr )
 
                 doContinue = False
                 try:
-                    preds = pr.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+                    # predict all sub sessions
+                    preds = pr.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)
                 except Exception:
                     doContinue = True
                 except IndexError:
@@ -389,11 +392,14 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
 
                 for m in metrics:
                     if hasattr(m, 'stop_predict'):
-                        m.stop_predict( pr ) # same as 'start_predict' above
+                        # same as 'start_predict' above - relevant only for some of the metrics
+                        m.stop_predict(pr)
 
                 # todo: refactor. Duplicated code that is handled differently between the
                 #  different evaluate_sessions methods;  Also appear as preds.fillna(0, inplace=True)
-                preds[np.isnan(preds)] = 0 # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
+
+                preds[np.isnan(preds)] = 0
+                # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
 
                 #  preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties
                 preds.sort_values( ascending=False, inplace=True ) # sort preds according to the predicted probability

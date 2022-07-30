@@ -538,14 +538,15 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
     algorithm.fit(train, test_)
     print('fit ', key, ' End')
 
-    ###############################
+
+    #####################################################################
     # train the LR model / Begin
     enableLR = False
     if 'LogisticRegressionOnEOS' in conf :
         enableLR = (conf['LogisticRegressionOnEOS'] == True)
 
+    #####################################################################
     # todo: enableLR from here
-
     aEOSBaseIDValue = -1
     sc = time.perf_counter()
     st = time.time()
@@ -589,7 +590,7 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
             # get the prediction from the model / file results
             doContinue = False
             try:
-                preds = algorithm.predict_next(sid, prev_iid, items_to_predict, timestamp=ts)  # predict all sub sessions
+                preds = algorithm.predict_next(sid, prev_iid, items_to_predict, timestamp=ts) # predict all sub sessions
             except Exception:
                 doContinue = True
             except IndexError:
@@ -604,34 +605,25 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
 
                 continue
 
+            # todo: STAMP return empty res
             # preds contain now a list of all possible items with their probabilities to be the next item
-
             # refine the predictions
-
-            # IN stamp
-            # preds[np.isnan(preds)] = 0
-            # TypeError: ufunc
-            # 'isnan'
-            # not supported
-            # for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
-
-            # if preds is not None: # todo: stamp return empty res
+            # if preds is not None:
             preds[np.isnan(preds)] = 0
-
             # in case that some prediction was not a valid number (NaN) -it's probability is zeroed
-            # preds += 1e-8 * np.random.rand(len(preds)) #Breaking up ties # todo: ?
-
             ############################################################
             # LR MODEL - collect the data to train the LR model
-            if (enableLR and preds is not None):  # todo check STAMP on train
-                aEOSMaxPredictedValue = 0
+            if (enableLR and preds is not None):
+                aEOSMaxPredictedValue = 0  # if there is no aEOS in the SRS algo prediction 0 will be the value for teh LR input as the SRS rank
                 EOSPreds = preds[preds.index <= aEOSBaseIDValue]  # filter only aEOS predictions
                 if len(EOSPreds) > 0:
                     # if there are aEOS in the prediction - take the rank of the top one
+                    # relevant in case there are multiple aEOS (-1, -2, ...)
+                    # For a single aEOS only a single aEOS ios expected
                     EOSPreds.sort_values(ascending=False, inplace=True)
                     aEOSMaxPredictedValue = EOSPreds.values[0]
 
-                # Set the data to train the LR model
+                # Set the data to train the LR model: Session Len + aEOS Prediction --> is_aEOS
                 sessionLen = pos + 1
                 LRx.append([aEOSMaxPredictedValue, sessionLen])
                 LRy.append(isEOS)
@@ -649,12 +641,12 @@ def eval_algorithm(train, test, key, algorithm, eval, metrics, results, conf, sl
 
     print('predict on train for LR Done ; errors In predict_next[' + str(errorsInTrain) + ']')
     ###############################
-    # train the LR model / Begin
+    # Train the LR model / Begin and the LR baseline
     if (enableLR):
         print('start train LR in ', (time.perf_counter() - sc), 'c / ', (time.time() - st), 's')
         clf = LogisticRegression(random_state=0).fit(LRx, LRy)
 
-        LRxBaseLine = list(map(lambda x: [x[1]], LRx))
+        LRxBaseLine = list(map(lambda x: [x[1]], LRx)) # for the baseline we take only the sessionLen values from the [aEOSMaxPredictedValue, sessionLen] collected values
         clfBaseLine = LogisticRegression(random_state=0).fit(LRxBaseLine, LRy)
         # the clf and the clfBaseLine are used externally - in the evaluation.py
         # todo: Save clf to pickle

@@ -66,7 +66,7 @@ def main( conf ):
 
 #this method is used for loading yml
 def run_file( conf ):
-    sessionLenMap = {}
+    sessionLenMap = {} # A map that count the number of sessions in each length
     #include preprocessing
     preprocessor = load_preprocessor( conf )
     
@@ -99,11 +99,17 @@ def run_file( conf ):
         if(aEOS == 'sessionLength'):
             sessionLength = True
 
-    print('aEOS[' + str(aEOS) + ']sessionLength[' +str(sessionLength) + ']')
-    if(aEOS != None):
-        print('add aEOS') # same aEOS for all dbs
-        # run on all data and add new aEOS - option 1
-        #  DataFrame --> List of lists --> add aEOS --> DataFrame
+    print('aEOS[' + str(aEOS) + ']sessionLength[' + str(sessionLength) + ']')
+    if (aEOS != None):
+        print('add aEOS')  # same aEOS for all dbs
+        # run on all data and add new aEOS
+        # DataFrame --> List of lists --> add aEOS --> DataFrame
+        # in this process we add data to the dataframe "in the middle"
+        # a few methods were tested, selected the one with the best performance
+        # working directly on the dataFrame cost too much resources when appending a new item
+        # for example:
+        #   list_of_lists.append([1, 2, 3])
+        #   list_of_lists.append([4, 5, 6])
         dataAsListOfLists = data.values.tolist()
 
         # look for variables locations (Time, 'SessionId', ...)
@@ -111,14 +117,12 @@ def run_file( conf ):
         indexOfTime = data.columns.get_loc("Time")
         indexOfItemId = data.columns.get_loc("ItemId")
 
-        # list_of_lists.append([1, 2, 3])
-        # list_of_lists.append([4, 5, 6])
         session_length = 1
         firstEntry = dataAsListOfLists[0]
         newData = [firstEntry]
         currentSessionID = firstEntry[indexOfSessionId]
-        entry_1 =  firstEntry
-        entry_2 =  None
+        entry_1 = firstEntry
+        entry_2 = None
         i = 1
         totalAEOSAdded = 0
         dataLen = len(data)
@@ -128,59 +132,61 @@ def run_file( conf ):
 
             entryList = dataAsListOfLists[i]
             entry = dataAsListOfLists[i]
-            currentIndex = i
-            i+=1
+            i += 1
 
             if(currentSessionID == entryList[indexOfSessionId] or currentSessionID == -1):
                 # didn't moved to a new session
                 currentSessionID = entryList[indexOfSessionId]
                 entry_2 = entry_1
                 entry_1 = entry
-                session_length+=1
+                session_length += 1
                 newData.append(entry)
             else:
-                #moved to a new session
-                if(entry_2 is None or entry_1 is None):
+                # moved to a new session
+                if (entry_2 is None or entry_1 is None):
                     print('unexpected less then 2 entries session')
                 else:
                     # build new raw entry - based last two raws
-
-                    # todo: consider setting the time according to the last two enries times
-                    #  timeBetweenLastTwoEnties = entry_1.iloc[0]['Time'] - entry_2.iloc[0]['Time']
+                    # todo: consider setting the time according to the last two entries times
+                    #  timeBetweenLastTwoEntries = entry_1.iloc[0]['Time'] - entry_2.iloc[0]['Time']
                     #  print('adding new line' + str(timeBetweenLastTwoEnties))
                     newEntry = entry_1.copy()
 
+                    # sessionLenMap is a map that count the number of sessions in each length
                     if session_length in sessionLenMap:
                         num = sessionLenMap[session_length]
-                        num+=1
+                        num += 1
                         sessionLenMap[session_length] = num
                     else:
                         sessionLenMap[session_length] = 1
 
-                    newEntryItemID = -1
-                    if(sessionLength):
+                    newEntryItemID = -1  # the id given for the current aEOS
+                    if (sessionLength):
                         newEntryItemID = -session_length
+                        # in case we distribute the aEOS according to their session len
+                        # we set the aEOS ID as the -(Session Len)
                     else:
                         randVal = np.random.random()
-                        newEntryItemID = ((int)(randVal * aEOS) + 1)
+                        newEntryItemID = ((int)(randVal * aEOS) + 1)  # Select the ID of the aEOS randomly
                         if (newEntryItemID > aEOS):
                             newEntryItemID = aEOS  # in case the random value is 1.0
                         newEntryItemID = -newEntryItemID
 
+                    # Set the aEOS new entry data
                     newEntry[indexOfItemId] = newEntryItemID
                     newEntry[indexOfTime] = newEntry[indexOfTime] + 1
 
                     newData.append(newEntry)
-                    newData.append(entry)
+                    newData.append(entry)  # this is the enmtry that we identified that the session was changed with
                     totalAEOSAdded += 1
 
                     # add raw to the new Pos
-                    #data = pd.DataFrame(np.insert(data.values, i-1, values=newEntry, axis=0))
-                    #i+=1 #added a new row to the data - that we dont need to analyze
+                    # data = pd.DataFrame(np.insert(data.values, i-1, values=newEntry, axis=0))
+                    # i+=1 #added a new row to the data - that we dont need to analyze
 
-                    #setting up new session data
+                    # setting up new session (next session) data -0 for the data scan to continue normally
                     session_length = 1
-                    currentSessionID = entry[indexOfSessionId] #entry is a df in len  1
+                    currentSessionID = entry[indexOfSessionId]  # entry is a df in len  1
                     entry_1 = entry
                     entry_2 = None
 
