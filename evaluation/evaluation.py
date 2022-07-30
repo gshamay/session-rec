@@ -432,23 +432,6 @@ def evaluate_sessions(pr, metrics, test_data_, train_data, algorithmKey, conf, i
                     # re sort preds according to the new  predicted probabilities
                     preds.sort_values(ascending=False, inplace=True)
 
-                # # Method 2
-                # # eval process:  1000  of  3006  actions:  33.266799733865604  % in 14.598280906677246 s
-                # EOSPreds = preds[preds.index <= aEOSBaseIDValue]  # filter only aEOS predictions
-                # if len(EOSPreds) > 0:
-                #     # if there are aEOS in the prediction - take the rank of the top one
-                #     EOSPreds.sort_values(ascending=False, inplace=True)
-                #     aEOSMaxPredictedValue = EOSPreds.values[0]
-                #     # Set all EOS Preds to be with rank defaultMinValueToPushDownPrediction (pushUp all other results)
-                #     for eosPredIKey in EOSPreds.keys():
-                #         preds[eosPredIKey] = defaultMinValueToPushDownPrediction
-                #
-                #     # Set a single EOS item aEOSBaseIDValue (-1) pred to b with the max EOS rank  aEOSMaxPredictedValue (-0.01)
-                #     preds[aEOSBaseIDValue] = aEOSMaxPredictedValue
-                #     # re sort preds according to the new  predicted probabilities
-                #     preds.sort_values(ascending=False, inplace=True)
-
-
                 # if the test actual data next id is aEOS with id < -1 (-2, -3....-N),
                 # we change it to -1 as it's the default aEOS id
                 if (iid <= aEOSBaseIDValue):
